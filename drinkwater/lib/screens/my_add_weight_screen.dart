@@ -11,7 +11,7 @@ class MyAddWeightScreen extends StatelessWidget {
       titulo: "Qual seu peso?",
       desc: "Vamos calcular a sua meta diaria de ingestão de agua de acordo com seu peso",
       imagem: "assets/images/balanca.png",
-      link: "myAddWeightScreen",
+      link: "myAddWakeUpTimeScreen",
       widget: MyNumberPicker(),);
   }
 }
