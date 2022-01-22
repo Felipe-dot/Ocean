@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import '../components/my_number_picker.dart';
 
 import '../constant.dart';
 
-class MyInitialSetupScreen extends StatelessWidget {
-  const MyInitialSetupScreen({Key key}) : super(key: key);
+class MyInfoPage extends StatelessWidget {
+  final String titulo;
+  final String desc;
+  final String imagem;
+  final String link;
+  final Widget widget;
+  const MyInfoPage({Key key, this.titulo, this.desc, this.imagem, this.link, this.widget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,29 +33,34 @@ class MyInitialSetupScreen extends StatelessWidget {
                   height: 89,
                   width: 145,
                 ),
-                const Text(
-                  "Vamos começar!",
-                  style: TextStyle(
+                Text(
+                  titulo,
+                  style: const TextStyle(
                     fontFamily: "Roboto",
                     fontSize: 34,
                     fontWeight: FontWeight.normal,
                     color: kDark2,
                   ),
                 ),
-                const Image(
-                  image: AssetImage("assets/images/imagem1.png"),
-                  width: 247,
-                  height: 208,
-                ),
-                const Text(
-                  "Para começarmos precisamos pegar alguns dados seus para que você aproveite da melhor forma o app.",
-                  style: TextStyle(
+                Text(
+                  desc,
+                  style: const TextStyle(
                     fontFamily: "Roboto",
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.w500,
                     color: kGray,
                   ),
                   textAlign: TextAlign.center,
+                ),
+                Row(
+                  children: [
+                    Image(
+                      image: AssetImage(imagem),
+                      width: 247,
+                      height: 208,
+                    ),
+                    const MyNumberPicker(),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -57,7 +68,7 @@ class MyInitialSetupScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {},
                       child: const Text(
-                        "CANCELAR",
+                        "Voltar",
                         style: TextStyle(
                           fontFamily: "Roboto",
                           fontSize: 18,
@@ -68,10 +79,10 @@ class MyInitialSetupScreen extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/myAddWeightScreen');
+                        Navigator.pushNamed(context, '/$link');
                       },
                       child: const Text(
-                        "COMEÇAR",
+                        "Proximo",
                         style: TextStyle(
                           fontFamily: "Roboto",
                           fontSize: 18,
