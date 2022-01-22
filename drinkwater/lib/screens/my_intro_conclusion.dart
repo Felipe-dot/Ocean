@@ -73,31 +73,37 @@ class MyIntroConclusion extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  width: 280,
-                  height: 70,
-                  margin: const EdgeInsets.only(top: 30),
-                  padding: const EdgeInsets.symmetric(horizontal: 55),
-                  decoration: BoxDecoration(
-                    color: kWhite,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                        Text(
-                          'continuar',
-                          style: kButton,
-                        ),
-                        Icon(
-                          Icons.arrow_right_alt_outlined,
-                          size: 40,
-                          color: kMainColor,
-                        ),
-                      ],
+                ElevatedButton(
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all<Size>(
+                      const Size(280, 70),
                     ),
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      const EdgeInsets.symmetric(horizontal: 60),
+                    ),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(kMainColor),
+                    backgroundColor: MaterialStateProperty.all<Color>(kWhite),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: const [
+                      Text(
+                        'continuar',
+                        style: kButton,
+                      ),
+                      Icon(
+                        Icons.arrow_right_alt_outlined,
+                        size: 40,
+                        color: kMainColor,
+                      ),
+                    ],
                   ),
                 ),
               ],
