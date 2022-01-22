@@ -13,3 +13,40 @@ const Color kRedAccent = Color(0xFFC25050);
 const Color kGray = Color(0xFF727272);
 const Color kBlack = Color(0xFF2F2E41);
 const Color kWhite = Color(0xFFFFFFFF);
+
+// estilos de texto
+
+const kHeadline1White = TextStyle(
+  color: kWhite,
+  fontSize: 86,
+  fontWeight: FontWeight.w300,
+  letterSpacing: -0.15,
+);
+
+const kHeadline5White = TextStyle(
+  color: kWhite,
+  fontSize: 21,
+);
+
+const kHeadline6White = TextStyle(
+  color: kLightBlue3,
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+);
+
+const kSubtitle1White = TextStyle(
+  color: kLightBlue2,
+  fontSize: 16,
+  letterSpacing: 0.015,
+);
+
+const kCaptionWhite = TextStyle(
+  color: kWhite,
+  fontSize: 12,
+);
+
+const kButton = TextStyle(
+  fontSize: 22,
+  fontWeight: FontWeight.w500,
+  color: kMainColor,
+);
