@@ -28,6 +28,12 @@ const kHeadline5White = TextStyle(
   fontSize: 21,
 );
 
+const kHeadline6 = TextStyle(
+  color: kLightBlue1,
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+);
+
 const kHeadline6White = TextStyle(
   color: kLightBlue3,
   fontSize: 18,
@@ -40,13 +46,25 @@ const kSubtitle1White = TextStyle(
   letterSpacing: 0.015,
 );
 
+const kBody1 = TextStyle(
+  color: kGray,
+  fontSize: 14,
+  letterSpacing: 0.015,
+);
+
 const kCaptionWhite = TextStyle(
   color: kWhite,
   fontSize: 12,
 );
 
 const kButton = TextStyle(
-  fontSize: 22,
+  fontSize: 18,
   fontWeight: FontWeight.w500,
   color: kMainColor,
+);
+
+const kButtonWhite = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+  color: kWhite,
 );
