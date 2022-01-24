@@ -23,6 +23,21 @@ const kHeadline1White = TextStyle(
   letterSpacing: -0.15,
 );
 
+const kHeadline4 = TextStyle(
+  color: kDark1,
+  fontSize: 32,
+);
+
+const kHeadline4White = TextStyle(
+  color: kWhite,
+  fontSize: 32,
+);
+
+const kHeadline5 = TextStyle(
+  color: kGray,
+  fontSize: 21,
+);
+
 const kHeadline5White = TextStyle(
   color: kWhite,
   fontSize: 21,
@@ -30,6 +45,12 @@ const kHeadline5White = TextStyle(
 
 const kHeadline6 = TextStyle(
   color: kLightBlue1,
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+);
+
+const kHeadline6Dark = TextStyle(
+  color: kGray,
   fontSize: 18,
   fontWeight: FontWeight.w500,
 );

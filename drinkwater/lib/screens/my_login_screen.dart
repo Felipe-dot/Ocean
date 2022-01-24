@@ -12,7 +12,7 @@ class MyLoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: kWhite,
+          color: kLightBlue4,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
@@ -26,20 +26,12 @@ class MyLoginScreen extends StatelessWidget {
                 const SizedBox(
                   width: 203,
                   height: 41,
-                  child: Text(
-                    "Bem vindo(a)",
-                    style: TextStyle(
-                      fontFamily: "Roboto",
-                      fontSize: 34,
-                      fontWeight: FontWeight.normal,
-                      color: kDark1,
-                    ),
-                  ),
+                  child: Text("Bem vindo(a)", style: kHeadline4),
                 ),
                 const Image(
                   image: AssetImage("assets/images/imagem.png"),
-                  width: 247,
-                  height: 208,
+                  width: 240,
+                  height: 200,
                 ),
                 const Text(
                   "Faça login com o google  ou inicie uma sessão como convidado",

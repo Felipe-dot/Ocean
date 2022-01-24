@@ -27,9 +27,6 @@ class MyCta extends StatelessWidget {
         fixedSize: MaterialStateProperty.all<Size>(
           Size(width, height),
         ),
-        padding: MaterialStateProperty.all<EdgeInsets>(
-          const EdgeInsets.symmetric(horizontal: 60),
-        ),
         foregroundColor: MaterialStateProperty.all<Color>(kWhite),
         backgroundColor: MaterialStateProperty.all<Color>(background),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -39,9 +36,11 @@ class MyCta extends StatelessWidget {
         ),
       ),
       onPressed: function,
-      child: Text(
-        text.toUpperCase(),
-        style: textStyle,
+      child: Center(
+        child: Text(
+          text.toUpperCase(),
+          style: textStyle,
+        ),
       ),
     );
   }
