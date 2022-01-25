@@ -35,6 +35,7 @@ class MyInfoPage extends StatelessWidget {
                 ),
                 Text(
                   titulo,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: "Roboto",
                     fontSize: 34,
@@ -59,14 +60,16 @@ class MyInfoPage extends StatelessWidget {
                       width: 247,
                       height: 208,
                     ),
-                    const MyNumberPicker(),
+                    widget,
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       child: const Text(
                         "Voltar",
                         style: TextStyle(
