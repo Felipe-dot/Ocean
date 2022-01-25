@@ -60,7 +60,7 @@ class MyInfoPage extends StatelessWidget {
                       width: 247,
                       height: 208,
                     ),
-                    const MyNumberPicker(),
+                    widget,
                   ],
                 ),
                 Row(
