@@ -1,3 +1,4 @@
+import 'package:drinkwater/components/buttons/my_cta_with_icon_left.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,111 +12,80 @@ class MyLoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: kWhite,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Image(
-                image: AssetImage("assets/images/logo.png"),
-                height: 89,
-                width: 145,
-              ),
-              const SizedBox(
-                width: 203,
-                height: 41,
-                child: Text(
-                  "Bem vindo(a)",
-                  style: TextStyle(
-                    fontFamily: "Roboto",
-                    fontSize: 34,
-                    fontWeight: FontWeight.normal,
-                    color: kDark1,
-                  ),
+          color: kLightBlue4,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Image(
+                  image: AssetImage("assets/images/logo.png"),
+                  height: 89,
+                  width: 145,
                 ),
-              ),
-              const Image(
-                image: AssetImage("assets/images/imagem.png"),
-                width: 247,
-                height: 208,
-              ),
-              const Text(
-                "Faça login com o google  ou inicie uma sessão como convidado",
-                style: TextStyle(
-                  fontFamily: "Roboto",
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                  color: kGray,
+                const SizedBox(
+                  width: 203,
+                  height: 41,
+                  child: Text("Bem vindo(a)", style: kHeadline4),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
+                const Image(
+                  image: AssetImage("assets/images/imagem.png"),
+                  width: 240,
+                  height: 200,
                 ),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Row(
-                    children: const [
-                      Icon(FontAwesomeIcons.google),
-                      SizedBox(
-                        width: 40,
+                const Text(
+                  "Faça login com o google  ou inicie uma sessão como convidado",
+                  style: kBody1,
+                  textAlign: TextAlign.center,
+                ),
+                MyCtaWithIconLeft(
+                  height: 60,
+                  width: 330,
+                  icon: FontAwesomeIcons.google,
+                  text: 'logar com o google',
+                  textStyle: kButtonWhite,
+                  background: kMainColor,
+                  function: () {},
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 50, right: 50),
+                  child: Row(children: const [
+                    Expanded(
+                      child: Divider(
+                        color: kLightBlue2,
+                        thickness: 3,
                       ),
-                      Text(
-                        "LOGAR COM O GOOGLE",
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Text(
+                        "OU",
                         style: TextStyle(
                           fontFamily: "Roboto",
-                          fontSize: 18,
-                          color: kWhite,
+                          fontSize: 12,
+                          color: kLightBlue2,
                         ),
                       ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: kMainColor,
-                    elevation: 2,
-                    padding: const EdgeInsets.all(20),
-                    enableFeedback: true,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 50, right: 50),
-                child: Row(children: const [
-                  Expanded(
-                      child: Divider(
-                    color: kLightBlue3,
-                  )),
-                  Text(
-                    "OU",
-                    style: TextStyle(
-                      fontFamily: "Roboto",
-                      fontSize: 12,
-                      color: kLightBlue3,
                     ),
-                  ),
-                  Expanded(
+                    Expanded(
                       child: Divider(
-                    color: kLightBlue3,
-                  )),
-                ]),
-              ),
-              TextButton(
-                child: const Text(
-                  "Entrar como convidado",
-                  style: TextStyle(
-                    fontFamily: "Roboto",
-                    fontSize: 20,
-                    color: kLightBlue1,
-                  ),
+                        color: kLightBlue2,
+                        thickness: 3,
+                      ),
+                    ),
+                  ]),
                 ),
-                onPressed: () {
+                TextButton(
+                  child: const Text(
+                    "Entrar como convidado",
+                    style: kHeadline6,
+                  ),
+                  onPressed: () {
                     Navigator.pushNamed(context, '/myInitialSetupScreen');
-                },
-              )
-            ],
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

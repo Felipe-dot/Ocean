@@ -1,3 +1,4 @@
+import 'package:drinkwater/components/buttons/my_cta.dart';
 import 'package:flutter/material.dart';
 
 import '../constant.dart';
@@ -11,13 +12,7 @@ class MyInitialSetupScreen extends StatelessWidget {
       body: SafeArea(
         child: SizedBox.expand(
           child: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.center,
-              stops: [1, 1.2],
-              colors: [kLightBlue4, kWhite],
-            )),
+            color: kLightBlue4,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,27 +24,20 @@ class MyInitialSetupScreen extends StatelessWidget {
                 ),
                 const Text(
                   "Vamos começar!",
-                  style: TextStyle(
-                    fontFamily: "Roboto",
-                    fontSize: 34,
-                    fontWeight: FontWeight.normal,
-                    color: kDark2,
-                  ),
+                  style: kHeadline4,
                 ),
                 const Image(
                   image: AssetImage("assets/images/imagem1.png"),
-                  width: 247,
-                  height: 208,
+                  width: 240,
+                  height: 200,
                 ),
-                const Text(
-                  "Para começarmos precisamos pegar alguns dados seus para que você aproveite da melhor forma o app.",
-                  style: TextStyle(
-                    fontFamily: "Roboto",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: kGray,
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    "Para começarmos precisamos pegar alguns dados seus para que você aproveite da melhor forma o app.",
+                    style: kHeadline6Dark,
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -66,26 +54,15 @@ class MyInitialSetupScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
+                    MyCta(
+                      function: () {
                         Navigator.pushNamed(context, '/myAddWeightScreen');
                       },
-                      child: const Text(
-                        "COMEÇAR",
-                        style: TextStyle(
-                          fontFamily: "Roboto",
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: kWhite,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(180, 56),
-                        primary: kMainColor,
-                        elevation: 2,
-                        padding: const EdgeInsets.all(10),
-                        enableFeedback: true,
-                      ),
+                      text: "começar",
+                      textStyle: kButtonWhite,
+                      height: 60,
+                      width: 180,
+                      background: kMainColor,
                     ),
                   ],
                 ),

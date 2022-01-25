@@ -29,6 +29,7 @@ class _MyAppState extends State<MyApp> {
         '/myInitialSetupScreen': (context) => const MyInitialSetupScreen(),
         '/myAddWeightScreen': (context) => const MyAddWeightScreen(),
         '/myAddWakeUpTimeScreen': (context) => const MyAddWakeUpTimeScreen(),
+        '/myIntroConclusion': (context) => const MyIntroConclusion(),
       },
     );
   }

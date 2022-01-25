@@ -1,3 +1,4 @@
+import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -73,37 +74,16 @@ class MyIntroConclusion extends StatelessWidget {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all<Size>(
-                      const Size(280, 70),
-                    ),
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      const EdgeInsets.symmetric(horizontal: 60),
-                    ),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(kMainColor),
-                    backgroundColor: MaterialStateProperty.all<Color>(kWhite),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
-                      Text(
-                        'continuar',
-                        style: kButton,
-                      ),
-                      Icon(
-                        Icons.arrow_right_alt_outlined,
-                        size: 40,
-                        color: kMainColor,
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: MyCtaWithIconRight(
+                    background: kWhite,
+                    textStyle: kButton,
+                    function: () {},
+                    height: 70,
+                    width: 280,
+                    icon: Icons.arrow_right_alt_outlined,
+                    text: 'Continuar',
                   ),
                 ),
               ],
