@@ -2,8 +2,8 @@ import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
 import 'package:flutter/material.dart';
 
-class MyIntroConclusion extends StatelessWidget {
-  const MyIntroConclusion({Key key}) : super(key: key);
+class MyIntroConclusionScreen extends StatelessWidget {
+  const MyIntroConclusionScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
