@@ -1,3 +1,4 @@
+import 'package:drinkwater/screens/my_add_sleep_time.dart';
 import 'package:drinkwater/screens/my_intro_conclusion.dart';
 import 'package:drinkwater/screens/my_add_weight_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _MyAppState extends State<MyApp> {
         '/myInitialSetupScreen': (context) => const MyInitialSetupScreen(),
         '/myAddWeightScreen': (context) => const MyAddWeightScreen(),
         '/myAddWakeUpTimeScreen': (context) => const MyAddWakeUpTimeScreen(),
+        '/myAddSleepTimeScreen': (context) => const MyAddSleepTimeScreen(),
         '/myIntroConclusion': (context) => const MyIntroConclusion(),
       },
     );
