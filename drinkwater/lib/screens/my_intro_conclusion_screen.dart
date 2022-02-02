@@ -21,28 +21,28 @@ class MyIntroConclusionScreen extends StatelessWidget {
                   height: 89,
                   width: 145,
                 ),
-                const Text(
+                Text(
                   'Pronto! já calculamos tudo',
-                  style: kHeadline5White,
+                  style: kHeadline5.copyWith(color: kWhite),
                 ),
                 const Image(
                   image: AssetImage('assets/images/metaCalculada.png'),
                   height: 112,
                   width: 99,
                 ),
-                const Text(
+                Text(
                   'Sua meta de ingestão de água diaria é',
-                  style: kHeadline6White,
+                  style: kHeadline6.copyWith(color: kLightBlue3),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       '2000',
-                      style: kHeadline1White,
+                      style: kHeadline1.copyWith(color: kWhite),
                     ),
-                    Text('ml', style: kCaptionWhite),
+                    Text('ml', style: kCaption.copyWith(color: kWhite)),
                   ],
                 ),
                 SizedBox(
@@ -50,20 +50,20 @@ class MyIntroConclusionScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'isso é equivalente a:',
-                        style: kSubtitle1White,
+                        style: kSubtitle1.copyWith(color: kLightBlue2),
                       ),
                       SizedBox(
                         width: 200,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
+                          children: [
                             Text(
                               '10 copos de 200ml',
-                              style: kHeadline6White,
+                              style: kHeadline6.copyWith(color: kLightBlue3),
                             ),
-                            Image(
+                            const Image(
                               image: AssetImage('assets/images/copoWhite.png'),
                               height: 20,
                               width: 18,

@@ -31,11 +31,13 @@ class MyInitialSetupScreen extends StatelessWidget {
                   width: 240,
                   height: 200,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
                     "Para começarmos precisamos pegar alguns dados seus para que você aproveite da melhor forma o app.",
-                    style: kHeadline6Dark,
+                    style: kHeadline6.copyWith(
+                      color: kGray,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -61,7 +63,9 @@ class MyInitialSetupScreen extends StatelessWidget {
                         Navigator.pushNamed(context, '/myAddWeightScreen');
                       },
                       text: "começar",
-                      textStyle: kButtonWhite,
+                      textStyle: kButton.copyWith(
+                        color: kWhite,
+                      ),
                       height: 60,
                       width: 180,
                       background: kMainColor,

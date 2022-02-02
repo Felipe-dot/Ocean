@@ -43,7 +43,7 @@ class MyLoginScreen extends StatelessWidget {
                   width: 330,
                   icon: FontAwesomeIcons.google,
                   text: 'logar com o google',
-                  textStyle: kButtonWhite,
+                  textStyle: kButton.copyWith(color: kWhite),
                   background: kMainColor,
                   function: () {},
                 ),
