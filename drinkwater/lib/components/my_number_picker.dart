@@ -14,23 +14,19 @@ class _MyNumberPickerState extends State<MyNumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: <Widget>[
         NumberPicker(
           value: _currentValue,
           minValue: 0,
           maxValue: 200,
+          textStyle: kHeadline4.copyWith(color: kLightBlue2),
+          selectedTextStyle: kHeadline2.copyWith(
+            color: kMainColor,
+          ),
           onChanged: (value) => setState(() => _currentValue = value),
         ),
-        Text(
-          'KG: $_currentValue',
-          style: const TextStyle(
-            fontFamily: "Roboto",
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: kMainColor,
-          ),
-          ),
+        Text('KG', style: kHeadline5.copyWith(color: kMainColor)),
       ],
     );
   }
