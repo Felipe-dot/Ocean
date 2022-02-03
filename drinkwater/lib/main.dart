@@ -1,11 +1,9 @@
-import 'package:drinkwater/screens/my_add_sleep_time.dart';
 import 'package:drinkwater/screens/my_intro_conclusion_screen.dart';
-import 'package:drinkwater/screens/my_add_weight_screen.dart';
+import 'package:drinkwater/screens/my_slider_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/my_splash_screen.dart';
 import 'screens/my_initial_setup_screen.dart';
-import 'screens/my_add_wake_up_time_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,9 +26,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const MySplashScreen(),
         '/myInitialSetupScreen': (context) => const MyInitialSetupScreen(),
-        '/myAddWeightScreen': (context) => const MyAddWeightScreen(),
-        '/myAddWakeUpTimeScreen': (context) => const MyAddWakeUpTimeScreen(),
-        '/myAddSleepTimeScreen': (context) => const MyAddSleepTimeScreen(),
+        '/mySliderScreen': (context) => const MySliderScreen(),
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
       },
     );

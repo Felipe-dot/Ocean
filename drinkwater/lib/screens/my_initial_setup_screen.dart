@@ -60,7 +60,7 @@ class MyInitialSetupScreen extends StatelessWidget {
                     ),
                     MyCta(
                       function: () {
-                        Navigator.pushNamed(context, '/myAddWeightScreen');
+                        Navigator.pushNamed(context, '/mySliderScreen');
                       },
                       text: "começar",
                       textStyle: kButton.copyWith(

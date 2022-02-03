@@ -78,7 +78,7 @@ class MyIntroConclusionScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 40),
                   child: MyCtaWithIconRight(
                     background: kWhite,
-                    textStyle: kButton,
+                    textStyle: kButton.copyWith(color: kMainColor),
                     function: () {},
                     height: 70,
                     width: 280,

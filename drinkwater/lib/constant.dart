@@ -22,6 +22,12 @@ const kHeadline1 = TextStyle(
   letterSpacing: -0.15,
 );
 
+const kHeadline2 = TextStyle(
+  fontSize: 50,
+  fontWeight: FontWeight.w300,
+  letterSpacing: -0.15,
+);
+
 const kHeadline4 = TextStyle(
   fontSize: 32,
 );
