@@ -1,3 +1,4 @@
+import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:wave/config.dart';
@@ -13,6 +14,7 @@ class MyHomePageScreen extends StatefulWidget {
 }
 
 class _MyHomePageScreenState extends State<MyHomePageScreen> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +122,40 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: MyBottomNavBar(
+        selectedIndex: _currentIndex,
+        backgroundColor: kMainColor,
+        showElevation: false,
+        itemCornerRadius: 20,
+        curve: Curves.easeIn,
+        onItemSelected: (index) => setState(() => _currentIndex = index),
+        items: <BottomNavyBarItem>[
+          BottomNavyBarItem(
+            icon: Icon(
+              Icons.home,
+              color:  kWhite,
+            ),
+            activeColor: kLightBlue1,
+            inactiveColor: kMainColor,
+          ),
+          BottomNavyBarItem(
+            icon: Icon(
+              Icons.notifications,
+              color:  kWhite,
+            ),
+            activeColor: kLightBlue1,
+            inactiveColor: kMainColor,
+          ),
+          BottomNavyBarItem(
+            icon: Icon(
+              Icons.event_available,
+              color:  kWhite,
+            ),
+            activeColor: kLightBlue1,
+            inactiveColor: kMainColor,
+          ),
+        ],
       ),
     );
   }
