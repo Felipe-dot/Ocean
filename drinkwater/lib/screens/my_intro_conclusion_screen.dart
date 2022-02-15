@@ -79,7 +79,9 @@ class MyIntroConclusionScreen extends StatelessWidget {
                   child: MyCtaWithIconRight(
                     background: kWhite,
                     textStyle: kButton.copyWith(color: kMainColor),
-                    function: () {},
+                    function: () {
+                       Navigator.pushNamed(context, '/myHomePage');
+                    },
                     height: 70,
                     width: 280,
                     icon: Icons.arrow_right_alt_outlined,

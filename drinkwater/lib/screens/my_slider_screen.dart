@@ -55,8 +55,8 @@ class _MySliderScreenState extends State<MySliderScreen> {
               children: [
                 const Image(
                   image: AssetImage("assets/images/logo.png"),
-                  height: 89,
-                  width: 145,
+                  height: 80,
+                  width: 140,
                 ),
                 SizedBox(
                   height: 420,
@@ -109,7 +109,7 @@ class _MySliderScreenState extends State<MySliderScreen> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.only(top: 6),
                   child: MySliderProgressIndicator(current: currentPage),
                 ),
               ],

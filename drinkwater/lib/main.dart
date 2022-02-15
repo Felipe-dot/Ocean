@@ -2,6 +2,7 @@ import 'package:drinkwater/screens/my_intro_conclusion_screen.dart';
 import 'package:drinkwater/screens/my_slider_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'screens/my_home_page_screen.dart';
 import 'screens/my_splash_screen.dart';
 import 'screens/my_initial_setup_screen.dart';
 
@@ -28,6 +29,7 @@ class _MyAppState extends State<MyApp> {
         '/myInitialSetupScreen': (context) => const MyInitialSetupScreen(),
         '/mySliderScreen': (context) => const MySliderScreen(),
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
+        '/myHomePage': (context) => const MyHomePageScreen(),
       },
     );
   }
