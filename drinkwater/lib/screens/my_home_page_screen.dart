@@ -1,4 +1,6 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
+import 'package:drinkwater/components/my_expandable_fab.dart';
+import 'package:drinkwater/components/my_fab_content.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -132,14 +134,22 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: kWhite,
-        onPressed: () {},
-        child: const Icon(
-          Icons.add,
-          color: kMainColor,
-          size: 50,
-        ),
+      floatingActionButton: MyExpandableFab(
+        distance: 100.0,
+        children: [
+          MyFabContent(
+            myIconImageAsset: 'assets/images/copo.png',
+            myFABContentText: '200ml',
+          ),
+          MyFabContent(
+            myIconImageAsset: 'assets/images/garrafa.png',
+            myFABContentText: '350ml',
+          ),
+          MyFabContent(
+            myIconImageAsset: 'assets/images/jarra.png',
+            myFABContentText: '700ml',
+          ),
+        ],
       ),
       bottomNavigationBar: MyBottomNavBar(
         iconSize: 30,
