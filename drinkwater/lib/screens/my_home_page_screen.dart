@@ -1,8 +1,6 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
 
 import '../constant.dart';
 
@@ -18,6 +16,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: kWhite,
@@ -35,7 +34,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       ),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
@@ -57,12 +55,12 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       ),
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: kWhite,
           ),
           alignment: Alignment.center,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
@@ -71,17 +69,23 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                     radius: 40.0,
                     lineWidth: 5.0,
                     percent: 0.75,
-                    center: Text("75%"),
+                    center: const Text(
+                      "75%",
+                      style: TextStyle(
+                        color: kMainColor,
+                        fontSize: 25,
+                      ),
+                    ),
                     progressColor: kDark1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 140),
-                        child: Text(
+                        margin: const EdgeInsets.only(left: 140),
+                        child: const Text(
                           "ml",
                           style: TextStyle(
                             color: kMainColor,
@@ -90,7 +94,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         "1250",
                         style: TextStyle(
                           color: kMainColor,
@@ -98,7 +102,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                           fontWeight: FontWeight.w300,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "faltando: 750ml",
                         style: TextStyle(
                           color: kLightBlue2,
@@ -110,20 +114,35 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: () {},
-                iconSize: 80,
-                icon: Icon(
-                  Icons.add_circle,
-                  color: kMainColor,
+              Container(
+                height: 200,
+                decoration: const BoxDecoration(
+                  color: kWhite,
+                  image: DecorationImage(
+                    alignment: Alignment.bottomCenter,
+                    scale: 0.5,
+                    image: AssetImage(
+                      'assets/images/wave.png',
+                    ),
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                color: kWhite,
               ),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kWhite,
+        onPressed: () {},
+        child: const Icon(
+          Icons.add,
+          color: kMainColor,
+          size: 50,
+        ),
+      ),
       bottomNavigationBar: MyBottomNavBar(
+        iconSize: 30,
         selectedIndex: _currentIndex,
         backgroundColor: kMainColor,
         showElevation: false,
@@ -132,25 +151,25 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         onItemSelected: (index) => setState(() => _currentIndex = index),
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.home,
-              color:  kWhite,
+              color: kWhite,
             ),
             activeColor: kLightBlue1,
             inactiveColor: kMainColor,
           ),
           BottomNavyBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications,
-              color:  kWhite,
+              color: kWhite,
             ),
             activeColor: kLightBlue1,
             inactiveColor: kMainColor,
           ),
           BottomNavyBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.event_available,
-              color:  kWhite,
+              color: kWhite,
             ),
             activeColor: kLightBlue1,
             inactiveColor: kMainColor,
