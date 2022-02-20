@@ -103,7 +103,7 @@ class _MyExpandableFabState extends State<MyExpandableFab>
     final children = <Widget>[];
     final count = widget.children.length;
     final step = 90.0 / (count - 1);
-    for (var i = 0, angleInDegrees = 0.0;
+    for (var i = 0, angleInDegrees = 45.0;
         i < count;
         i++, angleInDegrees += step) {
       children.add(
@@ -174,7 +174,7 @@ class _ExpandingActionButton extends StatelessWidget {
           progress.value * maxDistance,
         );
         return Positioned(
-          right: 135.0 + offset.dx,
+          right: 157.0 + offset.dx,
           bottom: 4.0 + offset.dy,
           child: Transform.rotate(
             angle: (1.0 - progress.value) * math.pi / 2,
