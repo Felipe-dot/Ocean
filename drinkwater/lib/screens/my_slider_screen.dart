@@ -13,7 +13,9 @@ class MySliderScreen extends StatefulWidget {
   _MySliderScreenState createState() => _MySliderScreenState();
 }
 
+
 class _MySliderScreenState extends State<MySliderScreen> {
+
   int currentPage = 0;
   List<Widget> myPages = [
     const MyInfoPage(

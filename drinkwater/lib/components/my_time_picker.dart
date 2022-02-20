@@ -1,6 +1,8 @@
 import 'package:drinkwater/constant.dart';
+import 'package:drinkwater/providers/wake_up_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/src/provider.dart';
 
 class MyTimePicker extends StatefulWidget {
   const MyTimePicker({Key key}) : super(key: key);
@@ -25,6 +27,7 @@ class _MyTimePickerState extends State<MyTimePicker> {
         if (newTime != null) {
           setState(() {
             time = newTime;
+            context.read<WakeUp>().add(time);
           });
         }
       },

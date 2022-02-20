@@ -1,9 +1,28 @@
 import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
+import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
-class MyIntroConclusionScreen extends StatelessWidget {
+class MyIntroConclusionScreen extends StatefulWidget {
   const MyIntroConclusionScreen({Key key}) : super(key: key);
+
+  @override
+  State<MyIntroConclusionScreen> createState() =>
+      _MyIntroConclusionScreenState();
+}
+
+class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
+  int howMuchINeedToDrink() {
+    int myWeight = context.read<Weight>().weight;
+    // Calculando quanto o usuário deve beber
+    return myWeight * 35;
+  }
+
+  double thisIsEquivalentTo() {
+    int drinkGoal = howMuchINeedToDrink();
+    return drinkGoal / 200;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +58,7 @@ class MyIntroConclusionScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '2000',
+                      '${howMuchINeedToDrink()}',
                       style: kHeadline1.copyWith(color: kWhite),
                     ),
                     Text('ml', style: kCaption.copyWith(color: kWhite)),
@@ -60,7 +79,7 @@ class MyIntroConclusionScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text(
-                              '10 copos de 200ml',
+                              '${thisIsEquivalentTo().toStringAsFixed(0)} copos de 200ml',
                               style: kHeadline6.copyWith(color: kLightBlue3),
                             ),
                             const Image(
@@ -80,7 +99,7 @@ class MyIntroConclusionScreen extends StatelessWidget {
                     background: kWhite,
                     textStyle: kButton.copyWith(color: kMainColor),
                     function: () {
-                       Navigator.pushNamed(context, '/myHomePage');
+                      Navigator.pushNamed(context, '/myHomePage');
                     },
                     height: 70,
                     width: 280,

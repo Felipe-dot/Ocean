@@ -1,5 +1,7 @@
+import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/src/provider.dart';
 import '../constant.dart';
 
 class MyNumberPicker extends StatefulWidget {
@@ -24,7 +26,10 @@ class _MyNumberPickerState extends State<MyNumberPicker> {
           selectedTextStyle: kHeadline2.copyWith(
             color: kMainColor,
           ),
-          onChanged: (value) => setState(() => _currentValue = value),
+          onChanged: (value) => setState(() => {
+                _currentValue = value,
+                context.read<Weight>().add(_currentValue)
+              }),
         ),
         Text('KG', style: kHeadline5.copyWith(color: kMainColor)),
       ],
