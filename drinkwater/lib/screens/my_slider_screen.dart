@@ -13,9 +13,7 @@ class MySliderScreen extends StatefulWidget {
   _MySliderScreenState createState() => _MySliderScreenState();
 }
 
-
 class _MySliderScreenState extends State<MySliderScreen> {
-
   int currentPage = 0;
   List<Widget> myPages = [
     const MyInfoPage(
@@ -30,14 +28,18 @@ class _MySliderScreenState extends State<MySliderScreen> {
       desc:
           "para que não enviemos seus lembretes em uma hora inoportuna é importante saber sua hora de acordar",
       imagem: "assets/images/despertador.png",
-      widget: MyTimePicker(),
+      widget: MyTimePicker(
+        isSleepTime: false,
+      ),
     ),
     const MyInfoPage(
       titulo: "Qual sua hora de dormir?",
       desc:
           "para que não enviemos seus lembretes em uma hora inoportuna é importante saber sua hora de dormir",
       imagem: "assets/images/dormindo.png",
-      widget: MyTimePicker(),
+      widget: MyTimePicker(
+        isSleepTime: true,
+      ),
     ),
   ];
 

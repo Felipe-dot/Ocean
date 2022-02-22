@@ -13,15 +13,14 @@ import 'screens/my_home_page_screen.dart';
 import 'screens/my_splash_screen.dart';
 import 'screens/my_initial_setup_screen.dart';
 
-void main() async{
+void main() async {
   // Inicializando o hive
   await Hive.initFlutter();
   // Registrando o adaptador
   Hive.registerAdapter(UserAdapter());
   // Abrindo a box
   await Hive.openBox<User>('userBox');
-  runApp(
-    MultiProvider(
+  runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => Weight()),
       ChangeNotifierProvider(create: (_) => WakeUp()),

@@ -19,16 +19,17 @@ class UserAdapter extends TypeAdapter<User> {
     return User(
       drinkingWaterGoal: fields[0] as int,
       userWeight: fields[1] as int,
-      userWakeUpTime: fields[2] as DateTime,
-      userSleepTime: fields[3] as DateTime,
+      userWakeUpTime: fields[2] as TimeOfDay,
+      userSleepTime: fields[3] as TimeOfDay,
       goalOfTheDayBeat: (fields[4] as Map)?.cast<bool, DateTime>(),
+      drinkingWaterStatus: fields[5] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.drinkingWaterGoal)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(3)
       ..write(obj.userSleepTime)
       ..writeByte(4)
-      ..write(obj.goalOfTheDayBeat);
+      ..write(obj.goalOfTheDayBeat)
+      ..writeByte(5)
+      ..write(obj.drinkingWaterStatus);
   }
 
   @override

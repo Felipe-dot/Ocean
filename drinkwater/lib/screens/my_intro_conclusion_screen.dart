@@ -1,7 +1,11 @@
 import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
+import 'package:drinkwater/models/user.dart';
+import 'package:drinkwater/providers/sleep_time_provider.dart';
+import 'package:drinkwater/providers/wake_up_provider.dart';
 import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/src/provider.dart';
 
 class MyIntroConclusionScreen extends StatefulWidget {
@@ -13,6 +17,22 @@ class MyIntroConclusionScreen extends StatefulWidget {
 }
 
 class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
+  Box<User> box;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get reference to an already opened box
+    box = Hive.box('userBox');
+  }
+
+  @override
+  void dispose() {
+    // Closes all Hive boxes
+    Hive.close();
+    super.dispose();
+  }
+
   int howMuchINeedToDrink() {
     int myWeight = context.read<Weight>().weight;
     // Calculando quanto o usuário deve beber
@@ -22,6 +42,20 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
   double thisIsEquivalentTo() {
     int drinkGoal = howMuchINeedToDrink();
     return drinkGoal / 200;
+  }
+
+  void _addDataToUserBox() async {
+    var wakeUpTime = context.read<WakeUp>().wakeUpTime;
+    var sleepTime = context.read<Sleep>().sleepTime;
+
+    box.put(
+        'drinkingWaterGoal', User(drinkingWaterGoal: howMuchINeedToDrink()));
+    box.put('userWeight', User(userWeight: context.read<Weight>().weight));
+    box.put('userWakeUpTime', User(userWakeUpTime: wakeUpTime));
+    box.put('userSleepTime', User(userSleepTime: sleepTime));
+    box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
+
+     print('User data added to box!');
   }
 
   @override
@@ -100,6 +134,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
                     textStyle: kButton.copyWith(color: kMainColor),
                     function: () {
                       Navigator.pushNamed(context, '/myHomePage');
+                      _addDataToUserBox();
                     },
                     height: 70,
                     width: 280,
