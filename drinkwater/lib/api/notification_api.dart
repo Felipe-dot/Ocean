@@ -17,8 +17,8 @@ class NotificationApi {
       ),
       iOS: IOSNotificationDetails(),
     );
-   }
-  
+  }
+
   static Future init({bool initScheduled = false}) async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iOS = IOSInitializationSettings();
@@ -28,8 +28,7 @@ class NotificationApi {
       settings,
       onSelectNotification: (payload) async {},
     );
-  })
-
+  }
 
   static Future showScheduleNotification({
     int id = 0,
@@ -43,11 +42,10 @@ class NotificationApi {
         title,
         body,
         scheduledDate,
+        await _notificationDetails(),
         androidAllowWhileIdle: true,
-        await _notificationDetails(
-          
-        ),
         payload: payload,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
       );
 }
