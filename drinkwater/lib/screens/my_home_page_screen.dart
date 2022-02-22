@@ -2,6 +2,7 @@ import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:drinkwater/components/my_expandable_fab.dart';
 import 'package:drinkwater/components/my_fab_content.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../constant.dart';
@@ -14,6 +15,23 @@ class MyHomePageScreen extends StatefulWidget {
 }
 
 class _MyHomePageScreenState extends State<MyHomePageScreen> {
+  Box box;
+  
+  @override
+  void initState() {
+    super.initState();
+    // Get reference to an already opened box
+    box = Hive.box('userBox');
+  }
+
+  @override
+  void dispose() {
+    // Closes all Hive boxes
+    Hive.close();
+    super.dispose();
+  }
+
+  
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
