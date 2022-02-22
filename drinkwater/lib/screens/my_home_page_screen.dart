@@ -35,7 +35,14 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   int _howMuchIsMissing() {
     int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
     int drinkGoal = box.get('drinkingWaterGoal').drinkingWaterGoal;
-    return drinkGoal - drinkStatus;
+    var myMap = {DateTime.now(): true};
+    // Verificando se a meta já foi batida
+    if ((drinkGoal - drinkStatus) <= 0) {
+      box.put('goalOfTheDayBeat', User(goalOfTheDayBeat: myMap));
+      return 0;
+    } else {
+      return drinkGoal - drinkStatus;
+    }
   }
 
   double _percentageCalc() {
@@ -43,11 +50,25 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     int drinkGoal = box.get('drinkingWaterGoal').drinkingWaterGoal;
 
     double percentage = (drinkStatus * 100) / drinkGoal;
+
     // Aplicando regra de três
-    return percentage;
+    return percentage > 100 ? 100 : percentage;
   }
 
   int _currentIndex = 0;
+
+  bool _getGoalStatus() {
+    if (box.get('goalOfTheDayBeat') == null) {
+      return false;
+    } else {
+      bool result = box
+          .get('goalOfTheDayBeat')
+          .goalOfTheDayBeat
+          .containsKey(DateTime.now());
+      return result;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +124,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                   CircularPercentIndicator(
                     radius: 40.0,
                     lineWidth: 5.0,
-                    percent: _percentageCalc(),
+                    percent: _percentageCalc() / 100,
                     center: Text(
                       "${_percentageCalc().toStringAsFixed(0)}%",
                       style: const TextStyle(
@@ -137,14 +158,23 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                           fontWeight: FontWeight.w300,
                         ),
                       ),
-                      Text(
-                        "faltando: ${_howMuchIsMissing()}",
-                        style: const TextStyle(
-                          color: kLightBlue2,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      _getGoalStatus()
+                          ? const Text(
+                              "Parabéns a sua meta foi batida",
+                              style: TextStyle(
+                                color: kLightBlue2,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          : Text(
+                              "faltando: ${_howMuchIsMissing()}",
+                              style: const TextStyle(
+                                color: kLightBlue2,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                     ],
                   ),
                 ],
@@ -174,24 +204,33 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/copo.png',
             myFABContentText: '200ml',
             myFunction: () {
-              int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
-              box.put('drinkingWaterStatus', User(drinkingWaterStatus: drinkStatus + 200));
+              int drinkStatus =
+                  box.get('drinkingWaterStatus').drinkingWaterStatus;
+              box.put('drinkingWaterStatus',
+                  User(drinkingWaterStatus: drinkStatus + 200));
+              setState(() {});
             },
           ),
           MyFabContent(
             myIconImageAsset: 'assets/images/garrafa.png',
             myFABContentText: '350ml',
             myFunction: () {
-              int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
-              box.put('drinkingWaterStatus', User(drinkingWaterStatus: drinkStatus + 350));
+              int drinkStatus =
+                  box.get('drinkingWaterStatus').drinkingWaterStatus;
+              box.put('drinkingWaterStatus',
+                  User(drinkingWaterStatus: drinkStatus + 350));
+              setState(() {});
             },
           ),
           MyFabContent(
             myIconImageAsset: 'assets/images/jarra.png',
             myFABContentText: '700ml',
             myFunction: () {
-              int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
-              box.put('drinkingWaterStatus', User(drinkingWaterStatus: drinkStatus + 700));
+              int drinkStatus =
+                  box.get('drinkingWaterStatus').drinkingWaterStatus;
+              box.put('drinkingWaterStatus',
+                  User(drinkingWaterStatus: drinkStatus + 700));
+              setState(() {});
             },
           ),
         ],

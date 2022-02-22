@@ -17,7 +17,7 @@ class User {
   final TimeOfDay userSleepTime;
 
   @HiveField(4)
-  final Map<bool, DateTime> goalOfTheDayBeat;
+  final Map<DateTime, bool> goalOfTheDayBeat;
 
   @HiveField(5)
   final int drinkingWaterStatus;
