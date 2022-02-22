@@ -173,14 +173,26 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
           MyFabContent(
             myIconImageAsset: 'assets/images/copo.png',
             myFABContentText: '200ml',
+            myFunction: () {
+              int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
+              box.put('drinkingWaterStatus', User(drinkingWaterStatus: drinkStatus + 200));
+            },
           ),
           MyFabContent(
             myIconImageAsset: 'assets/images/garrafa.png',
             myFABContentText: '350ml',
+            myFunction: () {
+              int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
+              box.put('drinkingWaterStatus', User(drinkingWaterStatus: drinkStatus + 350));
+            },
           ),
           MyFabContent(
             myIconImageAsset: 'assets/images/jarra.png',
             myFABContentText: '700ml',
+            myFunction: () {
+              int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
+              box.put('drinkingWaterStatus', User(drinkingWaterStatus: drinkStatus + 700));
+            },
           ),
         ],
       ),

@@ -5,8 +5,9 @@ import 'my_expandable_fab.dart';
 class MyFabContent extends StatelessWidget {
   String myIconImageAsset;
   String myFABContentText;
+  Function myFunction;
 
-  MyFabContent({Key key, this.myIconImageAsset, this.myFABContentText})
+  MyFabContent({Key key, this.myIconImageAsset, this.myFABContentText, this.myFunction})
       : super(key: key);
 
   @override
@@ -18,6 +19,7 @@ class MyFabContent extends StatelessWidget {
             myIconImageAsset,
             height: 23,
           ),
+          onPressed: myFunction,
         ),
         Text(
           myFABContentText,
