@@ -61,10 +61,8 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     if (box.get('goalOfTheDayBeat') == null) {
       return false;
     } else {
-      bool result = box
-          .get('goalOfTheDayBeat')
-          .goalOfTheDayBeat
-          .containsKey(DateTime.now());
+      var result =
+          box.get('goalOfTheDayBeat').goalOfTheDayBeat.containsValue(true);
       return result;
     }
   }
@@ -75,7 +73,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: kWhite,
+        backgroundColor: _getGoalStatus() ? kMainColor : kWhite,
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -111,63 +109,117 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       ),
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            color: kWhite,
+          decoration: BoxDecoration(
+            color: _getGoalStatus() ? kMainColor : kWhite,
           ),
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  CircularPercentIndicator(
-                    radius: 40.0,
-                    lineWidth: 5.0,
-                    percent: _percentageCalc() / 100,
-                    center: Text(
-                      "${_percentageCalc().toStringAsFixed(0)}%",
-                      style: const TextStyle(
-                        color: kMainColor,
-                        fontSize: 25,
-                      ),
-                    ),
-                    progressColor: kDark1,
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 140),
-                        child: const Text(
-                          "ml",
-                          style: TextStyle(
-                            color: kMainColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
+              _getGoalStatus()
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(45),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 140),
+                                child: const Text(
+                                  "ml",
+                                  style: TextStyle(
+                                    color: kGreenAccent,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              Text(
+                                "${box.get('drinkingWaterStatus').drinkingWaterStatus}",
+                                style: const TextStyle(
+                                  color: kGreenAccent,
+                                  fontSize: 60,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      Text(
-                        "${box.get('drinkingWaterStatus').drinkingWaterStatus}",
-                        style: const TextStyle(
-                          color: kMainColor,
-                          fontSize: 60,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      _getGoalStatus()
-                          ? const Text(
-                              "Parabéns a sua meta foi batida",
-                              style: TextStyle(
-                                color: kLightBlue2,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 75),
+                          height: 80,
+                          decoration: const BoxDecoration(
+                            color: kMainColor,
+                            image: DecorationImage(
+                              alignment: Alignment.bottomCenter,
+                              scale: 0.5,
+                              image: AssetImage(
+                                'assets/images/meta_batida.png',
                               ),
-                            )
-                          : Text(
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          "Parabéns!",
+                          style: TextStyle(
+                            color: kWhite,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Text(
+                          "Suas metas de hoje foram cumpridas",
+                          style: TextStyle(
+                            color: kWhite,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        CircularPercentIndicator(
+                          radius: 40.0,
+                          lineWidth: 5.0,
+                          percent: _percentageCalc() / 100,
+                          center: Text(
+                            "${_percentageCalc().toStringAsFixed(0)}%",
+                            style: const TextStyle(
+                              color: kMainColor,
+                              fontSize: 25,
+                            ),
+                          ),
+                          progressColor: kDark1,
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 140),
+                              child: const Text(
+                                "ml",
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "${box.get('drinkingWaterStatus').drinkingWaterStatus}",
+                              style: const TextStyle(
+                                color: kMainColor,
+                                fontSize: 60,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            Text(
                               "faltando: ${_howMuchIsMissing()}",
                               style: const TextStyle(
                                 color: kLightBlue2,
@@ -175,24 +227,26 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                    ],
-                  ),
-                ],
-              ),
-              Container(
-                height: 200,
-                decoration: const BoxDecoration(
-                  color: kWhite,
-                  image: DecorationImage(
-                    alignment: Alignment.bottomCenter,
-                    scale: 0.5,
-                    image: AssetImage(
-                      'assets/images/wave.png',
+                          ],
+                        ),
+                      ],
                     ),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
+              _getGoalStatus()
+                  ? Container()
+                  : Container(
+                      height: 200,
+                      decoration: const BoxDecoration(
+                        color: kWhite,
+                        image: DecorationImage(
+                          alignment: Alignment.bottomCenter,
+                          scale: 0.5,
+                          image: AssetImage(
+                            'assets/images/wave.png',
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
