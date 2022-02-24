@@ -1,4 +1,7 @@
+import 'package:drinkwater/models/user.dart';
+import 'package:drinkwater/screens/my_home_page_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 import '../constant.dart';
@@ -12,11 +15,25 @@ class MySplashScreen extends StatefulWidget {
 }
 
 class _MySplashScreenState extends State<MySplashScreen> {
+  Box<User> box;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get reference to an already opened box
+    box = Hive.box('userBox');
+  }
+
+  bool _isBoxEmpty() {
+    return box.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
       seconds: 14,
-      navigateAfterSeconds: const MyLoginScreen(),
+      navigateAfterSeconds:
+          _isBoxEmpty() ? const MyLoginScreen() : const MyHomePageScreen(),
       image: Image.asset(
         "assets/images/logoSplashScreen.png",
         alignment: Alignment.center,

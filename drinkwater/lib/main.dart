@@ -38,29 +38,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Box<User> box;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Get reference to an already opened box
-  //   box = Hive.box('userBox');
-  // }
-
-  // bool _isBoxEmpty() {
-  //   if (box. == null) {
-  //     false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-
+ 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Drink Water",
       debugShowCheckedModeBanner: false,
-      initialRoute: true ? '/' : '/myHomePage',
+      initialRoute: '/',
       routes: {
         '/': (context) => const MySplashScreen(),
         '/myInitialSetupScreen': (context) => const MyInitialSetupScreen(),
