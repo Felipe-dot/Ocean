@@ -23,6 +23,23 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     super.initState();
     // Get reference to an already opened box
     box = Hive.box('userBox');
+    if (box.get('goalOfTheDayBeat') == null) {
+      print("O dia continua o mesmo");
+    } else {
+      if (_isDayChanged()) {
+        Map<DateTime, bool> myMap;
+        //  Resetando o status da meta de ingestão de água
+        box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
+        if (_getGoalStatus()) {
+          myMap = box.get('goalOfTheDayBeat').goalOfTheDayBeat;
+        } else {
+          myMap = {};
+        }
+
+        myMap.addAll({DateTime.now(): false});
+        box.put('goalOfTheDayBeat', User(goalOfTheDayBeat: myMap));
+      }
+    }
   }
 
   @override
@@ -32,10 +49,43 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     super.dispose();
   }
 
+  bool _isDayChanged() {
+    int lastDay;
+    if (box.get('goalOfTheDayBeat') != null) {
+      lastDay = box.get('goalOfTheDayBeat').goalOfTheDayBeat.keys.last.day;
+      print(
+          "OLA DIA ${box.get('goalOfTheDayBeat').goalOfTheDayBeat.keys.last.day}");
+    } else {
+      return false;
+    }
+    if (lastDay != DateTime.now().day) {
+      print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
+      return true;
+    } else {
+      print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
+      return false;
+    }
+  }
+
   int _howMuchIsMissing() {
     int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
     int drinkGoal = box.get('drinkingWaterGoal').drinkingWaterGoal;
-    var myMap = {DateTime.now(): true};
+    Map<DateTime, bool> newMap;
+    Map<DateTime, bool> myMap;
+    if (_getGoalStatus()) {
+      myMap = box.get('goalOfTheDayBeat').goalOfTheDayBeat;
+    } else {
+      myMap = {};
+    }
+
+    if (_isDayChanged() && (drinkGoal - drinkStatus) > 0) {
+      newMap = {DateTime.now(): false};
+    } else {
+      newMap = {DateTime.now(): true};
+    }
+
+    myMap.addAll(newMap);
+
     // Verificando se a meta já foi batida
     if ((drinkGoal - drinkStatus) <= 0) {
       box.put('goalOfTheDayBeat', User(goalOfTheDayBeat: myMap));
@@ -61,8 +111,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     if (box.get('goalOfTheDayBeat') == null) {
       return false;
     } else {
-      var result =
-          box.get('goalOfTheDayBeat').goalOfTheDayBeat.containsValue(true);
+      var result = box.get('goalOfTheDayBeat').goalOfTheDayBeat.values.last;
       return result;
     }
   }
