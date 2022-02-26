@@ -138,8 +138,10 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
@@ -334,6 +336,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
               box.put('drinkingWaterStatus',
                   User(drinkingWaterStatus: drinkStatus + 200));
               setState(() {});
+              _howMuchIsMissing();
             },
           ),
           MyFabContent(
@@ -345,6 +348,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
               box.put('drinkingWaterStatus',
                   User(drinkingWaterStatus: drinkStatus + 350));
               setState(() {});
+              _howMuchIsMissing();
             },
           ),
           MyFabContent(
@@ -356,6 +360,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
               box.put('drinkingWaterStatus',
                   User(drinkingWaterStatus: drinkStatus + 700));
               setState(() {});
+              _howMuchIsMissing();
             },
           ),
         ],
