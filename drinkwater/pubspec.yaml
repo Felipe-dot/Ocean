@@ -41,8 +41,10 @@ dependencies:
   provider: ^6.0.2
   hive: ^2.0.5
   hive_flutter: ^1.1.0
-  flutter_local_notifications: ^9.3.2
+  flutter_local_notifications: ^6.1.0
   rxdart: ^0.27.1
+  # timezone:
+  flutter_native_timezone:
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:drinkwater/api/notification_api.dart';
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:drinkwater/components/my_expandable_fab.dart';
 import 'package:drinkwater/components/my_fab_content.dart';
@@ -23,6 +24,20 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     super.initState();
     // Get reference to an already opened box
     box = Hive.box('userBox');
+
+    // Iniciando o sistema de notificação do aplicativo
+    NotificationApi.init(initScheduled: true);
+    listenNotifications();
+
+    NotificationApi.showScheduleNotification(
+      title: 'Beba água',
+      body: 'Lembre de se manter hidratado',
+      payload: 'Drink time at 8am',
+      scheduledDate: DateTime.now().add(Duration(seconds: 12)),
+      hour: DateTime.now().hour,
+      minutes: 22,
+    );
+
     if (box.get('goalOfTheDayBeat') == null) {
       print("O dia continua o mesmo");
     } else {
@@ -40,6 +55,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         box.put('goalOfTheDayBeat', User(goalOfTheDayBeat: myMap));
       }
     }
+  }
+
+  void listenNotifications() =>
+      NotificationApi.onNotifications.stream.listen(onClickedNotification);
+
+  void onClickedNotification(String payload) {
+    Navigator.pushNamed(context, '/myHomePage');
   }
 
   @override

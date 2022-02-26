@@ -1,7 +1,6 @@
 import 'package:drinkwater/screens/my_intro_conclusion_screen.dart';
 import 'package:drinkwater/screens/my_slider_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +37,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
- 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
