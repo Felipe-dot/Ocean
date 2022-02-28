@@ -19,8 +19,8 @@ class UserAdapter extends TypeAdapter<User> {
     return User(
       drinkingWaterGoal: fields[0] as int,
       userWeight: fields[1] as int,
-      userWakeUpTime: fields[2] as TimeOfDay,
-      userSleepTime: fields[3] as TimeOfDay,
+      userWakeUpTime: fields[2] as DateTime,
+      userSleepTime: fields[3] as DateTime,
       goalOfTheDayBeat: (fields[4] as Map)?.cast<DateTime, bool>(),
       drinkingWaterStatus: fields[5] as int,
     );

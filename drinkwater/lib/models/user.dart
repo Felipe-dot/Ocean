@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'user.g.dart';
 
@@ -11,10 +10,10 @@ class User {
   final int userWeight;
 
   @HiveField(2)
-  final TimeOfDay userWakeUpTime;
+  final DateTime userWakeUpTime;
 
   @HiveField(3)
-  final TimeOfDay userSleepTime;
+  final DateTime userSleepTime;
 
   @HiveField(4)
   final Map<DateTime, bool> goalOfTheDayBeat;

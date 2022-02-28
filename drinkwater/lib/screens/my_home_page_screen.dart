@@ -29,14 +29,16 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     NotificationApi.init(initScheduled: true);
     listenNotifications();
 
-    NotificationApi.showScheduleNotification(
-      title: 'Beba água',
-      body: 'Lembre de se manter hidratado',
-      payload: 'Drink time at 8am',
-      scheduledDate: DateTime.now().add(Duration(seconds: 12)),
-      hour: DateTime.now().hour,
-      minutes: 22,
-    );
+    // NotificationApi.showScheduleNotification(
+    //   title: 'Beba água',
+    //   body: 'Lembre de se manter hidratado',
+    //   payload: 'Drink time at 8am',
+    //   scheduledDate: DateTime.now().add(Duration(seconds: 12)),
+    //   hour: DateTime.now().hour,
+    //   minutes: 22,
+    // );
+
+    NotificationApi.repeatNotification();
 
     if (box.get('goalOfTheDayBeat') == null) {
       print("O dia continua o mesmo");
@@ -61,7 +63,11 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       NotificationApi.onNotifications.stream.listen(onClickedNotification);
 
   void onClickedNotification(String payload) {
-    Navigator.pushNamed(context, '/myHomePage');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MyHomePageScreen()),
+    );
+    // Navigator.pushNamed(context, '/myHomePage');
   }
 
   @override
@@ -138,10 +144,8 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(

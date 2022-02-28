@@ -15,7 +15,7 @@ class NotificationApi {
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
-        'channel description',
+        channelDescription: 'channel description',
         importance: Importance.max,
       ),
       iOS: IOSNotificationDetails(),
@@ -79,5 +79,25 @@ class NotificationApi {
     return scheduledDate.isBefore(now)
         ? scheduledDate.add(const Duration(days: 1))
         : scheduledDate;
+  }
+
+  static Future<void> cancelAllNotifications() async {
+    await _notifications.cancelAll();
+  }
+
+  static Future<void> repeatNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await _notifications.periodicallyShow(
+        0,
+        'Beba água',
+        'Lembre de se manter hidratado',
+        RepeatInterval.hourly,
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true);
   }
 }

@@ -45,17 +45,36 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
   }
 
   void _addDataToUserBox() async {
+    final now = DateTime.now();
     var wakeUpTime = context.read<WakeUp>().wakeUpTime;
     var sleepTime = context.read<Sleep>().sleepTime;
 
     box.put(
         'drinkingWaterGoal', User(drinkingWaterGoal: howMuchINeedToDrink()));
     box.put('userWeight', User(userWeight: context.read<Weight>().weight));
-    box.put('userWakeUpTime', User(userWakeUpTime: wakeUpTime));
-    box.put('userSleepTime', User(userSleepTime: sleepTime));
+    box.put(
+        'userWakeUpTime',
+        User(
+            userWakeUpTime: DateTime(
+          now.year,
+          now.month,
+          now.day,
+          wakeUpTime.hour,
+          wakeUpTime.minute,
+        )));
+    box.put(
+        'userSleepTime',
+        User(
+            userSleepTime: DateTime(
+          now.year,
+          now.month,
+          now.day,
+          sleepTime.hour,
+          sleepTime.minute,
+        )));
     box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
 
-     print('User data added to box!');
+    print('User data added to box!');
   }
 
   @override
