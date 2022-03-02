@@ -7,7 +7,8 @@ class Sleep with ChangeNotifier {
 
   void add(TimeOfDay mySleepTime) {
     _sleepTime = mySleepTime;
-    print("EU DURMO ÀS ${_sleepTime}");
+    // ignore: avoid_print
+    print("EU DURMO ÀS $_sleepTime");
     notifyListeners();
   }
   

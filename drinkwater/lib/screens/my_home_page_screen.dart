@@ -1,5 +1,6 @@
 import 'package:drinkwater/api/notification_api.dart';
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
+import 'package:drinkwater/components/my_drawer.dart';
 import 'package:drinkwater/components/my_expandable_fab.dart';
 import 'package:drinkwater/components/my_fab_content.dart';
 import 'package:drinkwater/models/user.dart';
@@ -36,6 +37,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       listenNotifications();
       NotificationApi.repeatNotification();
     } else {
+      // ignore: avoid_print
       print("O usuário ainda não acordou");
     }
 
@@ -45,6 +47,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     }
 
     if (box.get('goalOfTheDayBeat') == null) {
+      // ignore: avoid_print
       print("O dia continua o mesmo");
     } else {
       if (_isDayChanged()) {
@@ -84,15 +87,18 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     int lastDay;
     if (box.get('goalOfTheDayBeat') != null) {
       lastDay = box.get('goalOfTheDayBeat').goalOfTheDayBeat.keys.last.day;
+      // ignore: avoid_print
       print(
           "OLA DIA ${box.get('goalOfTheDayBeat').goalOfTheDayBeat.keys.last.day}");
     } else {
       return false;
     }
     if (lastDay != DateTime.now().day) {
+      // ignore: avoid_print
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
       return true;
     } else {
+      // ignore: avoid_print
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
       return false;
     }
@@ -136,7 +142,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     return percentage > 100 ? 100 : percentage;
   }
 
-
   bool _getGoalStatus() {
     if (box.get('goalOfTheDayBeat') == null) {
       return false;
@@ -165,39 +170,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
           },
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  alignment: Alignment.center,
-                  image: AssetImage(
-                    'assets/images/drawerImage.jpg',
-                  ),
-                  fit: BoxFit.fill
-                ),
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: kWhite,
-                ),
-              ),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {},
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: const MyDrawer(),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -393,7 +366,8 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
           if (_currentIndex != 0) {
-            Navigator.pushNamed(context, '/myAvailableSoonScreen', arguments: _currentIndex);
+            Navigator.pushNamed(context, '/myAvailableSoonScreen',
+                arguments: _currentIndex);
           }
         },
         items: <BottomNavyBarItem>[

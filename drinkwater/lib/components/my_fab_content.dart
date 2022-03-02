@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'my_expandable_fab.dart';
 
+// ignore: must_be_immutable
 class MyFabContent extends StatelessWidget {
   String myIconImageAsset;
   String myFABContentText;
   Function myFunction;
 
-  MyFabContent({Key key, this.myIconImageAsset, this.myFABContentText, this.myFunction})
-      : super(key: key);
+  MyFabContent({
+    Key key,
+    this.myIconImageAsset,
+    this.myFABContentText,
+    this.myFunction,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,8 @@ class WakeUp with ChangeNotifier {
 
   void add(TimeOfDay myWakeUpTime) {
     _wakeUpTime = myWakeUpTime;
-    print("EU ACORDO ÀS ${_wakeUpTime}");
+    // ignore: avoid_print
+    print("EU ACORDO ÀS $_wakeUpTime");
     notifyListeners();
   }
 }

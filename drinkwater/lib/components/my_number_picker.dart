@@ -1,6 +1,7 @@
 import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 import '../constant.dart';
 
@@ -26,6 +27,7 @@ class _MyNumberPickerState extends State<MyNumberPicker> {
           selectedTextStyle: kHeadline2.copyWith(
             color: kMainColor,
           ),
+          // ignore: sdk_version_set_literal
           onChanged: (value) => setState(() => {
                 _currentValue = value,
                 context.read<Weight>().add(_currentValue)

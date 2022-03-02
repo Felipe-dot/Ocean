@@ -6,6 +6,7 @@ import 'package:drinkwater/providers/wake_up_provider.dart';
 import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
 class MyIntroConclusionScreen extends StatefulWidget {
@@ -74,6 +75,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
         )));
     box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
 
+    // ignore: avoid_print
     print('User data added to box!');
   }
 

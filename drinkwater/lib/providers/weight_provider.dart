@@ -7,7 +7,8 @@ class Weight with ChangeNotifier {
 
   void add(int myWeight) {
     _weight = myWeight;
-    print("MEU PESO É ${_weight}");
+    // ignore: avoid_print
+    print("MEU PESO É $_weight");
     notifyListeners();
   }
 }

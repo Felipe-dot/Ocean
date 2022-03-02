@@ -2,15 +2,13 @@ library bottom_navy_bar;
 
 import 'package:flutter/material.dart';
 
-
 /// A beautiful and animated bottom navigation that paints a rounded shape
 /// around its [items] to provide a wonderful look.
 ///
 /// Update [selectedIndex] to change the selected item.
 /// [selectedIndex] is required and must not be null.
 class MyBottomNavBar extends StatelessWidget {
-
-  MyBottomNavBar({
+  const MyBottomNavBar({
     Key key,
     this.selectedIndex = 0,
     this.showElevation = true,
@@ -23,8 +21,8 @@ class MyBottomNavBar extends StatelessWidget {
     this.items,
     this.onItemSelected,
     this.curve = Curves.linear,
-  }) : assert(items.length >= 2 && items.length <= 5),
-       super(key: key);
+  })  : assert(items.length >= 2 && items.length <= 5),
+        super(key: key);
 
   /// The selected item is index. Changing this property will change and animate
   /// the item being selected. Defaults to zero.
@@ -71,6 +69,7 @@ class MyBottomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         boxShadow: [
+          // ignore: sdk_version_ui_as_code
           if (showElevation)
             const BoxShadow(
               color: Colors.black12,
@@ -125,7 +124,7 @@ class _ItemWidget extends StatelessWidget {
     this.itemCornerRadius,
     this.iconSize,
     this.curve = Curves.linear,
-  })  : super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -137,15 +136,14 @@ class _ItemWidget extends StatelessWidget {
         duration: animationDuration,
         curve: curve,
         decoration: BoxDecoration(
-          color:
-              isSelected ? item.activeColor : item.inactiveColor,
+          color: isSelected ? item.activeColor : item.inactiveColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -153,14 +151,11 @@ class _ItemWidget extends StatelessWidget {
               children: <Widget>[
                 IconTheme(
                   data: IconThemeData(
-                    size: iconSize,
-                    color: isSelected
-                        ? item.activeColor
-                        : item.inactiveColor
-                  ),
+                      size: iconSize,
+                      color:
+                          isSelected ? item.activeColor : item.inactiveColor),
                   child: item.icon,
                 ),
-                
               ],
             ),
           ),
@@ -172,7 +167,6 @@ class _ItemWidget extends StatelessWidget {
 
 /// The [MyBottomNavBar.items] definition.
 class BottomNavyBarItem {
-
   BottomNavyBarItem({
     this.icon,
     this.title,
@@ -198,5 +192,4 @@ class BottomNavyBarItem {
   ///
   /// This will take effect only if [title] it a [Text] widget.
   final TextAlign textAlign;
-
 }

@@ -66,6 +66,7 @@ class _MyExpandableFabState extends State<MyExpandableFab>
         clipBehavior: Clip.none,
         children: [
           _buildTapToCloseFab(),
+          // ignore: sdk_version_ui_as_code
           ..._buildExpandingActionButtons(),
           _buildTapToOpenFab(),
         ],
