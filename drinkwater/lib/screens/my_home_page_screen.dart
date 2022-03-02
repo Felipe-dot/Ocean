@@ -17,6 +17,7 @@ class MyHomePageScreen extends StatefulWidget {
 }
 
 class _MyHomePageScreenState extends State<MyHomePageScreen> {
+  int _currentIndex = 0;
   Box<User> box;
 
   @override
@@ -26,19 +27,22 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     box = Hive.box('userBox');
 
     // Iniciando o sistema de notificação do aplicativo
-    NotificationApi.init(initScheduled: true);
-    listenNotifications();
+    var wakeUpTime = box.get('userWakeUpTime').userWakeUpTime;
+    var sleepTime = box.get('userSleepTime').userSleepTime;
 
-    // NotificationApi.showScheduleNotification(
-    //   title: 'Beba água',
-    //   body: 'Lembre de se manter hidratado',
-    //   payload: 'Drink time at 8am',
-    //   scheduledDate: DateTime.now().add(Duration(seconds: 12)),
-    //   hour: DateTime.now().hour,
-    //   minutes: 22,
-    // );
+    // Verificando se é a hora que o usuário acorda para iniciar as notificações
+    if (DateTime.now().hour >= wakeUpTime.hour) {
+      NotificationApi.init(initScheduled: true);
+      listenNotifications();
+      NotificationApi.repeatNotification();
+    } else {
+      print("O usuário ainda não acordou");
+    }
 
-    NotificationApi.repeatNotification();
+    // Cancelando as notificações dado a hora que o usuário dorme
+    if (DateTime.now().hour >= sleepTime.hour) {
+      NotificationApi.cancelAllNotifications();
+    }
 
     if (box.get('goalOfTheDayBeat') == null) {
       print("O dia continua o mesmo");
@@ -67,7 +71,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       context,
       MaterialPageRoute(builder: (context) => const MyHomePageScreen()),
     );
-    // Navigator.pushNamed(context, '/myHomePage');
   }
 
   @override
@@ -133,7 +136,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     return percentage > 100 ? 100 : percentage;
   }
 
-  int _currentIndex = 0;
 
   bool _getGoalStatus() {
     if (box.get('goalOfTheDayBeat') == null) {
@@ -376,7 +378,12 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         showElevation: false,
         itemCornerRadius: 20,
         curve: Curves.easeIn,
-        onItemSelected: (index) => setState(() => _currentIndex = index),
+        onItemSelected: (index) {
+          setState(() => _currentIndex = index);
+          if (_currentIndex != 0) {
+            Navigator.pushNamed(context, '/myAvailableSoonScreen', arguments: _currentIndex);
+          }
+        },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
             icon: const Icon(
