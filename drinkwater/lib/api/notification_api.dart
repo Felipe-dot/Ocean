@@ -41,46 +41,6 @@ class NotificationApi {
     }
   }
 
-  static void showScheduleNotification({
-    int id = 0,
-    String title,
-    String body,
-    String payload,
-    DateTime scheduledDate,
-    int hour,
-    int minutes,
-  }) async =>
-      _notifications.zonedSchedule(
-        id,
-        title,
-        body,
-        // tz.TZDateTime.from(scheduledDate, tz.local),
-        _scheduleDaily(Time(hour, minutes)),
-        await _notificationDetails(),
-        androidAllowWhileIdle: true,
-        payload: payload,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time,
-      );
-
-  static tz.TZDateTime _scheduleDaily(Time time) {
-    final now = tz.TZDateTime.now(tz.local);
-    final scheduledDate = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      time.hour,
-      time.minute,
-      time.second,
-    );
-
-    return scheduledDate.isBefore(now)
-        ? scheduledDate.add(const Duration(days: 1))
-        : scheduledDate;
-  }
-
   static Future<void> cancelAllNotifications() async {
     await _notifications.cancelAll();
   }
