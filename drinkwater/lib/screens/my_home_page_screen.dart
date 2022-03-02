@@ -169,9 +169,21 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
+                image: DecorationImage(
+                  alignment: Alignment.center,
+                  image: AssetImage(
+                    'assets/images/drawerImage.jpg',
+                  ),
+                  fit: BoxFit.fill
+                ),
                 color: Colors.blue,
               ),
-              child: Text('Drawer Header'),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: kWhite,
+                ),
+              ),
             ),
             ListTile(
               title: const Text('Item 1'),
