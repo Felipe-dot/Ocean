@@ -1,4 +1,5 @@
 import 'package:drinkwater/screens/my_%20available_soon_screen.dart';
+import 'package:drinkwater/screens/my_chart_screen.dart';
 import 'package:drinkwater/screens/my_intro_conclusion_screen.dart';
 import 'package:drinkwater/screens/my_slider_screen.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
         '/mySliderScreen': (context) => const MySliderScreen(),
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
         '/myAvailableSoonScreen': (context) => const MyAvailableSoonScreen(),
+        '/myChartScreen': (context) => const MyChartScreen(),
         '/myHomePage': (context) => const MyHomePageScreen(),
       },
     );
