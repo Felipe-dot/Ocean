@@ -67,11 +67,23 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
         curve: Curves.easeIn,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
-          if (_currentIndex != 0) {
-            Navigator.pushNamed(context, '/myAvailableSoonScreen',
+            switch(_currentIndex) {
+            case 0: {
+              Navigator.pushNamed(context, '/myHomePage');
+              break;
+            }
+            case 1: {
+              break;
+            }
+            case 2: {
+                Navigator.pushNamed(context, '/myChartScreen',
                 arguments: _currentIndex);
-          } else {
-            Navigator.pushNamed(context, '/myHomePage');
+              break;
+            }
+            default: {
+               Navigator.pushNamed(context, '/myAvailableSoonScreen',
+               arguments: _currentIndex);
+            }
           }
         },
         items: <BottomNavyBarItem>[
