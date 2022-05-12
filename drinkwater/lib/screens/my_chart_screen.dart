@@ -1,4 +1,5 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
+import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -13,13 +14,13 @@ class MyChartScreen extends StatefulWidget {
 }
 
 class _MyChartScreenState extends State<MyChartScreen> {
-  Box<User> box;
+  Box<WaterStatus> waterStatusBox;
 
   @override
   void initState() {
     super.initState();
     // Get reference to an already opened box
-    box = Hive.box('userBox');
+    waterStatusBox = Hive.box('statusBox');
   }
 
   @override
@@ -43,7 +44,7 @@ class _MyChartScreenState extends State<MyChartScreen> {
           children: [
             Column(
               children: [
-                Text('${box.get('goalOfTheDayBeat').goalOfTheDayBeat.entries}',
+                Text('${waterStatusBox.get('waterStatusData').waterStatusData}',
                     style: const TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -53,7 +54,7 @@ class _MyChartScreenState extends State<MyChartScreen> {
           ],
         ),
       ),
-        bottomNavigationBar: MyBottomNavBar(
+      bottomNavigationBar: MyBottomNavBar(
         iconSize: 30,
         selectedIndex: _currentIndex,
         backgroundColor: kMainColor,
@@ -62,23 +63,27 @@ class _MyChartScreenState extends State<MyChartScreen> {
         curve: Curves.easeIn,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
-            switch(_currentIndex) {
-            case 0: {
-              Navigator.pushNamed(context, '/myHomePage');
-              break;
-            }
-            case 1: {
-               Navigator.pushNamed(context, '/myAvailableSoonScreen',
-               arguments: _currentIndex);
-              break;
-            }
-            case 2: {
-              break;
-            }
-            default: {
-               Navigator.pushNamed(context, '/myAvailableSoonScreen',
-               arguments: _currentIndex);
-            }
+          switch (_currentIndex) {
+            case 0:
+              {
+                Navigator.pushNamed(context, '/myHomePage');
+                break;
+              }
+            case 1:
+              {
+                Navigator.pushNamed(context, '/myAvailableSoonScreen',
+                    arguments: _currentIndex);
+                break;
+              }
+            case 2:
+              {
+                break;
+              }
+            default:
+              {
+                Navigator.pushNamed(context, '/myAvailableSoonScreen',
+                    arguments: _currentIndex);
+              }
           }
         },
         items: <BottomNavyBarItem>[

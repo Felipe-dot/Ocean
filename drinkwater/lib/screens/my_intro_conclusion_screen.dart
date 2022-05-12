@@ -1,5 +1,6 @@
 import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
+import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
 import 'package:drinkwater/providers/sleep_time_provider.dart';
 import 'package:drinkwater/providers/wake_up_provider.dart';
@@ -18,13 +19,14 @@ class MyIntroConclusionScreen extends StatefulWidget {
 }
 
 class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
-  Box<User> box;
-
+  Box<User> userBox;
+  Box<WaterStatus> waterStatusBox;
   @override
   void initState() {
     super.initState();
     // Get reference to an already opened box
-    box = Hive.box('userBox');
+    userBox = Hive.box('userBox');
+    waterStatusBox = Hive.box('statusBox');
   }
 
   @override
@@ -50,10 +52,8 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
     var wakeUpTime = context.read<WakeUp>().wakeUpTime;
     var sleepTime = context.read<Sleep>().sleepTime;
 
-    box.put(
-        'drinkingWaterGoal', User(drinkingWaterGoal: howMuchINeedToDrink()));
-    box.put('userWeight', User(userWeight: context.read<Weight>().weight));
-    box.put(
+    userBox.put('userWeight', User(userWeight: context.read<Weight>().weight));
+    userBox.put(
         'userWakeUpTime',
         User(
             userWakeUpTime: DateTime(
@@ -63,7 +63,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           wakeUpTime.hour,
           wakeUpTime.minute,
         )));
-    box.put(
+    userBox.put(
         'userSleepTime',
         User(
             userSleepTime: DateTime(
@@ -73,7 +73,13 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           sleepTime.hour,
           sleepTime.minute,
         )));
-    box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
+
+    waterStatusBox.put(
+        'waterStatusData',
+        WaterStatus(
+          drinkingWaterGoal: howMuchINeedToDrink(),
+          amountOfWaterDrank: 0,
+        ));
 
     // ignore: avoid_print
     print('User data added to box!');
