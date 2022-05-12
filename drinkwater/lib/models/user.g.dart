@@ -17,31 +17,22 @@ class UserAdapter extends TypeAdapter<User> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return User(
-      drinkingWaterGoal: fields[0] as int,
-      userWeight: fields[1] as int,
-      userWakeUpTime: fields[2] as DateTime,
-      userSleepTime: fields[3] as DateTime,
-      goalOfTheDayBeat: (fields[4] as Map)?.cast<DateTime, bool>(),
-      drinkingWaterStatus: fields[5] as int,
+      userWeight: fields[0] as int,
+      userWakeUpTime: fields[1] as DateTime,
+      userSleepTime: fields[2] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(6)
-      ..writeByte(0)
-      ..write(obj.drinkingWaterGoal)
-      ..writeByte(1)
-      ..write(obj.userWeight)
-      ..writeByte(2)
-      ..write(obj.userWakeUpTime)
       ..writeByte(3)
-      ..write(obj.userSleepTime)
-      ..writeByte(4)
-      ..write(obj.goalOfTheDayBeat)
-      ..writeByte(5)
-      ..write(obj.drinkingWaterStatus);
+      ..writeByte(0)
+      ..write(obj.userWeight)
+      ..writeByte(1)
+      ..write(obj.userWakeUpTime)
+      ..writeByte(2)
+      ..write(obj.userSleepTime);
   }
 
   @override
