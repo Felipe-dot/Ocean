@@ -28,7 +28,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     super.initState();
     // Get reference to an already opened box
     userBox = Hive.box('userBox');
-    waterStatusBox = Hive.box('waterStatusBox');
+    waterStatusBox = Hive.box('statusBox');
     // Iniciando o sistema de notificação do aplicativo
     var wakeUpTime = userBox.get('userWakeUpTime').userWakeUpTime;
     var sleepTime = userBox.get('userSleepTime').userSleepTime;
@@ -48,43 +48,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       NotificationApi.cancelAllNotifications();
     }
 
-    if (waterStatusBox.get('goalOfTheDayWasBeat') == null) {
-      // ignore: avoid_print
-      print("O dia continua o mesmo");
-    } else {
-      if (_isDayChanged()) {
-        bool goalOfTheDayWasBeat;
-        //  Resetando o status da meta de ingestão de água
-        var waterStatusData =
-            waterStatusBox.get('WaterStatusData').waterStatusData;
-        waterStatusData.last.amountOfWaterDrank = 0;
-        waterStatusBox.put(
-            'waterStatusData', WaterStatus(waterStatusData: waterStatusData));
-
-        if (_getGoalStatus()) {
-          goalOfTheDayWasBeat = waterStatusBox
-              .get('WaterStatusData')
-              .waterStatusData
-              .last
-              .goalOfTheDayWasBeat;
-        } else {
-          goalOfTheDayWasBeat = false;
-        }
-
-        waterStatusData.add(WaterStatus(
-          amountOfWaterDrank: 0,
-          goalOfTheDayWasBeat: goalOfTheDayWasBeat,
-          statusDay: DateTime.now(),
-        ));
-
-        waterStatusBox.put(
-          'waterStatusData',
-          WaterStatus(
-            waterStatusData: waterStatusData,
-          ),
-        );
-      }
-    }
+    _isDayChanged();
   }
 
   void listenNotifications() =>
@@ -105,100 +69,58 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   }
 
   bool _isDayChanged() {
+    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
     int lastDay;
-    if (waterStatusBox
-            .get('waterStatusData')
-            .waterStatusData
-            .last
-            .goalOfTheDayWasBeat !=
-        null) {
-      lastDay = waterStatusBox
-          .get('waterStatusData')
-          .waterStatusData
-          .last
-          .statusDay
-          .day;
-      // ignore: avoid_print
-      print(
-          "OLA DIA ${waterStatusBox.get('waterStatusData').waterStatusData.last.statusDay.day}");
-    } else {
-      return false;
-    }
+    lastDay = waterStatusData.last.statusDay.day;
     if (lastDay != DateTime.now().day) {
-      // ignore: avoid_print
+      waterStatusData.add(WaterStatus(
+        statusDay: DateTime.now(),
+        goalOfTheDayWasBeat: false,
+        amountOfWaterDrank: 0,
+        drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+      ));
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
       return true;
     } else {
-      // ignore: avoid_print
-      print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
+      print("HOJE = $lastDay ==== HOJE = ${DateTime.now().day}");
       return false;
     }
   }
 
-  int _howMuchIsMissing() {
+  bool _getGoalStatus() {
     var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
-    int drinkStatus = waterStatusData.last.amountOfWaterDrank;
-    int drinkGoal = waterStatusData.last.drinkingWaterGoal;
-    bool goalOfTheDayWasBeat;
-
-    if (_getGoalStatus()) {
-      goalOfTheDayWasBeat = waterStatusData.last.goalOfTheDayWasBeat;
-    } else {
-      goalOfTheDayWasBeat = false;
-    }
-
-    if (_isDayChanged() && (drinkGoal - drinkStatus) > 0) {
-      waterStatusData.add(WaterStatus(
-        statusDay: DateTime.now(),
-        goalOfTheDayWasBeat: false,
-      ));
-    } else {
-      waterStatusData.add(WaterStatus(
-        statusDay: DateTime.now(),
-        goalOfTheDayWasBeat: true,
-      ));
-    }
-
-    // Verificando se a meta já foi batida
-    if ((drinkGoal - drinkStatus) <= 0) {
-      waterStatusBox.put(
-          'waterStatusData',
-          WaterStatus(
-            statusDay: waterStatusData.last.statusDay,
-            goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
-          ));
-      return 0;
-    } else {
-      return drinkGoal - drinkStatus;
-    }
+    return waterStatusData.last.goalOfTheDayWasBeat;
   }
 
   double _percentageCalc() {
     var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
-    int drinkStatus = waterStatusData.last.amountOfWaterDrank;
-    int drinkGoal = waterStatusData.last.drinkingWaterGoal;
+    int amountOfWaterDrank = waterStatusData.last.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.last.drinkingWaterGoal;
 
-    double percentage = (drinkStatus * 100) / drinkGoal;
+    double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
 
     // Aplicando regra de três
     return percentage > 100 ? 100 : percentage;
   }
 
-  bool _getGoalStatus() {
-    if (waterStatusBox
-            .get('waterStatusData')
-            .waterStatusData
-            .last
-            .goalOfTheDayWasBeat ==
-        null) {
-      return false;
+  int _howMuchIsMissing() {
+    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
+    int amountOfWaterDrank = waterStatusData.last.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.last.drinkingWaterGoal;
+
+    // Verificando se a meta já foi batida
+    if ((drinkWaterGoal - amountOfWaterDrank) <= 0) {
+      waterStatusData.last = WaterStatus(
+        statusDay: waterStatusData.last.statusDay,
+        goalOfTheDayWasBeat: true,
+        amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank,
+        drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+      );
+      waterStatusBox.put(
+          'waterStatusData', WaterStatus(waterStatusData: waterStatusData));
+      return 0;
     } else {
-      var result = waterStatusBox
-          .get('waterStatusData')
-          .waterStatusData
-          .last
-          .goalOfTheDayWasBeat;
-      return result;
+      return drinkWaterGoal - amountOfWaterDrank;
     }
   }
 
@@ -375,7 +297,15 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/copo.png',
             myFABContentText: '200ml',
             myFunction: () {
-              waterStatusData.last.amountOfWaterDrank += 200;
+              waterStatusData.last = WaterStatus(
+                statusDay: waterStatusData.last.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank +=
+                    200,
+                drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+              );
+              waterStatusBox.put('waterStatusData',
+                  WaterStatus(waterStatusData: waterStatusData));
               setState(() {});
               _howMuchIsMissing();
             },
@@ -384,7 +314,15 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/garrafa.png',
             myFABContentText: '350ml',
             myFunction: () {
-              waterStatusData.last.amountOfWaterDrank += 350;
+              waterStatusData.last = WaterStatus(
+                statusDay: waterStatusData.last.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank +=
+                    350,
+                drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+              );
+              waterStatusBox.put('waterStatusData',
+                  WaterStatus(waterStatusData: waterStatusData));
               setState(() {});
               _howMuchIsMissing();
             },
@@ -393,7 +331,15 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/jarra.png',
             myFABContentText: '700ml',
             myFunction: () {
-              waterStatusData.last.amountOfWaterDrank += 700;
+              waterStatusData.last = WaterStatus(
+                statusDay: waterStatusData.last.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank +=
+                    700,
+                drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+              );
+              waterStatusBox.put('waterStatusData',
+                  WaterStatus(waterStatusData: waterStatusData));
               setState(() {});
               _howMuchIsMissing();
             },

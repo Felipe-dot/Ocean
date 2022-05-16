@@ -73,13 +73,15 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           sleepTime.hour,
           sleepTime.minute,
         )));
-
+    List<WaterStatus> waterStatus = [];
+    waterStatus.add(WaterStatus(
+      drinkingWaterGoal: howMuchINeedToDrink(),
+      amountOfWaterDrank: 0,
+      goalOfTheDayWasBeat: false,
+      statusDay: DateTime.now(),
+    ));
     waterStatusBox.put(
-        'waterStatusData',
-        WaterStatus(
-          drinkingWaterGoal: howMuchINeedToDrink(),
-          amountOfWaterDrank: 0,
-        ));
+        'waterStatusData', WaterStatus(waterStatusData: waterStatus));
 
     // ignore: avoid_print
     print('User data added to box!');
@@ -160,6 +162,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
                     background: kWhite,
                     textStyle: kButton.copyWith(color: kMainColor),
                     function: () {
+                      // Navigator.pushNamed(context, '/myHomePage');
                       Navigator.pushNamed(context, '/myHomePage');
                       _addDataToUserBox();
                     },

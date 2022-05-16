@@ -44,11 +44,27 @@ class _MyChartScreenState extends State<MyChartScreen> {
           children: [
             Column(
               children: [
-                Text('${waterStatusBox.get('waterStatusData').waterStatusData}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    )),
+                Text(
+                  'Dia ${waterStatusBox.get('waterStatusData').waterStatusData.map((value) => value.statusDay.day)} ',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Qtd Bebida ${waterStatusBox.get('waterStatusData').waterStatusData.map((value) => value.amountOfWaterDrank)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Meta Batida? ${waterStatusBox.get('waterStatusData').waterStatusData.map((value) => value.goalOfTheDayWasBeat)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ],

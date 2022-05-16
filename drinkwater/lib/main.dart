@@ -15,6 +15,8 @@ import 'screens/my_home_page_screen.dart';
 import 'screens/my_splash_screen.dart';
 import 'screens/my_initial_setup_screen.dart';
 
+import 'screens/test.dart';
+
 void main() async {
   // Inicializando o hive
   await Hive.initFlutter();
@@ -55,6 +57,7 @@ class _MyAppState extends State<MyApp> {
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
         '/myAvailableSoonScreen': (context) => const MyAvailableSoonScreen(),
         '/myChartScreen': (context) => const MyChartScreen(),
+        '/test': (context) => const MyTestScreen(),
         '/myHomePage': (context) => const MyHomePageScreen(),
       },
     );
