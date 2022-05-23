@@ -1,6 +1,5 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:drinkwater/models/status.dart';
-import 'package:drinkwater/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -45,21 +44,21 @@ class _MyChartScreenState extends State<MyChartScreen> {
             Column(
               children: [
                 Text(
-                  'Dia ${waterStatusBox.get('waterStatusData').waterStatusData.map((value) => value.statusDay.day)} ',
+                  'Dia ${waterStatusBox.values.map((value) => value.statusDay.day)} ',
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
                 Text(
-                  'Qtd Bebida ${waterStatusBox.get('waterStatusData').waterStatusData.map((value) => value.amountOfWaterDrank)}',
+                  'Qtd Bebida ${waterStatusBox.values.map((value) => value.amountOfWaterDrank)}',
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
                 Text(
-                  'Meta Batida? ${waterStatusBox.get('waterStatusData').waterStatusData.map((value) => value.goalOfTheDayWasBeat)}',
+                  'Meta Batida? ${waterStatusBox.values.map((value) => value.goalOfTheDayWasBeat)}',
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,

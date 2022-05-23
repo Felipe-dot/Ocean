@@ -52,36 +52,29 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
     var wakeUpTime = context.read<WakeUp>().wakeUpTime;
     var sleepTime = context.read<Sleep>().sleepTime;
 
-    userBox.put('userWeight', User(userWeight: context.read<Weight>().weight));
-    userBox.put(
-        'userWakeUpTime',
-        User(
-            userWakeUpTime: DateTime(
+    userBox.add(User(
+        userWeight: context.read<Weight>().weight,
+        userWakeUpTime: DateTime(
           now.year,
           now.month,
           now.day,
           wakeUpTime.hour,
           wakeUpTime.minute,
-        )));
-    userBox.put(
-        'userSleepTime',
-        User(
-            userSleepTime: DateTime(
+        ),
+        userSleepTime: DateTime(
           now.year,
           now.month,
           now.day,
           sleepTime.hour,
           sleepTime.minute,
         )));
-    List<WaterStatus> waterStatus = [];
-    waterStatus.add(WaterStatus(
+
+    waterStatusBox.add(WaterStatus(
       drinkingWaterGoal: howMuchINeedToDrink(),
       amountOfWaterDrank: 0,
       goalOfTheDayWasBeat: false,
       statusDay: DateTime.now(),
     ));
-    waterStatusBox.put(
-        'waterStatusData', WaterStatus(waterStatusData: waterStatus));
 
     // ignore: avoid_print
     print('User data added to box!');

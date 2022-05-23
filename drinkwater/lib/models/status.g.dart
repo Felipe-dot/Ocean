@@ -17,27 +17,25 @@ class WaterStatusAdapter extends TypeAdapter<WaterStatus> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return WaterStatus(
-      drinkingWaterGoal: fields[3] as int,
-      amountOfWaterDrank: fields[5] as int,
-      goalOfTheDayWasBeat: fields[4] as bool,
-      statusDay: fields[6] as DateTime,
-    )..waterStatusData = (fields[7] as List)?.cast<WaterStatus>();
+      drinkingWaterGoal: fields[0] as int,
+      amountOfWaterDrank: fields[2] as int,
+      goalOfTheDayWasBeat: fields[1] as bool,
+      statusDay: fields[3] as DateTime,
+    );
   }
 
   @override
   void write(BinaryWriter writer, WaterStatus obj) {
     writer
-      ..writeByte(5)
-      ..writeByte(3)
-      ..write(obj.drinkingWaterGoal)
       ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.drinkingWaterGoal)
+      ..writeByte(1)
       ..write(obj.goalOfTheDayWasBeat)
-      ..writeByte(5)
+      ..writeByte(2)
       ..write(obj.amountOfWaterDrank)
-      ..writeByte(6)
-      ..write(obj.statusDay)
-      ..writeByte(7)
-      ..write(obj.waterStatusData);
+      ..writeByte(3)
+      ..write(obj.statusDay);
   }
 
   @override

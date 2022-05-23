@@ -30,8 +30,8 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     userBox = Hive.box('userBox');
     waterStatusBox = Hive.box('statusBox');
     // Iniciando o sistema de notificação do aplicativo
-    var wakeUpTime = userBox.get('userWakeUpTime').userWakeUpTime;
-    var sleepTime = userBox.get('userSleepTime').userSleepTime;
+    var wakeUpTime = userBox.getAt(userBox.length - 1).userWakeUpTime;
+    var sleepTime = userBox.getAt(userBox.length - 1).userSleepTime;
 
     // Verificando se é a hora que o usuário acorda para iniciar as notificações
     if (DateTime.now().hour >= wakeUpTime.hour) {
@@ -69,16 +69,17 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   }
 
   bool _isDayChanged() {
-    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
     int lastDay;
-    lastDay = waterStatusData.last.statusDay.day;
+    lastDay = waterStatusData.statusDay.day;
     if (lastDay != DateTime.now().day) {
-      waterStatusData.add(WaterStatus(
+      waterStatusBox.add(WaterStatus(
         statusDay: DateTime.now(),
         goalOfTheDayWasBeat: false,
         amountOfWaterDrank: 0,
-        drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+        drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
       ));
+
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
       return true;
     } else {
@@ -88,14 +89,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   }
 
   bool _getGoalStatus() {
-    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
-    return waterStatusData.last.goalOfTheDayWasBeat;
+    return waterStatusBox.getAt(waterStatusBox.length - 1).goalOfTheDayWasBeat;
   }
 
   double _percentageCalc() {
-    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
-    int amountOfWaterDrank = waterStatusData.last.amountOfWaterDrank;
-    int drinkWaterGoal = waterStatusData.last.drinkingWaterGoal;
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
 
     double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
 
@@ -104,20 +104,19 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   }
 
   int _howMuchIsMissing() {
-    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
-    int amountOfWaterDrank = waterStatusData.last.amountOfWaterDrank;
-    int drinkWaterGoal = waterStatusData.last.drinkingWaterGoal;
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
 
     // Verificando se a meta já foi batida
     if ((drinkWaterGoal - amountOfWaterDrank) <= 0) {
-      waterStatusData.last = WaterStatus(
-        statusDay: waterStatusData.last.statusDay,
+      waterStatusData = WaterStatus(
+        statusDay: waterStatusData.statusDay,
         goalOfTheDayWasBeat: true,
-        amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank,
-        drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+        amountOfWaterDrank: waterStatusData.amountOfWaterDrank,
+        drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
       );
-      waterStatusBox.put(
-          'waterStatusData', WaterStatus(waterStatusData: waterStatusData));
+      waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
       return 0;
     } else {
       return drinkWaterGoal - amountOfWaterDrank;
@@ -126,7 +125,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var waterStatusData = waterStatusBox.get('waterStatusData').waterStatusData;
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -177,7 +176,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                 ),
                               ),
                               Text(
-                                "${waterStatusData.last.amountOfWaterDrank}",
+                                "${waterStatusData.amountOfWaterDrank}",
                                 style: const TextStyle(
                                   color: kGreenAccent,
                                   fontSize: 60,
@@ -251,7 +250,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                               ),
                             ),
                             Text(
-                              "${waterStatusData.last.amountOfWaterDrank}",
+                              "${waterStatusData.amountOfWaterDrank}",
                               style: const TextStyle(
                                 color: kMainColor,
                                 fontSize: 60,
@@ -297,15 +296,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/copo.png',
             myFABContentText: '200ml',
             myFunction: () {
-              waterStatusData.last = WaterStatus(
-                statusDay: waterStatusData.last.statusDay,
-                goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank +=
-                    200,
-                drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+              waterStatusData = WaterStatus(
+                statusDay: waterStatusData.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 200,
+                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
               );
-              waterStatusBox.put('waterStatusData',
-                  WaterStatus(waterStatusData: waterStatusData));
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -314,15 +311,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/garrafa.png',
             myFABContentText: '350ml',
             myFunction: () {
-              waterStatusData.last = WaterStatus(
-                statusDay: waterStatusData.last.statusDay,
-                goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank +=
-                    350,
-                drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+              waterStatusData = WaterStatus(
+                statusDay: waterStatusData.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 350,
+                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
               );
-              waterStatusBox.put('waterStatusData',
-                  WaterStatus(waterStatusData: waterStatusData));
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -331,15 +326,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/jarra.png',
             myFABContentText: '700ml',
             myFunction: () {
-              waterStatusData.last = WaterStatus(
-                statusDay: waterStatusData.last.statusDay,
-                goalOfTheDayWasBeat: waterStatusData.last.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData.last.amountOfWaterDrank +=
-                    700,
-                drinkingWaterGoal: waterStatusData.last.drinkingWaterGoal,
+              waterStatusData = WaterStatus(
+                statusDay: waterStatusData.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 700,
+                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
               );
-              waterStatusBox.put('waterStatusData',
-                  WaterStatus(waterStatusData: waterStatusData));
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
               _howMuchIsMissing();
             },
