@@ -6,7 +6,6 @@ import 'package:splashscreen/splashscreen.dart';
 
 import '../constant.dart';
 import 'my_login_screen.dart';
-import 'test.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({Key key}) : super(key: key);
