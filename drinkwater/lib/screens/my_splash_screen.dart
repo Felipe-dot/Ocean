@@ -34,6 +34,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       seconds: 14,
       navigateAfterSeconds:
           _isBoxEmpty() ? const MyLoginScreen() : const MyHomePageScreen(),
+      // _isBoxEmpty() ? const MyLoginScreen() : const MyTestScreen(),
       image: Image.asset(
         "assets/images/logoSplashScreen.png",
         alignment: Alignment.center,

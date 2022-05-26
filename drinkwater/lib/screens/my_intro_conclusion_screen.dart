@@ -1,5 +1,6 @@
 import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
+import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
 import 'package:drinkwater/providers/sleep_time_provider.dart';
 import 'package:drinkwater/providers/wake_up_provider.dart';
@@ -18,13 +19,14 @@ class MyIntroConclusionScreen extends StatefulWidget {
 }
 
 class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
-  Box<User> box;
-
+  Box<User> userBox;
+  Box<WaterStatus> waterStatusBox;
   @override
   void initState() {
     super.initState();
     // Get reference to an already opened box
-    box = Hive.box('userBox');
+    userBox = Hive.box('userBox');
+    waterStatusBox = Hive.box('statusBox');
   }
 
   @override
@@ -50,30 +52,29 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
     var wakeUpTime = context.read<WakeUp>().wakeUpTime;
     var sleepTime = context.read<Sleep>().sleepTime;
 
-    box.put(
-        'drinkingWaterGoal', User(drinkingWaterGoal: howMuchINeedToDrink()));
-    box.put('userWeight', User(userWeight: context.read<Weight>().weight));
-    box.put(
-        'userWakeUpTime',
-        User(
-            userWakeUpTime: DateTime(
+    userBox.add(User(
+        userWeight: context.read<Weight>().weight,
+        userWakeUpTime: DateTime(
           now.year,
           now.month,
           now.day,
           wakeUpTime.hour,
           wakeUpTime.minute,
-        )));
-    box.put(
-        'userSleepTime',
-        User(
-            userSleepTime: DateTime(
+        ),
+        userSleepTime: DateTime(
           now.year,
           now.month,
           now.day,
           sleepTime.hour,
           sleepTime.minute,
         )));
-    box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
+
+    waterStatusBox.add(WaterStatus(
+      drinkingWaterGoal: howMuchINeedToDrink(),
+      amountOfWaterDrank: 0,
+      goalOfTheDayWasBeat: false,
+      statusDay: DateTime.now(),
+    ));
 
     // ignore: avoid_print
     print('User data added to box!');
@@ -154,6 +155,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
                     background: kWhite,
                     textStyle: kButton.copyWith(color: kMainColor),
                     function: () {
+                      // Navigator.pushNamed(context, '/myHomePage');
                       Navigator.pushNamed(context, '/myHomePage');
                       _addDataToUserBox();
                     },

@@ -3,6 +3,7 @@ import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:drinkwater/components/my_drawer.dart';
 import 'package:drinkwater/components/my_expandable_fab.dart';
 import 'package:drinkwater/components/my_fab_content.dart';
+import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -19,17 +20,18 @@ class MyHomePageScreen extends StatefulWidget {
 
 class _MyHomePageScreenState extends State<MyHomePageScreen> {
   int _currentIndex = 0;
-  Box<User> box;
+  Box<User> userBox;
+  Box<WaterStatus> waterStatusBox;
 
   @override
   void initState() {
     super.initState();
     // Get reference to an already opened box
-    box = Hive.box('userBox');
-
+    userBox = Hive.box('userBox');
+    waterStatusBox = Hive.box('statusBox');
     // Iniciando o sistema de notificação do aplicativo
-    var wakeUpTime = box.get('userWakeUpTime').userWakeUpTime;
-    var sleepTime = box.get('userSleepTime').userSleepTime;
+    var wakeUpTime = userBox.getAt(userBox.length - 1).userWakeUpTime;
+    var sleepTime = userBox.getAt(userBox.length - 1).userSleepTime;
 
     // Verificando se é a hora que o usuário acorda para iniciar as notificações
     if (DateTime.now().hour >= wakeUpTime.hour) {
@@ -46,24 +48,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       NotificationApi.cancelAllNotifications();
     }
 
-    if (box.get('goalOfTheDayBeat') == null) {
-      // ignore: avoid_print
-      print("O dia continua o mesmo");
-    } else {
-      if (_isDayChanged()) {
-        Map<DateTime, bool> myMap;
-        //  Resetando o status da meta de ingestão de água
-        box.put('drinkingWaterStatus', User(drinkingWaterStatus: 0));
-        if (_getGoalStatus()) {
-          myMap = box.get('goalOfTheDayBeat').goalOfTheDayBeat;
-        } else {
-          myMap = {};
-        }
-
-        myMap.addAll({DateTime.now(): false});
-        box.put('goalOfTheDayBeat', User(goalOfTheDayBeat: myMap));
-      }
-    }
+    _isDayChanged();
   }
 
   void listenNotifications() =>
@@ -84,75 +69,64 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   }
 
   bool _isDayChanged() {
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
     int lastDay;
-    if (box.get('goalOfTheDayBeat') != null) {
-      lastDay = box.get('goalOfTheDayBeat').goalOfTheDayBeat.keys.last.day;
-      // ignore: avoid_print
-      print(
-          "OLA DIA ${box.get('goalOfTheDayBeat').goalOfTheDayBeat.keys.last.day}");
-    } else {
-      return false;
-    }
+    lastDay = waterStatusData.statusDay.day;
     if (lastDay != DateTime.now().day) {
-      // ignore: avoid_print
+      waterStatusBox.add(WaterStatus(
+        statusDay: DateTime.now(),
+        goalOfTheDayWasBeat: false,
+        amountOfWaterDrank: 0,
+        drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+      ));
+
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
       return true;
     } else {
-      // ignore: avoid_print
-      print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
+      print("HOJE = $lastDay ==== HOJE = ${DateTime.now().day}");
       return false;
     }
   }
 
-  int _howMuchIsMissing() {
-    int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
-    int drinkGoal = box.get('drinkingWaterGoal').drinkingWaterGoal;
-    Map<DateTime, bool> newMap;
-    Map<DateTime, bool> myMap;
-    if (_getGoalStatus()) {
-      myMap = box.get('goalOfTheDayBeat').goalOfTheDayBeat;
-    } else {
-      myMap = {};
-    }
-
-    if (_isDayChanged() && (drinkGoal - drinkStatus) > 0) {
-      newMap = {DateTime.now(): false};
-    } else {
-      newMap = {DateTime.now(): true};
-    }
-
-    myMap.addAll(newMap);
-
-    // Verificando se a meta já foi batida
-    if ((drinkGoal - drinkStatus) <= 0) {
-      box.put('goalOfTheDayBeat', User(goalOfTheDayBeat: myMap));
-      return 0;
-    } else {
-      return drinkGoal - drinkStatus;
-    }
+  bool _getGoalStatus() {
+    return waterStatusBox.getAt(waterStatusBox.length - 1).goalOfTheDayWasBeat;
   }
 
   double _percentageCalc() {
-    int drinkStatus = box.get('drinkingWaterStatus').drinkingWaterStatus;
-    int drinkGoal = box.get('drinkingWaterGoal').drinkingWaterGoal;
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
 
-    double percentage = (drinkStatus * 100) / drinkGoal;
+    double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
 
     // Aplicando regra de três
     return percentage > 100 ? 100 : percentage;
   }
 
-  bool _getGoalStatus() {
-    if (box.get('goalOfTheDayBeat') == null) {
-      return false;
+  int _howMuchIsMissing() {
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
+
+    // Verificando se a meta já foi batida
+    if ((drinkWaterGoal - amountOfWaterDrank) <= 0) {
+      waterStatusData = WaterStatus(
+        statusDay: waterStatusData.statusDay,
+        goalOfTheDayWasBeat: true,
+        amountOfWaterDrank: waterStatusData.amountOfWaterDrank,
+        drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+      );
+      waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
+      return 0;
     } else {
-      var result = box.get('goalOfTheDayBeat').goalOfTheDayBeat.values.last;
-      return result;
+      return drinkWaterGoal - amountOfWaterDrank;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
@@ -202,7 +176,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                 ),
                               ),
                               Text(
-                                "${box.get('drinkingWaterStatus').drinkingWaterStatus}",
+                                "${waterStatusData.amountOfWaterDrank}",
                                 style: const TextStyle(
                                   color: kGreenAccent,
                                   fontSize: 60,
@@ -276,7 +250,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                               ),
                             ),
                             Text(
-                              "${box.get('drinkingWaterStatus').drinkingWaterStatus}",
+                              "${waterStatusData.amountOfWaterDrank}",
                               style: const TextStyle(
                                 color: kMainColor,
                                 fontSize: 60,
@@ -322,10 +296,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/copo.png',
             myFABContentText: '200ml',
             myFunction: () {
-              int drinkStatus =
-                  box.get('drinkingWaterStatus').drinkingWaterStatus;
-              box.put('drinkingWaterStatus',
-                  User(drinkingWaterStatus: drinkStatus + 200));
+              waterStatusData = WaterStatus(
+                statusDay: waterStatusData.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 200,
+                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+              );
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -334,10 +311,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/garrafa.png',
             myFABContentText: '350ml',
             myFunction: () {
-              int drinkStatus =
-                  box.get('drinkingWaterStatus').drinkingWaterStatus;
-              box.put('drinkingWaterStatus',
-                  User(drinkingWaterStatus: drinkStatus + 350));
+              waterStatusData = WaterStatus(
+                statusDay: waterStatusData.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 350,
+                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+              );
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -346,10 +326,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/jarra.png',
             myFABContentText: '700ml',
             myFunction: () {
-              int drinkStatus =
-                  box.get('drinkingWaterStatus').drinkingWaterStatus;
-              box.put('drinkingWaterStatus',
-                  User(drinkingWaterStatus: drinkStatus + 700));
+              waterStatusData = WaterStatus(
+                statusDay: waterStatusData.statusDay,
+                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 700,
+                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+              );
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -365,24 +348,28 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         curve: Curves.easeIn,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
-          switch(_currentIndex) {
-            case 0: {
-              break;
-            }
-            case 1: {
+          switch (_currentIndex) {
+            case 0:
+              {
+                break;
+              }
+            case 1:
+              {
                 Navigator.pushNamed(context, '/myAvailableSoonScreen',
-                arguments: _currentIndex);
-              break;
-            }
-            case 2: {
+                    arguments: _currentIndex);
+                break;
+              }
+            case 2:
+              {
                 Navigator.pushNamed(context, '/myChartScreen',
-                arguments: _currentIndex);
-              break;
-            }
-            default: {
-               Navigator.pushNamed(context, '/myAvailableSoonScreen',
-                arguments: _currentIndex);
-            }
+                    arguments: _currentIndex);
+                break;
+              }
+            default:
+              {
+                Navigator.pushNamed(context, '/myAvailableSoonScreen',
+                    arguments: _currentIndex);
+              }
           }
         },
         items: <BottomNavyBarItem>[
