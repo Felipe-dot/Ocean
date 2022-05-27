@@ -37,35 +37,107 @@ class _MyChartScreenState extends State<MyChartScreen> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.blue,
+          color: Colors.white30,
         ),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            // Gráfico Principal
+            Container(
+              height: 200,
+              width: 200,
+              decoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+            ),
+            // Status da semana streak
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Dia ${waterStatusBox.values.map((value) => value.statusDay.day)} ',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Semana",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(
-                  'Qtd Bebida ${waterStatusBox.values.map((value) => value.amountOfWaterDrank)}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'Meta Batida? ${waterStatusBox.values.map((value) => value.goalOfTheDayWasBeat)}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: true,
+                      weekday: "Dom",
+                    ),
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: true,
+                      weekday: "Seg",
+                    ),
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: false,
+                      weekday: "Ter",
+                    ),
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: false,
+                      weekday: "Qua",
+                    ),
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: true,
+                      weekday: "Qui",
+                    ),
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: true,
+                      weekday: "Sex",
+                    ),
+                    MyWeekendStreak(
+                      isTheWeekDayBeat: false,
+                      weekday: "Sáb",
+                    ),
+                  ],
                 ),
               ],
             ),
+            Column(
+              children: const [
+                ListTile(
+                  title: Text("Ingestão média"),
+                  trailing: Text(
+                    "1024ml",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Colors.blueGrey,
+                  height: 20,
+                ),
+                ListTile(
+                  title: Text("Frequência de consumo"),
+                  trailing: Text(
+                    "10 vezes/dia",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Colors.blueGrey,
+                  height: 20,
+                ),
+                ListTile(
+                  title: Text("Média de conclusão"),
+                  trailing: Text(
+                    "58%",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -128,6 +200,38 @@ class _MyChartScreenState extends State<MyChartScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MyWeekendStreak extends StatelessWidget {
+  const MyWeekendStreak({
+    Key key,
+    this.isTheWeekDayBeat,
+    this.weekday,
+  }) : super(key: key);
+
+  final bool isTheWeekDayBeat;
+  final String weekday;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          backgroundColor: isTheWeekDayBeat ? Colors.yellow : Colors.grey,
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(
+          weekday,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
