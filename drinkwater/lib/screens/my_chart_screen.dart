@@ -1,4 +1,5 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
+import 'package:drinkwater/components/my_weekend_streak.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -200,38 +201,6 @@ class _MyChartScreenState extends State<MyChartScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class MyWeekendStreak extends StatelessWidget {
-  const MyWeekendStreak({
-    Key key,
-    this.isTheWeekDayBeat,
-    this.weekday,
-  }) : super(key: key);
-
-  final bool isTheWeekDayBeat;
-  final String weekday;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundColor: isTheWeekDayBeat ? Colors.yellow : Colors.grey,
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text(
-          weekday,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }
