@@ -1,4 +1,5 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
+import 'package:drinkwater/components/my_water_chart.dart';
 import 'package:drinkwater/components/my_weekend_streak.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:flutter/material.dart';
@@ -44,19 +45,13 @@ class _MyChartScreenState extends State<MyChartScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // Gráfico Principal
-            Container(
-              height: 200,
-              width: 200,
-              decoration: const BoxDecoration(
-                color: Colors.black,
-              ),
-            ),
+            const MyWaterChart(),
             // Status da semana streak
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(left: 8, right: 8, top: 0),
                   child: Text(
                     "Semana",
                     style: TextStyle(
