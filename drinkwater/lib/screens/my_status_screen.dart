@@ -31,6 +31,45 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     super.dispose();
   }
 
+  bool isTheWeekDayBeat(int weekDay) {
+    var waterStatusData = waterStatusBox.values;
+    WaterStatus elementDay;
+    try {
+      elementDay = waterStatusData
+          .lastWhere((element) => element.statusDay.weekday == weekDay);
+    } catch (err) {
+      return false;
+    }
+
+    return elementDay.goalOfTheDayWasBeat;
+  }
+
+  double averageDrank() {
+    var waterStatusData = waterStatusBox.values;
+    double averageDrank = 0.0;
+    for (var element in waterStatusData) {
+      averageDrank += element.amountOfWaterDrank;
+      averageDrank /= (waterStatusData.length - 1);
+    }
+    return averageDrank;
+  }
+
+  int drinkingFrequency() {}
+
+  int completionAverage() {
+    var waterStatusData = waterStatusBox.values;
+    double completionAverage = 0;
+    int totalDays = (waterStatusData.length - 1);
+    int goalDaysAccomplished = 0;
+    for (var element in waterStatusData) {
+      if (element.goalOfTheDayWasBeat == true) {
+        goalDaysAccomplished++;
+      }
+    }
+    completionAverage = (goalDaysAccomplished * 100) / totalDays;
+    return completionAverage.round();
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments;
@@ -51,7 +90,8 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(left: 8, right: 8, top: 0),
+                  padding:
+                      EdgeInsets.only(left: 10, right: 8, top: 0, bottom: 10),
                   child: Text(
                     "Semana",
                     style: TextStyle(
@@ -62,33 +102,33 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
+                  children: [
                     MyWeekendStreak(
-                      isTheWeekDayBeat: true,
+                      isTheWeekDayBeat: isTheWeekDayBeat(7),
                       weekday: "Dom",
                     ),
                     MyWeekendStreak(
-                      isTheWeekDayBeat: true,
+                      isTheWeekDayBeat: isTheWeekDayBeat(1),
                       weekday: "Seg",
                     ),
                     MyWeekendStreak(
-                      isTheWeekDayBeat: false,
+                      isTheWeekDayBeat: isTheWeekDayBeat(2),
                       weekday: "Ter",
                     ),
                     MyWeekendStreak(
-                      isTheWeekDayBeat: false,
+                      isTheWeekDayBeat: isTheWeekDayBeat(3),
                       weekday: "Qua",
                     ),
                     MyWeekendStreak(
-                      isTheWeekDayBeat: true,
+                      isTheWeekDayBeat: isTheWeekDayBeat(4),
                       weekday: "Qui",
                     ),
                     MyWeekendStreak(
-                      isTheWeekDayBeat: true,
+                      isTheWeekDayBeat: isTheWeekDayBeat(5),
                       weekday: "Sex",
                     ),
                     MyWeekendStreak(
-                      isTheWeekDayBeat: false,
+                      isTheWeekDayBeat: isTheWeekDayBeat(6),
                       weekday: "Sáb",
                     ),
                   ],
@@ -96,38 +136,38 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
               ],
             ),
             Column(
-              children: const [
+              children: [
                 ListTile(
-                  title: Text("Ingestão média"),
+                  title: const Text("Ingestão média"),
                   trailing: Text(
-                    "1024ml",
-                    style: TextStyle(
+                    "${averageDrank()}ml",
+                    style: const TextStyle(
                       color: Colors.lightBlue,
                     ),
                   ),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.blueGrey,
                   height: 20,
                 ),
                 ListTile(
-                  title: Text("Frequência de consumo"),
+                  title: const Text("Frequência de consumo"),
                   trailing: Text(
                     "10 vezes/dia",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.lightBlue,
                     ),
                   ),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.blueGrey,
                   height: 20,
                 ),
                 ListTile(
-                  title: Text("Média de conclusão"),
+                  title: const Text("Média de conclusão"),
                   trailing: Text(
-                    "58%",
-                    style: TextStyle(
+                    "${completionAverage()}%",
+                    style: const TextStyle(
                       color: Colors.lightBlue,
                     ),
                   ),
