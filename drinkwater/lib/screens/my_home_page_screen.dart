@@ -361,7 +361,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
               }
             case 2:
               {
-                Navigator.pushNamed(context, '/myChartScreen',
+                Navigator.pushNamed(context, '/myStatusScreen',
                     arguments: _currentIndex);
                 break;
               }

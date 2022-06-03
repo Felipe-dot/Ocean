@@ -79,7 +79,7 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
               }
             case 2:
               {
-                Navigator.pushNamed(context, '/myChartScreen',
+                Navigator.pushNamed(context, '/myStatusScreen',
                     arguments: _currentIndex);
                 break;
               }

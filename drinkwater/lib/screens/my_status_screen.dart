@@ -7,14 +7,14 @@ import 'package:hive/hive.dart';
 
 import '../constant.dart';
 
-class MyChartScreen extends StatefulWidget {
-  const MyChartScreen({Key key}) : super(key: key);
+class MyStatusScreen extends StatefulWidget {
+  const MyStatusScreen({Key key}) : super(key: key);
 
   @override
-  State<MyChartScreen> createState() => _MyChartScreenState();
+  State<MyStatusScreen> createState() => _MyStatusScreenState();
 }
 
-class _MyChartScreenState extends State<MyChartScreen> {
+class _MyStatusScreenState extends State<MyStatusScreen> {
   Box<WaterStatus> waterStatusBox;
 
   @override
