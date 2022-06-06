@@ -44,6 +44,27 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     return elementDay.goalOfTheDayWasBeat;
   }
 
+  bool isData(int weekDay) {
+    var waterStatusData = waterStatusBox.values;
+    WaterStatus elementDay;
+    var currentDay = DateTime.now();
+    bool isData = false;
+    try {
+      for (var element in waterStatusData) {
+        if ((element.statusDay.weekday == weekDay ||
+            weekDay <= currentDay.weekday)) {
+          isData = true;
+        } else {
+          isData = false;
+        }
+      }
+    } catch (err) {
+      return false;
+    }
+
+    return isData;
+  }
+
   double averageDrank() {
     var waterStatusData = waterStatusBox.values;
     double averageDrank = 0.0;
@@ -106,30 +127,37 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(7),
                       weekday: "Dom",
+                      isData: isData(7),
                     ),
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(1),
                       weekday: "Seg",
+                      isData: isData(1),
                     ),
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(2),
                       weekday: "Ter",
+                      isData: isData(2),
                     ),
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(3),
                       weekday: "Qua",
+                      isData: isData(3),
                     ),
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(4),
                       weekday: "Qui",
+                      isData: isData(4),
                     ),
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(5),
                       weekday: "Sex",
+                      isData: isData(5),
                     ),
                     MyWeekendStreak(
                       isTheWeekDayBeat: isTheWeekDayBeat(6),
                       weekday: "Sáb",
+                      isData: isData(6),
                     ),
                   ],
                 ),
