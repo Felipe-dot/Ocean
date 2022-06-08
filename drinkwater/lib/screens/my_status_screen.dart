@@ -51,8 +51,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     bool isData = false;
     try {
       for (var element in waterStatusData) {
-        if ((element.statusDay.weekday == weekDay ||
-            weekDay <= currentDay.weekday)) {
+        if (weekDay == 7 || weekDay <= currentDay.weekday) {
           isData = true;
         } else {
           isData = false;
