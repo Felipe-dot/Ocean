@@ -46,12 +46,15 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
 
   bool isData(int weekDay) {
     var waterStatusData = waterStatusBox.values;
-    WaterStatus elementDay;
     var currentDay = DateTime.now();
     bool isData = false;
     try {
       for (var element in waterStatusData) {
-        if (weekDay == 7 || weekDay <= currentDay.weekday) {
+        if (currentDay.weekday == 7 && weekDay == 7) {
+          isData = true;
+        } else if (currentDay.weekday == 7 && weekDay != 7) {
+          isData = false;
+        } else if (weekDay <= currentDay.weekday || weekDay == 7) {
           isData = true;
         } else {
           isData = false;
@@ -60,7 +63,6 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     } catch (err) {
       return false;
     }
-
     return isData;
   }
 
@@ -167,7 +169,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                 ListTile(
                   title: const Text("Ingestão média"),
                   trailing: Text(
-                    "${averageDrank()}ml",
+                    "${averageDrank().toStringAsFixed(2)}ml",
                     style: const TextStyle(
                       color: Colors.lightBlue,
                     ),
@@ -193,7 +195,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                 ListTile(
                   title: const Text("Média de conclusão"),
                   trailing: Text(
-                    "${completionAverage()}%",
+                    "${completionAverage().toStringAsFixed(1)}%",
                     style: const TextStyle(
                       color: Colors.lightBlue,
                     ),
