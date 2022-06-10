@@ -71,17 +71,32 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     double averageDrank = 0.0;
     for (var element in waterStatusData) {
       averageDrank += element.amountOfWaterDrank;
-      averageDrank /= (waterStatusData.length - 1);
+      averageDrank /= waterStatusData.length == 1
+          ? waterStatusData.length
+          : (waterStatusData.length - 1);
     }
     return averageDrank;
   }
 
-  int drinkingFrequency() {}
+  int drinkingFrequency() {
+    var waterStatusData = waterStatusBox.values;
+    double drinkFrequency = 0;
+    for (var element in waterStatusData) {
+      drinkFrequency += element.drinkingFrequency;
+      drinkFrequency /= waterStatusData.length == 1
+          ? waterStatusData.length
+          : (waterStatusData.length - 1);
+    }
+
+    return drinkFrequency.round();
+  }
 
   int completionAverage() {
     var waterStatusData = waterStatusBox.values;
     double completionAverage = 0;
-    int totalDays = (waterStatusData.length - 1);
+    int totalDays = waterStatusData.length == 1
+        ? waterStatusData.length
+        : (waterStatusData.length - 1);
     int goalDaysAccomplished = 0;
     for (var element in waterStatusData) {
       if (element.goalOfTheDayWasBeat == true) {
@@ -182,7 +197,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                 ListTile(
                   title: const Text("Frequência de consumo"),
                   trailing: Text(
-                    "10 vezes/dia",
+                    "${drinkingFrequency().toStringAsFixed(0)} vezes/dia",
                     style: const TextStyle(
                       color: Colors.lightBlue,
                     ),
