@@ -20,14 +20,15 @@ class WaterStatusAdapter extends TypeAdapter<WaterStatus> {
       drinkingWaterGoal: fields[0] as int,
       amountOfWaterDrank: fields[2] as int,
       goalOfTheDayWasBeat: fields[1] as bool,
-      statusDay: fields[3] as DateTime,
+      statusDay: fields[4] as DateTime,
+      drinkingFrequency: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, WaterStatus obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.drinkingWaterGoal)
       ..writeByte(1)
@@ -35,6 +36,8 @@ class WaterStatusAdapter extends TypeAdapter<WaterStatus> {
       ..writeByte(2)
       ..write(obj.amountOfWaterDrank)
       ..writeByte(3)
+      ..write(obj.drinkingFrequency)
+      ..writeByte(4)
       ..write(obj.statusDay);
   }
 

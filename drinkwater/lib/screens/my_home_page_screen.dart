@@ -78,6 +78,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         goalOfTheDayWasBeat: false,
         amountOfWaterDrank: 0,
         drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+        drinkingFrequency: 0,
       ));
 
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
@@ -115,6 +116,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         goalOfTheDayWasBeat: true,
         amountOfWaterDrank: waterStatusData.amountOfWaterDrank,
         drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+        drinkingFrequency: waterStatusData.drinkingFrequency,
       );
       waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
       return 0;
@@ -301,6 +303,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                 goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
                 amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 200,
                 drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
               );
               waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
@@ -316,6 +319,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                 goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
                 amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 350,
                 drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
               );
               waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
@@ -331,6 +335,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                 goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
                 amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 700,
                 drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
               );
               waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
