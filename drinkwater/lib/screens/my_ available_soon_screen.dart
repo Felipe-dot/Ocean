@@ -1,5 +1,4 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
-import 'package:drinkwater/components/my_drawer.dart';
 import 'package:flutter/material.dart';
 
 import '../constant.dart';
@@ -34,7 +33,6 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
           },
         ),
       ),
-      drawer: const MyDrawer(),
       body: SafeArea(
         child: Container(
           height: double.infinity,
