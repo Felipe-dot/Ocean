@@ -16,6 +16,7 @@ class MyStatusScreen extends StatefulWidget {
 
 class _MyStatusScreenState extends State<MyStatusScreen> {
   Box<WaterStatus> waterStatusBox;
+  var currentDay = DateTime.now();
 
   @override
   void initState() {
@@ -44,9 +45,24 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     return elementDay.goalOfTheDayWasBeat;
   }
 
+  List<DateTime> lastSevenDays(DateTime currentDay) {
+    List<DateTime> lastSevenDays = [];
+
+    for (var x = 7; x > 0; x--) {
+      lastSevenDays.add(DateTime(
+        currentDay.year,
+        currentDay.month,
+        currentDay.day - x,
+      ));
+    }
+
+    lastSevenDays.add(DateTime.now());
+
+    return lastSevenDays;
+  }
+
   bool isData(int weekDay) {
     var waterStatusData = waterStatusBox.values;
-    var currentDay = DateTime.now();
     bool isData = false;
     try {
       for (var element in waterStatusData) {
@@ -71,9 +87,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     double averageDrank = 0.0;
     for (var element in waterStatusData) {
       averageDrank += element.amountOfWaterDrank;
-      averageDrank /= waterStatusData.length == 1
-          ? waterStatusData.length
-          : (waterStatusData.length - 1);
+      averageDrank /= waterStatusData.length;
     }
     return averageDrank;
   }
@@ -83,20 +97,16 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     double drinkFrequency = 0;
     for (var element in waterStatusData) {
       drinkFrequency += element.drinkingFrequency;
-      drinkFrequency /= waterStatusData.length == 1
-          ? waterStatusData.length
-          : (waterStatusData.length - 1);
+      drinkFrequency /= waterStatusData.length;
     }
-
     return drinkFrequency.round();
   }
 
   int completionAverage() {
     var waterStatusData = waterStatusBox.values;
     double completionAverage = 0;
-    int totalDays = waterStatusData.length == 1
-        ? waterStatusData.length
-        : (waterStatusData.length - 1);
+    int totalDays = waterStatusData.length;
+
     int goalDaysAccomplished = 0;
     for (var element in waterStatusData) {
       if (element.goalOfTheDayWasBeat == true) {
@@ -104,6 +114,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
       }
     }
     completionAverage = (goalDaysAccomplished * 100) / totalDays;
+
     return completionAverage.round();
   }
 

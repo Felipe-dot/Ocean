@@ -16,6 +16,24 @@ class _MyWaterChartState extends State<MyWaterChart> {
 
   bool showAvg = false;
 
+  var currentDay = DateTime.now();
+
+  List<DateTime> lastSevenDays(DateTime currentDay) {
+    List<DateTime> lastSevenDays = [];
+
+    for (var x = 6; x >= 0; x--) {
+      lastSevenDays.add(DateTime(
+        currentDay.year,
+        currentDay.month,
+        currentDay.day - x,
+      ));
+    }
+
+    lastSevenDays.add(DateTime.now());
+
+    return lastSevenDays;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -58,6 +76,18 @@ class _MyWaterChartState extends State<MyWaterChart> {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    Map<int, String> daysOfTheWeek = {
+      1: "SEG",
+      2: "TER",
+      3: "QUA",
+      4: "QUI",
+      5: "SEX",
+      6: "SÁB",
+      7: "DOM",
+    };
+
+    List<DateTime> sevenDaysList = lastSevenDays(currentDay);
+
     const style = TextStyle(
       color: Color(0xff68737d),
       fontWeight: FontWeight.bold,
@@ -66,25 +96,25 @@ class _MyWaterChartState extends State<MyWaterChart> {
     Widget text;
     switch (value.toInt()) {
       case 0:
-        text = const Text('DOM', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[0].weekday], style: style);
         break;
       case 1:
-        text = const Text('SEG', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[1].weekday], style: style);
         break;
       case 2:
-        text = const Text('TER', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[2].weekday], style: style);
         break;
       case 3:
-        text = const Text('QUA', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[3].weekday], style: style);
         break;
       case 4:
-        text = const Text('QUI', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[4].weekday], style: style);
         break;
       case 5:
-        text = const Text('SEX', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[5].weekday], style: style);
         break;
       case 6:
-        text = const Text('SAB', style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[6].weekday], style: style);
         break;
       default:
         text = const Text('', style: style);
