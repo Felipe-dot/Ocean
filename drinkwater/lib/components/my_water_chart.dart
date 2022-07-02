@@ -1,5 +1,7 @@
+import 'package:drinkwater/models/status.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class MyWaterChart extends StatefulWidget {
   const MyWaterChart({Key key}) : super(key: key);
@@ -9,6 +11,23 @@ class MyWaterChart extends StatefulWidget {
 }
 
 class _MyWaterChartState extends State<MyWaterChart> {
+  Box<WaterStatus> waterStatusBox;
+  var currentDay = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    // Get reference to an already opened box
+    waterStatusBox = Hive.box('statusBox');
+  }
+
+  @override
+  void dispose() {
+    // Closes all Hive boxes
+    Hive.close();
+    super.dispose();
+  }
+
   List<Color> gradientColors = [
     const Color(0xFF4C7AC8),
     const Color(0xFF8DA6DE),
@@ -16,22 +35,20 @@ class _MyWaterChartState extends State<MyWaterChart> {
 
   bool showAvg = false;
 
-  var currentDay = DateTime.now();
-
   List<DateTime> lastSevenDays(DateTime currentDay) {
-    List<DateTime> lastSevenDays = [];
+    List<DateTime> sevenDaysList = [];
 
     for (var x = 6; x >= 0; x--) {
-      lastSevenDays.add(DateTime(
+      sevenDaysList.add(DateTime(
         currentDay.year,
         currentDay.month,
         currentDay.day - x,
       ));
     }
 
-    lastSevenDays.add(DateTime.now());
+    sevenDaysList.add(DateTime.now());
 
-    return lastSevenDays;
+    return sevenDaysList;
   }
 
   @override
@@ -161,6 +178,45 @@ class _MyWaterChartState extends State<MyWaterChart> {
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
+  double _percentageCalc() {
+    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
+
+    double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
+
+    // Aplicando regra de três
+    percentage = (5 * percentage) / 100;
+
+    return percentage > 5 ? 5 : percentage;
+  }
+
+  List<FlSpot> dataFlSpots() {
+    //0% -> 10%->20% -> 30%-> 40% -> 50%->60%-> 70% ->80%->90%->100%
+    // 0 -> 0.5 -> 1 -> 1.5 -> 2 -> 2.5 -> 3 -> 3.5 -> 4 -> 4.5 -> 5
+    /* 
+      FlSpot(0, 3)
+      FlSpot(1, 2.5),
+      FlSpot(2, 4.5),
+      FlSpot(3, 3.3),
+      FlSpot(4, 5.2),
+      FlSpot(5, 1.2),
+      FlSpot(6, 3.5),
+     */
+
+    List<FlSpot> chartData = [];
+    List<DateTime> sevenDaysList = lastSevenDays(currentDay);
+    var waterStatusData = waterStatusBox.values;
+
+    for (int x = 0; x < 6; x++) {
+      chartData.add(
+        FlSpot(x.toDouble(), _percentageCalc()),
+      );
+    }
+
+    return chartData;
+  }
+
   LineChartData mainData() {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
@@ -216,15 +272,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
       maxY: 6,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(1, 2.5),
-            FlSpot(2, 4.5),
-            FlSpot(3, 3.3),
-            FlSpot(4, 5.2),
-            FlSpot(5, 1.2),
-            FlSpot(6, 3.5),
-          ],
+          spots: dataFlSpots(),
           isCurved: false,
           gradient: LinearGradient(
             colors: gradientColors,

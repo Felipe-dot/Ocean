@@ -17,6 +17,15 @@ class MyStatusScreen extends StatefulWidget {
 class _MyStatusScreenState extends State<MyStatusScreen> {
   Box<WaterStatus> waterStatusBox;
   var currentDay = DateTime.now();
+  Map<int, String> daysOfTheWeek = {
+    1: "SEG",
+    2: "TER",
+    3: "QUA",
+    4: "QUI",
+    5: "SEX",
+    6: "SÁB",
+    7: "DOM",
+  };
 
   @override
   void initState() {
@@ -46,19 +55,19 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
   }
 
   List<DateTime> lastSevenDays(DateTime currentDay) {
-    List<DateTime> lastSevenDays = [];
+    List<DateTime> sevenDaysList = [];
 
     for (var x = 7; x > 0; x--) {
-      lastSevenDays.add(DateTime(
+      sevenDaysList.add(DateTime(
         currentDay.year,
         currentDay.month,
         currentDay.day - x,
       ));
     }
 
-    lastSevenDays.add(DateTime.now());
+    sevenDaysList.add(DateTime.now());
 
-    return lastSevenDays;
+    return sevenDaysList;
   }
 
   bool isData(int weekDay) {
