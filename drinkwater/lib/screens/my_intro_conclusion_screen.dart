@@ -74,6 +74,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
       amountOfWaterDrank: 0,
       goalOfTheDayWasBeat: false,
       statusDay: DateTime.now(),
+      drinkingFrequency: 0,
     ));
 
     // ignore: avoid_print

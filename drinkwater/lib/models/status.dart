@@ -14,6 +14,9 @@ class WaterStatus {
   int amountOfWaterDrank;
 
   @HiveField(3)
+  int drinkingFrequency;
+
+  @HiveField(4)
   DateTime statusDay;
 
   WaterStatus({
@@ -21,5 +24,6 @@ class WaterStatus {
     this.amountOfWaterDrank,
     this.goalOfTheDayWasBeat,
     this.statusDay,
+    this.drinkingFrequency,
   });
 }

@@ -1,6 +1,5 @@
 import 'package:drinkwater/api/notification_api.dart';
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
-import 'package:drinkwater/components/my_drawer.dart';
 import 'package:drinkwater/components/my_expandable_fab.dart';
 import 'package:drinkwater/components/my_fab_content.dart';
 import 'package:drinkwater/models/status.dart';
@@ -78,6 +77,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         goalOfTheDayWasBeat: false,
         amountOfWaterDrank: 0,
         drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+        drinkingFrequency: 0,
       ));
 
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
@@ -115,6 +115,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         goalOfTheDayWasBeat: true,
         amountOfWaterDrank: waterStatusData.amountOfWaterDrank,
         drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+        drinkingFrequency: waterStatusData.drinkingFrequency,
       );
       waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
       return 0;
@@ -129,22 +130,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: _getGoalStatus() ? kMainColor : kWhite,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Image.asset(
-                'assets/images/menuIcon.png',
-                height: 23,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            );
-          },
-        ),
-      ),
-      drawer: const MyDrawer(),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -301,6 +286,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                 goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
                 amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 200,
                 drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
               );
               waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
@@ -316,6 +302,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                 goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
                 amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 350,
                 drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
               );
               waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
@@ -331,6 +318,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                 goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
                 amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 700,
                 drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
               );
               waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
               setState(() {});
@@ -361,7 +349,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
               }
             case 2:
               {
-                Navigator.pushNamed(context, '/myChartScreen',
+                Navigator.pushNamed(context, '/myStatusScreen',
                     arguments: _currentIndex);
                 break;
               }
