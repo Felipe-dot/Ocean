@@ -178,8 +178,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
-  double _percentageCalc() {
-    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
+  double _percentageCalc(WaterStatus waterStatusData) {
     int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
     int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
 
@@ -194,23 +193,17 @@ class _MyWaterChartState extends State<MyWaterChart> {
   List<FlSpot> dataFlSpots() {
     //0% -> 10%->20% -> 30%-> 40% -> 50%->60%-> 70% ->80%->90%->100%
     // 0 -> 0.5 -> 1 -> 1.5 -> 2 -> 2.5 -> 3 -> 3.5 -> 4 -> 4.5 -> 5
-    /* 
-      FlSpot(0, 3)
-      FlSpot(1, 2.5),
-      FlSpot(2, 4.5),
-      FlSpot(3, 3.3),
-      FlSpot(4, 5.2),
-      FlSpot(5, 1.2),
-      FlSpot(6, 3.5),
-     */
 
     List<FlSpot> chartData = [];
     List<DateTime> sevenDaysList = lastSevenDays(currentDay);
     var waterStatusData = waterStatusBox.values;
 
-    for (int x = 0; x < 6; x++) {
+    for (int x = 0; x <= 6; x++) {
+      var waterData = waterStatusData.firstWhere((element) =>
+          sevenDaysList[x].day == element.statusDay.day &&
+          sevenDaysList[x].month == element.statusDay.month);
       chartData.add(
-        FlSpot(x.toDouble(), _percentageCalc()),
+        FlSpot(x.toDouble(), _percentageCalc(waterData)),
       );
     }
 
@@ -273,7 +266,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
       lineBarsData: [
         LineChartBarData(
           spots: dataFlSpots(),
-          isCurved: false,
+          isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
             begin: Alignment.centerLeft,
