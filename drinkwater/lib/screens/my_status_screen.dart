@@ -142,8 +142,9 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     double drinkFrequency = 0;
     for (var element in waterStatusData) {
       drinkFrequency += element.drinkingFrequency;
-      drinkFrequency /= waterStatusData.length;
     }
+    drinkFrequency /= waterStatusData.length;
+
     return drinkFrequency.round();
   }
 
