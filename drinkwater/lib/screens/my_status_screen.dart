@@ -89,8 +89,8 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     List<String> week = [];
     List<DateTime> sevenDaysList = lastSevenDays(currentDay);
 
-    for (var x = 0; x <= 6; x++) {
-      week.add(daysOfTheWeek[sevenDaysList[x].weekday]);
+    for (var days in sevenDaysList) {
+      week.add(daysOfTheWeek[days.weekday]);
     }
 
     List<MyDataPointStreak> streaks =
@@ -114,7 +114,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
   List<DateTime> lastSevenDays(DateTime currentDay) {
     List<DateTime> sevenDaysList = [];
 
-    for (var x = 7; x > 0; x--) {
+    for (var x = 6; x > 0; x--) {
       sevenDaysList.add(DateTime(
         currentDay.year,
         currentDay.month,
