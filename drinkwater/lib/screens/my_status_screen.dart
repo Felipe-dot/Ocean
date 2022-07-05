@@ -1,6 +1,8 @@
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
+import 'package:drinkwater/components/my_mock_streak.dart';
 import 'package:drinkwater/components/my_water_chart.dart';
-import 'package:drinkwater/components/my_weekend_streak.dart';
+import 'package:drinkwater/components/my_datapoint_streak.dart';
+import 'package:drinkwater/models/data_point.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -17,15 +19,6 @@ class MyStatusScreen extends StatefulWidget {
 class _MyStatusScreenState extends State<MyStatusScreen> {
   Box<WaterStatus> waterStatusBox;
   var currentDay = DateTime.now();
-  Map<int, String> daysOfTheWeek = {
-    1: "SEG",
-    2: "TER",
-    3: "QUA",
-    4: "QUI",
-    5: "SEX",
-    6: "SÁB",
-    7: "DOM",
-  };
 
   @override
   void initState() {
@@ -41,6 +34,43 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     super.dispose();
   }
 
+  Map<int, String> daysOfTheWeek = {
+    1: "SEG",
+    2: "TER",
+    3: "QUA",
+    4: "QUI",
+    5: "SEX",
+    6: "SÁB",
+    7: "DOM",
+  };
+
+  List<DataPoint> getLastSevenDataPoints() {
+    var waterStatusData = waterStatusBox.values;
+    List<DateTime> sevenDaysList = lastSevenDays(currentDay);
+    List<DataPoint> dataPointList = [];
+
+    for (var day in sevenDaysList) {
+      for (var waterData in waterStatusData) {
+        if (day.day == waterData.statusDay.day &&
+            day.month == waterData.statusDay.month) {
+          dataPointList.add(DataPoint(
+            weekday: daysOfTheWeek[waterData.statusDay.weekday],
+            isTheWeekDayBeat: waterData.goalOfTheDayWasBeat,
+          ));
+        }
+      }
+    }
+
+    return dataPointList;
+  }
+
+  MyDataPointStreak buildStreak(DataPoint dp) {
+    return MyDataPointStreak(
+      isTheWeekDayBeat: dp.isTheWeekDayBeat,
+      weekday: dp.weekday,
+    );
+  }
+
   bool isTheWeekDayBeat(int weekDay) {
     var waterStatusData = waterStatusBox.values;
     WaterStatus elementDay;
@@ -54,10 +84,37 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     return elementDay.goalOfTheDayWasBeat;
   }
 
+  Widget buildStreakRow() {
+    // List<String> week = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
+    List<String> week = [];
+    List<DateTime> sevenDaysList = lastSevenDays(currentDay);
+
+    for (var days in sevenDaysList) {
+      week.add(daysOfTheWeek[days.weekday]);
+    }
+
+    List<MyDataPointStreak> streaks =
+        getLastSevenDataPoints().map((dp) => buildStreak(dp)).toList();
+    Map<String, Widget> row = {};
+
+    for (var e in streaks) {
+      row.putIfAbsent(e.weekday, () => e);
+    }
+
+    for (var wd in week) {
+      row.putIfAbsent(wd, () => MyMockStreak(weekday: wd));
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [for (var wd in week) row[wd]],
+    );
+  }
+
   List<DateTime> lastSevenDays(DateTime currentDay) {
     List<DateTime> sevenDaysList = [];
 
-    for (var x = 7; x > 0; x--) {
+    for (var x = 6; x > 0; x--) {
       sevenDaysList.add(DateTime(
         currentDay.year,
         currentDay.month,
@@ -68,27 +125,6 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     sevenDaysList.add(DateTime.now());
 
     return sevenDaysList;
-  }
-
-  bool isData(int weekDay) {
-    var waterStatusData = waterStatusBox.values;
-    bool isData = false;
-    try {
-      for (var element in waterStatusData) {
-        if (currentDay.weekday == 7 && weekDay == 7) {
-          isData = true;
-        } else if (currentDay.weekday == 7 && weekDay != 7) {
-          isData = false;
-        } else if (weekDay <= currentDay.weekday || weekDay == 7) {
-          isData = true;
-        } else {
-          isData = false;
-        }
-      }
-    } catch (err) {
-      return false;
-    }
-    return isData;
   }
 
   double averageDrank() {
@@ -106,8 +142,9 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     double drinkFrequency = 0;
     for (var element in waterStatusData) {
       drinkFrequency += element.drinkingFrequency;
-      drinkFrequency /= waterStatusData.length;
     }
+    drinkFrequency /= waterStatusData.length;
+
     return drinkFrequency.round();
   }
 
@@ -157,46 +194,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(7),
-                      weekday: "Dom",
-                      isData: isData(7),
-                    ),
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(1),
-                      weekday: "Seg",
-                      isData: isData(1),
-                    ),
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(2),
-                      weekday: "Ter",
-                      isData: isData(2),
-                    ),
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(3),
-                      weekday: "Qua",
-                      isData: isData(3),
-                    ),
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(4),
-                      weekday: "Qui",
-                      isData: isData(4),
-                    ),
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(5),
-                      weekday: "Sex",
-                      isData: isData(5),
-                    ),
-                    MyWeekendStreak(
-                      isTheWeekDayBeat: isTheWeekDayBeat(6),
-                      weekday: "Sáb",
-                      isData: isData(6),
-                    ),
-                  ],
-                ),
+                buildStreakRow(),
               ],
             ),
             Column(
