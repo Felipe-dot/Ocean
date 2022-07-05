@@ -33,7 +33,23 @@ class _MyWaterChartState extends State<MyWaterChart> {
     const Color(0xFF8DA6DE),
   ];
 
-  bool showAvg = false;
+  bool showLastSevenMonths = false;
+
+  List<DateTime> lastSevenMonths(DateTime currentDay) {
+    List<DateTime> sevenMonthsList = [];
+
+    for (var x = 6; x >= 0; x--) {
+      sevenMonthsList.add(DateTime(
+        currentDay.year,
+        currentDay.month - x,
+        currentDay.day,
+      ));
+    }
+
+    sevenMonthsList.add(DateTime.now());
+
+    return sevenMonthsList;
+  }
 
   List<DateTime> lastSevenDays(DateTime currentDay) {
     List<DateTime> sevenDaysList = [];
@@ -49,6 +65,69 @@ class _MyWaterChartState extends State<MyWaterChart> {
     sevenDaysList.add(DateTime.now());
 
     return sevenDaysList;
+  }
+
+  List<FlSpot> dataMonthFlSpots() {
+    //0% -> 10%->20% -> 30%-> 40% -> 50%->60%-> 70% ->80%->90%->100%
+    // 0 -> 0.5 -> 1 -> 1.5 -> 2 -> 2.5 -> 3 -> 3.5 -> 4 -> 4.5 -> 5
+
+    List<FlSpot> chartData = [];
+    List<DateTime> sevenMonthsList = lastSevenMonths(currentDay);
+    var waterStatusData = waterStatusBox.values;
+
+    for (int x = 0; x <= 6; x++) {
+      List<WaterStatus> waterData = waterStatusData.where((element) =>
+          sevenMonthsList[x].year == element.statusDay.year &&
+          sevenMonthsList[x].month == element.statusDay.month);
+      chartData.add(
+        FlSpot(x.toDouble(), _percentageMonthCalc(waterData)),
+      );
+    }
+  }
+
+  double _percentageMonthCalc(List<WaterStatus> waterStatusData) {
+    double monthPercentage = 0.0;
+    List<double> percentageDayList = [];
+    for (var waterData in waterStatusData) {
+      percentageDayList.add(_percentageWeekCalc(waterData));
+    }
+
+    for (var day in percentageDayList) {
+      monthPercentage += day;
+    }
+
+    monthPercentage /= percentageDayList.length;
+
+    return monthPercentage > 5 ? 5 : monthPercentage;
+  }
+
+  double _percentageWeekCalc(WaterStatus waterStatusData) {
+    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
+
+    double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
+
+    // Aplicando regra de três
+    percentage = (5 * percentage) / 100;
+
+    return percentage > 5 ? 5 : percentage;
+  }
+
+  List<FlSpot> dataWeekFlSpots() {
+    List<FlSpot> chartData = [];
+    List<DateTime> sevenDaysList = lastSevenDays(currentDay);
+    var waterStatusData = waterStatusBox.values;
+
+    for (int x = 0; x <= 6; x++) {
+      var waterData = waterStatusData.firstWhere((element) =>
+          sevenDaysList[x].year == element.statusDay.year &&
+          sevenDaysList[x].month == element.statusDay.month);
+      chartData.add(
+        FlSpot(x.toDouble(), _percentageWeekCalc(waterData)),
+      );
+    }
+
+    return chartData;
   }
 
   @override
@@ -69,7 +148,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
                 padding: const EdgeInsets.only(
                     right: 20.0, left: 25.0, top: 24, bottom: 6),
                 child: LineChart(
-                  showAvg ? avgData() : mainData(),
+                  showLastSevenMonths ? monthChartData() : sevenDaysChartData(),
                 ),
               ),
             ),
@@ -82,7 +161,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
               color: Colors.white.withOpacity(0.7),
               onPressed: () {
                 setState(() {
-                  showAvg = !showAvg;
+                  showLastSevenMonths = !showLastSevenMonths;
                 });
               },
             ),
@@ -178,39 +257,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
-  double _percentageCalc(WaterStatus waterStatusData) {
-    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
-    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
-
-    double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
-
-    // Aplicando regra de três
-    percentage = (5 * percentage) / 100;
-
-    return percentage > 5 ? 5 : percentage;
-  }
-
-  List<FlSpot> dataFlSpots() {
-    //0% -> 10%->20% -> 30%-> 40% -> 50%->60%-> 70% ->80%->90%->100%
-    // 0 -> 0.5 -> 1 -> 1.5 -> 2 -> 2.5 -> 3 -> 3.5 -> 4 -> 4.5 -> 5
-
-    List<FlSpot> chartData = [];
-    List<DateTime> sevenDaysList = lastSevenDays(currentDay);
-    var waterStatusData = waterStatusBox.values;
-
-    for (int x = 0; x <= 6; x++) {
-      var waterData = waterStatusData.firstWhere((element) =>
-          sevenDaysList[x].day == element.statusDay.day &&
-          sevenDaysList[x].month == element.statusDay.month);
-      chartData.add(
-        FlSpot(x.toDouble(), _percentageCalc(waterData)),
-      );
-    }
-
-    return chartData;
-  }
-
-  LineChartData mainData() {
+  LineChartData sevenDaysChartData() {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(
@@ -265,7 +312,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
       maxY: 6,
       lineBarsData: [
         LineChartBarData(
-          spots: dataFlSpots(),
+          spots: dataWeekFlSpots(),
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
@@ -292,7 +339,65 @@ class _MyWaterChartState extends State<MyWaterChart> {
     );
   }
 
-  LineChartData avgData() {
+  Widget yearBottomTitleWidgets(double value, TitleMeta meta) {
+    Map<int, String> monthsOfTheYear = {
+      1: "JAN",
+      2: "FEV",
+      3: "MAR",
+      4: "ABR",
+      5: "MAI",
+      6: "JUN",
+      7: "JUL",
+      8: "AGO",
+      9: "SET",
+      10: "OUT",
+      11: "NOV",
+      12: "DEZ"
+    };
+
+    List<DateTime> sevenMonthsList = lastSevenMonths(currentDay);
+
+    const style = TextStyle(
+      color: Color(0xff68737d),
+      fontWeight: FontWeight.bold,
+      fontSize: 12,
+    );
+    Widget text;
+    switch (value.toInt()) {
+      case 0:
+        text = Text(monthsOfTheYear[sevenMonthsList[0].month], style: style);
+        break;
+      case 1:
+        text = Text(monthsOfTheYear[sevenMonthsList[1].month], style: style);
+        break;
+      case 2:
+        text = Text(monthsOfTheYear[sevenMonthsList[2].month], style: style);
+        break;
+      case 3:
+        text = Text(monthsOfTheYear[sevenMonthsList[3].month], style: style);
+        break;
+      case 4:
+        text = Text(monthsOfTheYear[sevenMonthsList[4].month], style: style);
+        break;
+      case 5:
+        text = Text(monthsOfTheYear[sevenMonthsList[5].month], style: style);
+        break;
+      case 6:
+        text = Text(monthsOfTheYear[sevenMonthsList[6].month], style: style);
+        break;
+      default:
+        text = const Text('', style: style);
+        break;
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 8.0,
+      child: text,
+    );
+  }
+
+  LineChartData monthChartData() {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(
@@ -347,15 +452,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
       maxY: 6,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.70),
-            FlSpot(1, 1.70),
-            FlSpot(2, 5.70),
-            FlSpot(3, 4.30),
-            FlSpot(4, 2.44),
-            FlSpot(5, 3.54),
-            FlSpot(6, 4.44),
-          ],
+          spots: dataMonthFlSpots(),
           isCurved: false,
           gradient: LinearGradient(
             colors: [
@@ -391,45 +488,4 @@ class _MyWaterChartState extends State<MyWaterChart> {
       ],
     );
   }
-}
-
-Widget yearBottomTitleWidgets(double value, TitleMeta meta) {
-  const style = TextStyle(
-    color: Color(0xff68737d),
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-  );
-  Widget text;
-  switch (value.toInt()) {
-    case 0:
-      text = const Text('ABR', style: style);
-      break;
-    case 1:
-      text = const Text('MAI', style: style);
-      break;
-    case 2:
-      text = const Text('JUN', style: style);
-      break;
-    case 3:
-      text = const Text('JUL', style: style);
-      break;
-    case 4:
-      text = const Text('AGO', style: style);
-      break;
-    case 5:
-      text = const Text('SET', style: style);
-      break;
-    case 6:
-      text = const Text('OUT', style: style);
-      break;
-    default:
-      text = const Text('', style: style);
-      break;
-  }
-
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    space: 8.0,
-    child: text,
-  );
 }
