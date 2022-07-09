@@ -76,13 +76,23 @@ class _MyWaterChartState extends State<MyWaterChart> {
     var waterStatusData = waterStatusBox.values;
 
     for (int x = 0; x <= 6; x++) {
-      List<WaterStatus> waterData = waterStatusData.where((element) =>
-          sevenMonthsList[x].year == element.statusDay.year &&
-          sevenMonthsList[x].month == element.statusDay.month);
+      List<WaterStatus> waterData = [];
+      for (var element in waterStatusData) {
+        if (sevenMonthsList[x].year == element.statusDay.year &&
+            sevenMonthsList[x].month == element.statusDay.month) {
+          waterData.add(element);
+        }
+      }
       chartData.add(
-        FlSpot(x.toDouble(), _percentageMonthCalc(waterData)),
+        FlSpot(
+            x.toDouble(),
+            _percentageMonthCalc(waterData).isNaN
+                ? 0
+                : _percentageMonthCalc(waterData)),
       );
     }
+
+    return chartData;
   }
 
   double _percentageMonthCalc(List<WaterStatus> waterStatusData) {
@@ -117,14 +127,27 @@ class _MyWaterChartState extends State<MyWaterChart> {
     List<FlSpot> chartData = [];
     List<DateTime> sevenDaysList = lastSevenDays(currentDay);
     var waterStatusData = waterStatusBox.values;
+    // WaterStatus waterData;
 
     for (int x = 0; x <= 6; x++) {
-      var waterData = waterStatusData.firstWhere((element) =>
-          sevenDaysList[x].year == element.statusDay.year &&
-          sevenDaysList[x].month == element.statusDay.month);
-      chartData.add(
-        FlSpot(x.toDouble(), _percentageWeekCalc(waterData)),
-      );
+      try {
+        var waterData = waterStatusData.firstWhere(
+          (element) =>
+              sevenDaysList[x].day == element.statusDay.day &&
+              sevenDaysList[x].month == element.statusDay.month,
+        );
+
+        chartData.add(
+          FlSpot(
+              x.toDouble(),
+              _percentageWeekCalc(waterData).isNaN
+                  ? 0
+                  : _percentageWeekCalc(waterData)),
+        );
+      } catch (err) {
+        chartData.add(FlSpot(x.toDouble(), 0));
+        print(err);
+      }
     }
 
     return chartData;
@@ -453,7 +476,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
       lineBarsData: [
         LineChartBarData(
           spots: dataMonthFlSpots(),
-          isCurved: false,
+          isCurved: true,
           gradient: LinearGradient(
             colors: [
               ColorTween(begin: gradientColors[0], end: gradientColors[1])
