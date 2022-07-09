@@ -1,10 +1,12 @@
 import 'package:drinkwater/screens/my_%20available_soon_screen.dart';
+import 'package:drinkwater/screens/my_status_screen.dart';
 import 'package:drinkwater/screens/my_intro_conclusion_screen.dart';
 import 'package:drinkwater/screens/my_slider_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'models/status.dart';
 import 'models/user.dart';
 import 'providers/sleep_time_provider.dart';
 import 'providers/wake_up_provider.dart';
@@ -18,8 +20,10 @@ void main() async {
   await Hive.initFlutter();
   // Registrando o adaptador
   Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(WaterStatusAdapter());
   // Abrindo a box
   await Hive.openBox<User>('userBox');
+  await Hive.openBox<WaterStatus>('statusBox');
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => Weight()),
@@ -50,6 +54,7 @@ class _MyAppState extends State<MyApp> {
         '/mySliderScreen': (context) => const MySliderScreen(),
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
         '/myAvailableSoonScreen': (context) => const MyAvailableSoonScreen(),
+        '/myStatusScreen': (context) => const MyStatusScreen(),
         '/myHomePage': (context) => const MyHomePageScreen(),
       },
     );

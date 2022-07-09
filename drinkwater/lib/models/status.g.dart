@@ -1,38 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'status.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserAdapter extends TypeAdapter<User> {
+class WaterStatusAdapter extends TypeAdapter<WaterStatus> {
   @override
-  final int typeId = 1;
+  final int typeId = 2;
 
   @override
-  User read(BinaryReader reader) {
+  WaterStatus read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return User(
-      userWeight: fields[0] as int,
-      userWakeUpTime: fields[1] as DateTime,
-      userSleepTime: fields[2] as DateTime,
+    return WaterStatus(
+      drinkingWaterGoal: fields[0] as int,
+      amountOfWaterDrank: fields[2] as int,
+      goalOfTheDayWasBeat: fields[1] as bool,
+      statusDay: fields[4] as DateTime,
+      drinkingFrequency: fields[3] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, User obj) {
+  void write(BinaryWriter writer, WaterStatus obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.userWeight)
+      ..write(obj.drinkingWaterGoal)
       ..writeByte(1)
-      ..write(obj.userWakeUpTime)
+      ..write(obj.goalOfTheDayWasBeat)
       ..writeByte(2)
-      ..write(obj.userSleepTime);
+      ..write(obj.amountOfWaterDrank)
+      ..writeByte(3)
+      ..write(obj.drinkingFrequency)
+      ..writeByte(4)
+      ..write(obj.statusDay);
   }
 
   @override
@@ -41,7 +47,7 @@ class UserAdapter extends TypeAdapter<User> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserAdapter &&
+      other is WaterStatusAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
