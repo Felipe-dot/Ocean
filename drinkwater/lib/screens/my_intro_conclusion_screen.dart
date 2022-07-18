@@ -11,7 +11,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/src/provider.dart';
 
 class MyIntroConclusionScreen extends StatefulWidget {
-  const MyIntroConclusionScreen({Key key}) : super(key: key);
+  const MyIntroConclusionScreen({Key? key}) : super(key: key);
 
   @override
   State<MyIntroConclusionScreen> createState() =>
@@ -19,8 +19,8 @@ class MyIntroConclusionScreen extends StatefulWidget {
 }
 
 class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
-  Box<User> userBox;
-  Box<WaterStatus> waterStatusBox;
+  late Box<User> userBox;
+  late Box<WaterStatus> waterStatusBox;
   @override
   void initState() {
     super.initState();

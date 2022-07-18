@@ -8,7 +8,7 @@ import 'package:provider/src/provider.dart';
 
 class MyTimePicker extends StatefulWidget {
   final bool isSleepTime;
-  const MyTimePicker({Key key, this.isSleepTime}) : super(key: key);
+  const MyTimePicker({Key? key, required this.isSleepTime}) : super(key: key);
 
   @override
   State<MyTimePicker> createState() => _MyTimePickerState();
@@ -25,7 +25,7 @@ class _MyTimePickerState extends State<MyTimePicker> {
         textStyle: kHeadline2.copyWith(color: kMainColor),
       ),
       onPressed: () async {
-        TimeOfDay newTime =
+        TimeOfDay? newTime =
             await showTimePicker(context: context, initialTime: time);
         if (newTime != null) {
           if (widget.isSleepTime == true) {

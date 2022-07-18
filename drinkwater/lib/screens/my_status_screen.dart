@@ -10,14 +10,14 @@ import 'package:hive/hive.dart';
 import '../constant.dart';
 
 class MyStatusScreen extends StatefulWidget {
-  const MyStatusScreen({Key key}) : super(key: key);
+  const MyStatusScreen({Key? key}) : super(key: key);
 
   @override
   State<MyStatusScreen> createState() => _MyStatusScreenState();
 }
 
 class _MyStatusScreenState extends State<MyStatusScreen> {
-  Box<WaterStatus> waterStatusBox;
+  late Box<WaterStatus> waterStatusBox;
   var currentDay = DateTime.now();
 
   @override
@@ -54,7 +54,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
         if (day.day == waterData.statusDay.day &&
             day.month == waterData.statusDay.month) {
           dataPointList.add(DataPoint(
-            weekday: daysOfTheWeek[waterData.statusDay.weekday],
+            weekday: daysOfTheWeek[waterData.statusDay.weekday]!,
             isTheWeekDayBeat: waterData.goalOfTheDayWasBeat,
           ));
         }
@@ -90,7 +90,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     List<DateTime> sevenDaysList = lastSevenDays(currentDay);
 
     for (var days in sevenDaysList) {
-      week.add(daysOfTheWeek[days.weekday]);
+      week.add(daysOfTheWeek[days.weekday]!);
     }
 
     List<MyDataPointStreak> streaks =
@@ -107,7 +107,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [for (var wd in week) row[wd]],
+      children: [for (var wd in week) row[wd]!],
     );
   }
 
@@ -166,8 +166,8 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments;
-    int _currentIndex = args;
+    final args = ModalRoute.of(context)!.settings.arguments;
+    int? _currentIndex = args as int?;
 
     return Scaffold(
       body: Container(
@@ -241,7 +241,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
       ),
       bottomNavigationBar: MyBottomNavBar(
         iconSize: 30,
-        selectedIndex: _currentIndex,
+        selectedIndex: _currentIndex!,
         backgroundColor: kMainColor,
         showElevation: false,
         itemCornerRadius: 20,

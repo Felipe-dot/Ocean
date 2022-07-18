@@ -10,14 +10,14 @@ class MyCtaWithIconRight extends StatelessWidget {
   final Function() function;
 
   const MyCtaWithIconRight({
-    Key key,
-    this.width,
-    this.height,
-    this.text,
-    this.function,
-    this.icon,
-    this.background,
-    this.textStyle,
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.text,
+    required this.function,
+    required this.icon,
+    required this.background,
+    required this.textStyle,
   }) : super(key: key);
 
   @override

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class MyWaterChart extends StatefulWidget {
-  const MyWaterChart({Key key}) : super(key: key);
+  const MyWaterChart({Key? key}) : super(key: key);
 
   @override
   State<MyWaterChart> createState() => _MyWaterChartState();
 }
 
 class _MyWaterChartState extends State<MyWaterChart> {
-  Box<WaterStatus> waterStatusBox;
+  late Box<WaterStatus> waterStatusBox;
   var currentDay = DateTime.now();
 
   @override
@@ -215,25 +215,25 @@ class _MyWaterChartState extends State<MyWaterChart> {
     Widget text;
     switch (value.toInt()) {
       case 0:
-        text = Text(daysOfTheWeek[sevenDaysList[0].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[0].weekday]!, style: style);
         break;
       case 1:
-        text = Text(daysOfTheWeek[sevenDaysList[1].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[1].weekday]!, style: style);
         break;
       case 2:
-        text = Text(daysOfTheWeek[sevenDaysList[2].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[2].weekday]!, style: style);
         break;
       case 3:
-        text = Text(daysOfTheWeek[sevenDaysList[3].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[3].weekday]!, style: style);
         break;
       case 4:
-        text = Text(daysOfTheWeek[sevenDaysList[4].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[4].weekday]!, style: style);
         break;
       case 5:
-        text = Text(daysOfTheWeek[sevenDaysList[5].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[5].weekday]!, style: style);
         break;
       case 6:
-        text = Text(daysOfTheWeek[sevenDaysList[6].weekday], style: style);
+        text = Text(daysOfTheWeek[sevenDaysList[6].weekday]!, style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -388,25 +388,25 @@ class _MyWaterChartState extends State<MyWaterChart> {
     Widget text;
     switch (value.toInt()) {
       case 0:
-        text = Text(monthsOfTheYear[sevenMonthsList[0].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[0].month]!, style: style);
         break;
       case 1:
-        text = Text(monthsOfTheYear[sevenMonthsList[1].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[1].month]!, style: style);
         break;
       case 2:
-        text = Text(monthsOfTheYear[sevenMonthsList[2].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[2].month]!, style: style);
         break;
       case 3:
-        text = Text(monthsOfTheYear[sevenMonthsList[3].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[3].month]!, style: style);
         break;
       case 4:
-        text = Text(monthsOfTheYear[sevenMonthsList[4].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[4].month]!, style: style);
         break;
       case 5:
-        text = Text(monthsOfTheYear[sevenMonthsList[5].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[5].month]!, style: style);
         break;
       case 6:
-        text = Text(monthsOfTheYear[sevenMonthsList[6].month], style: style);
+        text = Text(monthsOfTheYear[sevenMonthsList[6].month]!, style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -480,9 +480,9 @@ class _MyWaterChartState extends State<MyWaterChart> {
           gradient: LinearGradient(
             colors: [
               ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2),
+                  .lerp(0.2)!,
               ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2),
+                  .lerp(0.2)!,
             ],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
@@ -497,10 +497,10 @@ class _MyWaterChartState extends State<MyWaterChart> {
             gradient: LinearGradient(
               colors: [
                 ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)
+                    .lerp(0.2)!
                     .withOpacity(0.1),
                 ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)
+                    .lerp(0.2)!
                     .withOpacity(0.1),
               ],
               begin: Alignment.centerLeft,

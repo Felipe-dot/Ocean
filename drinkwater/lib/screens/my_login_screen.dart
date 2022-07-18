@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../constant.dart';
 
 class MyLoginScreen extends StatelessWidget {
-  const MyLoginScreen({Key key}) : super(key: key);
+  const MyLoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

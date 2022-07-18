@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../constant.dart';
 
 class MyAvailableSoonScreen extends StatefulWidget {
-  const MyAvailableSoonScreen({Key key}) : super(key: key);
+  const MyAvailableSoonScreen({Key? key}) : super(key: key);
 
   @override
   State<MyAvailableSoonScreen> createState() => _MyAvailableSoonScreenState();
@@ -13,8 +13,8 @@ class MyAvailableSoonScreen extends StatefulWidget {
 class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments;
-    int _currentIndex = args;
+    final args = ModalRoute.of(context)!.settings.arguments;
+    int? _currentIndex = args as int?;
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -58,7 +58,7 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
       ),
       bottomNavigationBar: MyBottomNavBar(
         iconSize: 30,
-        selectedIndex: _currentIndex,
+        selectedIndex: _currentIndex!,
         backgroundColor: kMainColor,
         showElevation: false,
         itemCornerRadius: 20,

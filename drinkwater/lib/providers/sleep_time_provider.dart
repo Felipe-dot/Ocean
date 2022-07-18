@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Sleep with ChangeNotifier {
-  TimeOfDay _sleepTime;
+  late TimeOfDay _sleepTime;
 
   TimeOfDay get sleepTime => _sleepTime;
 
@@ -11,5 +11,4 @@ class Sleep with ChangeNotifier {
     print("EU DURMO ÀS $_sleepTime");
     notifyListeners();
   }
-  
 }

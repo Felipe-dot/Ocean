@@ -5,13 +5,11 @@ import 'dart:math' as math;
 @immutable
 class MyExpandableFab extends StatefulWidget {
   const MyExpandableFab({
-    Key key,
-    this.initialOpen,
-    this.distance,
-    this.children,
+    Key? key,
+    required this.distance,
+    required this.children,
   }) : super(key: key);
 
-  final bool initialOpen;
   final double distance;
   final List<Widget> children;
 
@@ -21,14 +19,14 @@ class MyExpandableFab extends StatefulWidget {
 
 class _MyExpandableFabState extends State<MyExpandableFab>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _expandAnimation;
+  late AnimationController _controller;
+  late Animation<double> _expandAnimation;
   bool _open = false;
 
   @override
   void initState() {
     super.initState();
-    _open = widget.initialOpen ?? false;
+    _open = false;
     _controller = AnimationController(
       value: _open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
@@ -153,11 +151,11 @@ class _MyExpandableFabState extends State<MyExpandableFab>
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
   const _ExpandingActionButton({
-    Key key,
-    this.directionInDegrees,
-    this.maxDistance,
-    this.progress,
-    this.child,
+    Key? key,
+    required this.directionInDegrees,
+    required this.maxDistance,
+    required this.progress,
+    required this.child,
   }) : super(key: key);
 
   final double directionInDegrees;
@@ -194,9 +192,9 @@ class _ExpandingActionButton extends StatelessWidget {
 @immutable
 class ActionButton extends StatelessWidget {
   const ActionButton({
-    Key key,
-    this.onPressed,
-    this.icon,
+    Key? key,
+    required this.onPressed,
+    required this.icon,
   }) : super(key: key);
 
   final VoidCallback onPressed;
@@ -226,8 +224,8 @@ class ActionButton extends StatelessWidget {
 @immutable
 class FakeItem extends StatelessWidget {
   const FakeItem({
-    Key key,
-    this.isBig,
+    Key? key,
+    required this.isBig,
   }) : super(key: key);
 
   final bool isBig;
