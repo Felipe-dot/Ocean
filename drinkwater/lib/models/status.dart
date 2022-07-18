@@ -20,10 +20,10 @@ class WaterStatus {
   DateTime statusDay;
 
   WaterStatus({
-    this.drinkingWaterGoal,
-    this.amountOfWaterDrank,
-    this.goalOfTheDayWasBeat,
-    this.statusDay,
-    this.drinkingFrequency,
+    required this.drinkingWaterGoal,
+    required this.amountOfWaterDrank,
+    required this.goalOfTheDayWasBeat,
+    required this.statusDay,
+    required this.drinkingFrequency,
   });
 }

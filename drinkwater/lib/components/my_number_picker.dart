@@ -6,7 +6,7 @@ import 'package:provider/src/provider.dart';
 import '../constant.dart';
 
 class MyNumberPicker extends StatefulWidget {
-  const MyNumberPicker({Key key}) : super(key: key);
+  const MyNumberPicker({Key? key}) : super(key: key);
 
   @override
   _MyNumberPickerState createState() => _MyNumberPickerState();

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class MyProgressIndicatorCircle extends StatelessWidget {
   final int currentPage;
   final int order;
-  const MyProgressIndicatorCircle({Key key, this.order, this.currentPage})
+  const MyProgressIndicatorCircle(
+      {Key? key, required this.order, required this.currentPage})
       : super(key: key);
 
   @override

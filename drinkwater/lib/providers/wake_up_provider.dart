@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WakeUp with ChangeNotifier {
-  TimeOfDay _wakeUpTime;
+  late TimeOfDay _wakeUpTime;
 
   TimeOfDay get wakeUpTime => _wakeUpTime;
 

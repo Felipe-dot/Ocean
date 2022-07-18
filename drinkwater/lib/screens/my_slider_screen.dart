@@ -7,7 +7,7 @@ import 'package:drinkwater/constant.dart';
 import 'package:flutter/material.dart';
 
 class MySliderScreen extends StatefulWidget {
-  const MySliderScreen({Key key}) : super(key: key);
+  const MySliderScreen({Key? key}) : super(key: key);
 
   @override
   _MySliderScreenState createState() => _MySliderScreenState();

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../constant.dart';
 
 class MyInitialSetupScreen extends StatelessWidget {
-  const MyInitialSetupScreen({Key key}) : super(key: key);
+  const MyInitialSetupScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

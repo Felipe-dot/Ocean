@@ -11,7 +11,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../constant.dart';
 
 class MyHomePageScreen extends StatefulWidget {
-  const MyHomePageScreen({Key key}) : super(key: key);
+  const MyHomePageScreen({Key? key}) : super(key: key);
 
   @override
   _MyHomePageScreenState createState() => _MyHomePageScreenState();
@@ -19,8 +19,8 @@ class MyHomePageScreen extends StatefulWidget {
 
 class _MyHomePageScreenState extends State<MyHomePageScreen> {
   int _currentIndex = 0;
-  Box<User> userBox;
-  Box<WaterStatus> waterStatusBox;
+  late Box<User> userBox;
+  late Box<WaterStatus> waterStatusBox;
 
   @override
   void initState() {
@@ -29,11 +29,11 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     userBox = Hive.box('userBox');
     waterStatusBox = Hive.box('statusBox');
     // Iniciando o sistema de notificação do aplicativo
-    var wakeUpTime = userBox.getAt(userBox.length - 1).userWakeUpTime;
-    var sleepTime = userBox.getAt(userBox.length - 1).userSleepTime;
+    var wakeUpTime = userBox.getAt(userBox.length - 1)?.userWakeUpTime;
+    var sleepTime = userBox.getAt(userBox.length - 1)?.userSleepTime;
 
     // Verificando se é a hora que o usuário acorda para iniciar as notificações
-    if (DateTime.now().hour >= wakeUpTime.hour) {
+    if (DateTime.now().hour >= wakeUpTime!.hour) {
       NotificationApi.init(initScheduled: true);
       listenNotifications();
       NotificationApi.repeatNotification();
@@ -43,7 +43,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     }
 
     // Cancelando as notificações dado a hora que o usuário dorme
-    if (DateTime.now().hour >= sleepTime.hour) {
+    if (DateTime.now().hour >= sleepTime!.hour) {
       NotificationApi.cancelAllNotifications();
     }
 
@@ -70,7 +70,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   bool _isDayChanged() {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
     int lastDay;
-    lastDay = waterStatusData.statusDay.day;
+    lastDay = waterStatusData!.statusDay.day;
     if (lastDay != DateTime.now().day) {
       waterStatusBox.add(WaterStatus(
         statusDay: DateTime.now(),
@@ -89,12 +89,12 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
   }
 
   bool _getGoalStatus() {
-    return waterStatusBox.getAt(waterStatusBox.length - 1).goalOfTheDayWasBeat;
+    return waterStatusBox.getAt(waterStatusBox.length - 1)!.goalOfTheDayWasBeat;
   }
 
   double _percentageCalc() {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
-    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int amountOfWaterDrank = waterStatusData!.amountOfWaterDrank;
     int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
 
     double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
@@ -105,7 +105,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
 
   int _howMuchIsMissing() {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
-    int amountOfWaterDrank = waterStatusData.amountOfWaterDrank;
+    int amountOfWaterDrank = waterStatusData!.amountOfWaterDrank;
     int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
 
     // Verificando se a meta já foi batida
@@ -161,7 +161,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                 ),
                               ),
                               Text(
-                                "${waterStatusData.amountOfWaterDrank}",
+                                "${waterStatusData!.amountOfWaterDrank}",
                                 style: const TextStyle(
                                   color: kGreenAccent,
                                   fontSize: 60,
@@ -235,7 +235,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                               ),
                             ),
                             Text(
-                              "${waterStatusData.amountOfWaterDrank}",
+                              "${waterStatusData!.amountOfWaterDrank}",
                               style: const TextStyle(
                                 color: kMainColor,
                                 fontSize: 60,
@@ -282,13 +282,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myFABContentText: '200ml',
             myFunction: () {
               waterStatusData = WaterStatus(
-                statusDay: waterStatusData.statusDay,
-                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 200,
-                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
-                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
+                statusDay: waterStatusData!.statusDay,
+                goalOfTheDayWasBeat: waterStatusData!.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData!.amountOfWaterDrank += 200,
+                drinkingWaterGoal: waterStatusData!.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData!.drinkingFrequency + 1,
               );
-              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -298,13 +298,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myFABContentText: '350ml',
             myFunction: () {
               waterStatusData = WaterStatus(
-                statusDay: waterStatusData.statusDay,
-                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 350,
-                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
-                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
+                statusDay: waterStatusData!.statusDay,
+                goalOfTheDayWasBeat: waterStatusData!.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData!.amountOfWaterDrank += 350,
+                drinkingWaterGoal: waterStatusData!.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData!.drinkingFrequency + 1,
               );
-              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
               setState(() {});
               _howMuchIsMissing();
             },
@@ -314,13 +314,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myFABContentText: '700ml',
             myFunction: () {
               waterStatusData = WaterStatus(
-                statusDay: waterStatusData.statusDay,
-                goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData.amountOfWaterDrank += 700,
-                drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
-                drinkingFrequency: waterStatusData.drinkingFrequency + 1,
+                statusDay: waterStatusData!.statusDay,
+                goalOfTheDayWasBeat: waterStatusData!.goalOfTheDayWasBeat,
+                amountOfWaterDrank: waterStatusData!.amountOfWaterDrank += 700,
+                drinkingWaterGoal: waterStatusData!.drinkingWaterGoal,
+                drinkingFrequency: waterStatusData!.drinkingFrequency + 1,
               );
-              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
+              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
               setState(() {});
               _howMuchIsMissing();
             },

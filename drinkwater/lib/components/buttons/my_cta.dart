@@ -10,13 +10,13 @@ class MyCta extends StatelessWidget {
   final TextStyle textStyle;
   final Function() function;
   const MyCta({
-    Key key,
-    this.width,
-    this.height,
-    this.text,
-    this.function,
-    this.background,
-    this.textStyle,
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.text,
+    required this.function,
+    required this.background,
+    required this.textStyle,
   }) : super(key: key);
 
   @override

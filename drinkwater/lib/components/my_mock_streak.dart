@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../constant.dart';
 
 class MyMockStreak extends StatelessWidget {
-  const MyMockStreak({Key key, this.weekday}) : super(key: key);
+  const MyMockStreak({Key? key, required this.weekday}) : super(key: key);
 
   final String weekday;
 

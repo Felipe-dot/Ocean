@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class MySliderProgressIndicator extends StatelessWidget {
   final int current;
-  const MySliderProgressIndicator({Key key, this.current}) : super(key: key);
+  const MySliderProgressIndicator({Key? key, required this.current})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

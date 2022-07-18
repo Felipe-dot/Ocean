@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class MyDataPointStreak extends StatelessWidget {
   const MyDataPointStreak({
-    Key key,
-    this.isTheWeekDayBeat,
-    this.weekday,
+    Key? key,
+    required this.isTheWeekDayBeat,
+    required this.weekday,
   }) : super(key: key);
 
   final bool isTheWeekDayBeat;

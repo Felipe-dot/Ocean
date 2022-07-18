@@ -7,7 +7,12 @@ class MyInfoPage extends StatelessWidget {
   final String desc;
   final String imagem;
   final Widget widget;
-  const MyInfoPage({Key key, this.titulo, this.desc, this.imagem, this.widget})
+  const MyInfoPage(
+      {Key? key,
+      required this.titulo,
+      required this.desc,
+      required this.imagem,
+      required this.widget})
       : super(key: key);
 
   @override

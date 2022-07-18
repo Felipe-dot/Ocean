@@ -9,17 +9,17 @@ import 'package:flutter/material.dart';
 /// [selectedIndex] is required and must not be null.
 class MyBottomNavBar extends StatelessWidget {
   const MyBottomNavBar({
-    Key key,
+    Key? key,
     this.selectedIndex = 0,
     this.showElevation = true,
     this.iconSize = 24,
-    this.backgroundColor,
+    required this.backgroundColor,
     this.itemCornerRadius = 16,
     this.containerHeight = 56,
     this.animationDuration = const Duration(milliseconds: 270),
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
-    this.items,
-    this.onItemSelected,
+    required this.items,
+    required this.onItemSelected,
     this.curve = Curves.linear,
   })  : assert(items.length >= 2 && items.length <= 5),
         super(key: key);
@@ -63,7 +63,7 @@ class MyBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? Theme.of(context).bottomAppBarColor;
+    final bgColor = backgroundColor;
 
     return Container(
       decoration: BoxDecoration(
@@ -116,13 +116,13 @@ class _ItemWidget extends StatelessWidget {
   final Curve curve;
 
   const _ItemWidget({
-    Key key,
-    this.item,
-    this.isSelected,
-    this.backgroundColor,
-    this.animationDuration,
-    this.itemCornerRadius,
-    this.iconSize,
+    Key? key,
+    required this.item,
+    required this.isSelected,
+    required this.backgroundColor,
+    required this.animationDuration,
+    required this.itemCornerRadius,
+    required this.iconSize,
     this.curve = Curves.linear,
   }) : super(key: key);
 
@@ -168,11 +168,11 @@ class _ItemWidget extends StatelessWidget {
 /// The [MyBottomNavBar.items] definition.
 class BottomNavyBarItem {
   BottomNavyBarItem({
-    this.icon,
-    this.title,
+    required this.icon,
+    this.title = const Text(""),
     this.activeColor = Colors.blue,
-    this.textAlign,
-    this.inactiveColor,
+    this.textAlign = TextAlign.center,
+    required this.inactiveColor,
   });
 
   /// Defines this item's icon which is placed in the right side of the [title].

@@ -8,12 +8,12 @@ class MySecondaryButton extends StatelessWidget {
   final Function() function;
 
   const MySecondaryButton({
-    Key key,
-    this.width,
-    this.height,
-    this.text,
-    this.function,
-    this.textStyle,
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.text,
+    required this.function,
+    required this.textStyle,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class MySecondaryButton extends StatelessWidget {
           ),
           side: BorderSide(
             width: 2,
-            color: textStyle.color,
+            color: textStyle.color!,
           )),
       onPressed: function,
       child: Text(

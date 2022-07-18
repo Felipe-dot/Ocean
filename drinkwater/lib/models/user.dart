@@ -13,8 +13,8 @@ class User {
   final DateTime userSleepTime;
 
   User({
-    this.userWeight,
-    this.userWakeUpTime,
-    this.userSleepTime,
+    required this.userWeight,
+    required this.userWakeUpTime,
+    required this.userSleepTime,
   });
 }
