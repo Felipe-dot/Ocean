@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../constant.dart';
 
-class MyAvailableSoonScreen extends StatefulWidget {
-  const MyAvailableSoonScreen({Key? key}) : super(key: key);
+class MySettings extends StatefulWidget {
+  const MySettings({Key? key}) : super(key: key);
 
   @override
-  State<MyAvailableSoonScreen> createState() => _MyAvailableSoonScreenState();
+  State<MySettings> createState() => _MySettingsState();
 }
 
-class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
+class _MySettingsState extends State<MySettings> {
+  bool temp = false;
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
@@ -24,17 +25,37 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
           decoration: const BoxDecoration(
             color: kWhite,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "Disponível em breve",
-                style: TextStyle(
-                  color: kMainColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
+          child: ListView(
+            children: [
+              ListTile(
+                title: Text("Agenda de notificações"),
+                trailing: Icon(Icons.notifications),
+              ),
+              SwitchListTile(
+                title: Text("Lembrete adicional"),
+                onChanged: (bool newValue) {
+                  setState(() {
+                    temp = newValue;
+                    print(temp);
+                  });
+                },
+                value: temp,
+              ),
+              ListTile(
+                title: Text("Meta de ingestão"),
+                trailing: Text("1500"),
+              ),
+              ListTile(
+                title: Text("Peso"),
+                trailing: Text("53 kg"),
+              ),
+              ListTile(
+                title: Text("Hora de acordar"),
+                trailing: Text("06:00"),
+              ),
+              ListTile(
+                title: Text("Hora de dormir"),
+                trailing: Text("22:30"),
               ),
             ],
           ),
@@ -57,8 +78,6 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
               }
             case 1:
               {
-                Navigator.pushNamed(context, '/mySettingsScreen',
-                    arguments: _currentIndex);
                 break;
               }
             case 2:

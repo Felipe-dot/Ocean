@@ -256,7 +256,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
               }
             case 1:
               {
-                Navigator.pushNamed(context, '/myAvailableSoonScreen',
+                Navigator.pushNamed(context, '/mySettingsScreen',
                     arguments: _currentIndex);
                 break;
               }
@@ -282,7 +282,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
           ),
           BottomNavyBarItem(
             icon: const Icon(
-              Icons.notifications,
+              Icons.event_available,
               color: kWhite,
             ),
             activeColor: kLightBlue1,
@@ -290,7 +290,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
           ),
           BottomNavyBarItem(
             icon: const Icon(
-              Icons.event_available,
+              Icons.settings,
               color: kWhite,
             ),
             activeColor: kLightBlue1,
