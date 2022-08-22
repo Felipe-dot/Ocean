@@ -343,13 +343,13 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
               }
             case 1:
               {
-                Navigator.pushNamed(context, '/mySettingsScreen',
+                Navigator.pushNamed(context, '/myStatusScreen',
                     arguments: _currentIndex);
                 break;
               }
             case 2:
               {
-                Navigator.pushNamed(context, '/myStatusScreen',
+                Navigator.pushNamed(context, '/mySettingsScreen',
                     arguments: _currentIndex);
                 break;
               }

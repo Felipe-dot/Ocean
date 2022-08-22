@@ -78,12 +78,12 @@ class _MySettingsState extends State<MySettings> {
               }
             case 1:
               {
+                Navigator.pushNamed(context, '/myStatusScreen',
+                    arguments: _currentIndex);
                 break;
               }
             case 2:
               {
-                Navigator.pushNamed(context, '/myStatusScreen',
-                    arguments: _currentIndex);
                 break;
               }
             default:
