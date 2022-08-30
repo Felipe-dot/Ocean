@@ -3,9 +3,13 @@ import 'package:drinkwater/components/my_number_picker.dart';
 import 'package:drinkwater/components/my_time_picker.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
+import 'package:drinkwater/providers/sleep_time_provider.dart';
+import 'package:drinkwater/providers/wake_up_provider.dart';
+import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/src/provider.dart';
 
 import '../constant.dart';
 
@@ -112,7 +116,9 @@ class _MySettingsState extends State<MySettings> {
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.only(left: 35),
-                  child: const MyNumberPicker(),
+                  child: MyNumberPicker(
+                    currentValue: userData!.userWeight,
+                  ),
                 ),
               ),
               actions: [
@@ -121,7 +127,16 @@ class _MySettingsState extends State<MySettings> {
                       Navigator.of(context).pop(context);
                     },
                     child: const Text("CANCELAR")),
-                TextButton(onPressed: () {}, child: const Text("OK")),
+                TextButton(
+                    onPressed: () {
+                      userData = User(
+                          userWeight: context.read<Weight>().weight,
+                          userWakeUpTime: userData!.userWakeUpTime,
+                          userSleepTime: userData!.userSleepTime);
+                      userBox.putAt(userBox.length - 1, userData!);
+                      Navigator.of(context).pop(context);
+                    },
+                    child: const Text("OK")),
               ],
             );
           }),
@@ -135,10 +150,18 @@ class _MySettingsState extends State<MySettings> {
                 borderRadius: BorderRadius.circular(12),
               ),
               title: const Center(child: Text("Alterar a hora de acordar")),
-              content: const SizedBox(
+              content: SizedBox(
                 height: 100,
                 width: 100,
-                child: Center(child: MyTimePicker(isSleepTime: false)),
+                child: Center(
+                  child: MyTimePicker(
+                    isSleepTime: false,
+                    time: TimeOfDay(
+                      hour: userData!.userWakeUpTime.hour,
+                      minute: userData!.userWakeUpTime.minute,
+                    ),
+                  ),
+                ),
               ),
               actions: [
                 TextButton(
@@ -146,7 +169,22 @@ class _MySettingsState extends State<MySettings> {
                       Navigator.of(context).pop(context);
                     },
                     child: const Text("CANCELAR")),
-                TextButton(onPressed: () {}, child: const Text("OK")),
+                TextButton(
+                    onPressed: () {
+                      userData = User(
+                          userWeight: userData!.userWeight,
+                          userWakeUpTime: DateTime(
+                            userData!.userWakeUpTime.year,
+                            userData!.userWakeUpTime.month,
+                            userData!.userWakeUpTime.day,
+                            context.read<WakeUp>().wakeUpTime.hour,
+                            context.read<WakeUp>().wakeUpTime.minute,
+                          ),
+                          userSleepTime: userData!.userSleepTime);
+                      userBox.putAt(userBox.length - 1, userData!);
+                      Navigator.of(context).pop(context);
+                    },
+                    child: const Text("OK")),
               ],
             );
           }),
@@ -160,10 +198,18 @@ class _MySettingsState extends State<MySettings> {
                 borderRadius: BorderRadius.circular(12),
               ),
               title: const Center(child: Text("Alterar a hora de dormir")),
-              content: const SizedBox(
+              content: SizedBox(
                 height: 100,
                 width: 100,
-                child: Center(child: MyTimePicker(isSleepTime: true)),
+                child: Center(
+                  child: MyTimePicker(
+                    isSleepTime: true,
+                    time: TimeOfDay(
+                      hour: userData!.userSleepTime.hour,
+                      minute: userData!.userSleepTime.minute,
+                    ),
+                  ),
+                ),
               ),
               actions: [
                 TextButton(
@@ -171,7 +217,24 @@ class _MySettingsState extends State<MySettings> {
                       Navigator.of(context).pop(context);
                     },
                     child: const Text("CANCELAR")),
-                TextButton(onPressed: () {}, child: const Text("OK")),
+                TextButton(
+                    onPressed: () {
+                      //  var sleepTime = context.read<Sleep>().sleepTime;
+                      userData = User(
+                        userWeight: userData!.userWeight,
+                        userWakeUpTime: userData!.userWakeUpTime,
+                        userSleepTime: DateTime(
+                          userData!.userSleepTime.year,
+                          userData!.userSleepTime.month,
+                          userData!.userSleepTime.day,
+                          context.read<Sleep>().sleepTime.hour,
+                          context.read<Sleep>().sleepTime.minute,
+                        ),
+                      );
+                      userBox.putAt(userBox.length - 1, userData!);
+                      Navigator.of(context).pop(context);
+                    },
+                    child: const Text("OK")),
               ],
             );
           }),
@@ -203,27 +266,68 @@ class _MySettingsState extends State<MySettings> {
               ),
               ListTile(
                 title: const Text("Meta de ingestão"),
-                trailing: Text("${waterStatusData!.drinkingWaterGoal}ml"),
+                trailing: Text(
+                  "${waterStatusData!.drinkingWaterGoal}ml",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: kMainColor,
+                  ),
+                ),
                 onTap: () async {
                   await openWaterGoalDialog();
                   setState(() {});
                 },
               ),
               ListTile(
-                title: const Text("Peso"),
-                trailing: Text("${userData!.userWeight} kg"),
-                onTap: openWeightDialog,
-              ),
+                  title: const Text("Peso"),
+                  trailing: Text(
+                    "${userData!.userWeight} kg",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: kMainColor,
+                    ),
+                  ),
+                  onTap: () async {
+                    await openWeightDialog();
+                    setState(() {});
+                  }),
               ListTile(
-                title: const Text("Hora de acordar"),
-                trailing: Text(DateFormat.Hm().format(userData.userWakeUpTime)),
-                onTap: openWakeUpTimeDialog,
-              ),
+                  title: const Text("Hora de acordar"),
+                  trailing: Text(
+                    DateFormat.Hm().format(userData!.userWakeUpTime),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: kMainColor,
+                    ),
+                  ),
+                  onTap: () async {
+                    await openWakeUpTimeDialog();
+                    setState(() {});
+                  }),
               ListTile(
-                title: const Text("Hora de dormir"),
-                trailing: Text(DateFormat.Hm().format(userData.userSleepTime)),
-                onTap: openSleepTimeDialog,
-              ),
+                  title: const Text("Hora de dormir"),
+                  trailing: Text(
+                    DateFormat.Hm().format(userData!.userSleepTime),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: kMainColor,
+                    ),
+                  ),
+                  onTap: () async {
+                    await openSleepTimeDialog();
+                    setState(() {});
+                  }),
+              const Divider(),
+              ListTile(
+                title: const Text(
+                  "Sair",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: kRedAccent,
+                  ),
+                ),
+                onTap: () {},
+              )
             ],
           ),
         ),
