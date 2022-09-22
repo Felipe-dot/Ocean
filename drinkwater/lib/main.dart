@@ -1,4 +1,5 @@
 import 'package:drinkwater/screens/my_%20available_soon_screen.dart';
+import 'package:drinkwater/screens/my_settings_screen.dart';
 import 'package:drinkwater/screens/my_status_screen.dart';
 import 'package:drinkwater/screens/my_intro_conclusion_screen.dart';
 import 'package:drinkwater/screens/my_slider_screen.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
         '/myAvailableSoonScreen': (context) => const MyAvailableSoonScreen(),
         '/myStatusScreen': (context) => const MyStatusScreen(),
+        '/mySettingsScreen': (context) => const MySettings(),
         '/myHomePage': (context) => const MyHomePageScreen(),
       },
     );

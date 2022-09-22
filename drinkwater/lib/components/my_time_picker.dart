@@ -8,7 +8,9 @@ import 'package:provider/src/provider.dart';
 
 class MyTimePicker extends StatefulWidget {
   final bool isSleepTime;
-  const MyTimePicker({Key? key, required this.isSleepTime}) : super(key: key);
+  TimeOfDay time;
+  MyTimePicker({Key? key, required this.isSleepTime, required this.time})
+      : super(key: key);
 
   @override
   State<MyTimePicker> createState() => _MyTimePickerState();
@@ -17,7 +19,6 @@ class MyTimePicker extends StatefulWidget {
 class _MyTimePickerState extends State<MyTimePicker> {
   NumberFormat formatter = NumberFormat('00');
 
-  TimeOfDay time = const TimeOfDay(hour: 00, minute: 00);
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -26,23 +27,23 @@ class _MyTimePickerState extends State<MyTimePicker> {
       ),
       onPressed: () async {
         TimeOfDay? newTime =
-            await showTimePicker(context: context, initialTime: time);
+            await showTimePicker(context: context, initialTime: widget.time);
         if (newTime != null) {
           if (widget.isSleepTime == true) {
             setState(() {
-              time = newTime;
-              context.read<Sleep>().add(time);
+              widget.time = newTime;
+              context.read<Sleep>().add(widget.time);
             });
           } else {
             setState(() {
-              time = newTime;
-              context.read<WakeUp>().add(time);
+              widget.time = newTime;
+              context.read<WakeUp>().add(widget.time);
             });
           }
         }
       },
       child: Text(
-          '${formatter.format(time.hour).toString()}:${formatter.format(time.minute).toString()}'),
+          '${formatter.format(widget.time.hour).toString()}:${formatter.format(widget.time.minute).toString()}'),
     );
   }
 }

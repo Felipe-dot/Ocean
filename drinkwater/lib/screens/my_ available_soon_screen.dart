@@ -17,22 +17,6 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
     int? _currentIndex = args as int?;
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: kWhite,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Image.asset(
-                'assets/images/menuIcon.png',
-                height: 23,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            );
-          },
-        ),
-      ),
       body: SafeArea(
         child: Container(
           height: double.infinity,
@@ -73,6 +57,8 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
               }
             case 1:
               {
+                Navigator.pushNamed(context, '/mySettingsScreen',
+                    arguments: _currentIndex);
                 break;
               }
             case 2:
@@ -99,7 +85,7 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
           ),
           BottomNavyBarItem(
             icon: const Icon(
-              Icons.notifications,
+              Icons.event_available,
               color: kWhite,
             ),
             activeColor: kLightBlue1,
@@ -107,7 +93,7 @@ class _MyAvailableSoonScreenState extends State<MyAvailableSoonScreen> {
           ),
           BottomNavyBarItem(
             icon: const Icon(
-              Icons.event_available,
+              Icons.settings,
               color: kWhite,
             ),
             activeColor: kLightBlue1,
