@@ -27,7 +27,6 @@ class _MyNumberPickerState extends State<MyNumberPicker> {
           selectedTextStyle: kHeadline2.copyWith(
             color: kMainColor,
           ),
-          // ignore: sdk_version_set_literal
           onChanged: (value) => setState(() => {
                 widget.currentValue = value,
                 context.read<Weight>().add(widget.currentValue)
