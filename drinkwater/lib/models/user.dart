@@ -12,9 +12,17 @@ class User {
   @HiveField(2)
   final DateTime userSleepTime;
 
+  @HiveField(3)
+  final bool additionalReminder;
+
+  @HiveField(4)
+  final List<DateTime> notificationTimeList;
+
   User({
     required this.userWeight,
     required this.userWakeUpTime,
     required this.userSleepTime,
+    required this.additionalReminder,
+    required this.notificationTimeList,
   });
 }

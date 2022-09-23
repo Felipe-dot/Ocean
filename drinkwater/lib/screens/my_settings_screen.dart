@@ -130,9 +130,12 @@ class _MySettingsState extends State<MySettings> {
                 TextButton(
                     onPressed: () {
                       userData = User(
-                          userWeight: context.read<Weight>().weight,
-                          userWakeUpTime: userData!.userWakeUpTime,
-                          userSleepTime: userData!.userSleepTime);
+                        userWeight: context.read<Weight>().weight,
+                        userWakeUpTime: userData!.userWakeUpTime,
+                        userSleepTime: userData!.userSleepTime,
+                        additionalReminder: userData!.additionalReminder,
+                        notificationTimeList: userData!.notificationTimeList,
+                      );
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);
                     },
@@ -171,16 +174,21 @@ class _MySettingsState extends State<MySettings> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () {
+                      var newUserWakeUpTime = DateTime(
+                        userData!.userWakeUpTime.year,
+                        userData!.userWakeUpTime.month,
+                        userData!.userWakeUpTime.day,
+                        context.read<WakeUp>().wakeUpTime.hour,
+                        context.read<WakeUp>().wakeUpTime.minute,
+                      );
+                      userData!.notificationTimeList.first = newUserWakeUpTime;
                       userData = User(
-                          userWeight: userData!.userWeight,
-                          userWakeUpTime: DateTime(
-                            userData!.userWakeUpTime.year,
-                            userData!.userWakeUpTime.month,
-                            userData!.userWakeUpTime.day,
-                            context.read<WakeUp>().wakeUpTime.hour,
-                            context.read<WakeUp>().wakeUpTime.minute,
-                          ),
-                          userSleepTime: userData!.userSleepTime);
+                        userWeight: userData!.userWeight,
+                        userWakeUpTime: newUserWakeUpTime,
+                        userSleepTime: userData!.userSleepTime,
+                        additionalReminder: userData!.additionalReminder,
+                        notificationTimeList: userData!.notificationTimeList,
+                      );
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);
                     },
@@ -219,17 +227,21 @@ class _MySettingsState extends State<MySettings> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () {
-                      //  var sleepTime = context.read<Sleep>().sleepTime;
+                      var newSleepTime = DateTime(
+                        userData!.userSleepTime.year,
+                        userData!.userSleepTime.month,
+                        userData!.userSleepTime.day,
+                        context.read<Sleep>().sleepTime.hour,
+                        context.read<Sleep>().sleepTime.minute,
+                      );
+                      userData!.notificationTimeList.last = newSleepTime;
+
                       userData = User(
                         userWeight: userData!.userWeight,
                         userWakeUpTime: userData!.userWakeUpTime,
-                        userSleepTime: DateTime(
-                          userData!.userSleepTime.year,
-                          userData!.userSleepTime.month,
-                          userData!.userSleepTime.day,
-                          context.read<Sleep>().sleepTime.hour,
-                          context.read<Sleep>().sleepTime.minute,
-                        ),
+                        userSleepTime: newSleepTime,
+                        additionalReminder: userData!.additionalReminder,
+                        notificationTimeList: userData!.notificationTimeList,
                       );
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);

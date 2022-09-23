@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drinkwater/components/buttons/my_cta_with_icon_right.dart';
 import 'package:drinkwater/constant.dart';
 import 'package:drinkwater/models/status.dart';
@@ -47,12 +49,52 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
     return drinkGoal / 200;
   }
 
+  List<DateTime> _notificationTimeList() {
+    final now = DateTime.now();
+    var wakeUpTimeOfDay = context.read<WakeUp>().wakeUpTime;
+    var sleepTimeOfDay = context.read<Sleep>().sleepTime;
+
+    DateTime wakeUpTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      wakeUpTimeOfDay.hour,
+      wakeUpTimeOfDay.minute,
+    );
+
+    DateTime sleepTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      wakeUpTimeOfDay.hour,
+      wakeUpTimeOfDay.minute,
+    );
+
+    List<DateTime> notificationTimeList = [];
+    notificationTimeList.add(wakeUpTime);
+
+    var awakeTime = -1 * (wakeUpTime.difference(sleepTime).inHours);
+
+    for (int x = 0; x < awakeTime; x++) {
+      var timeModified =
+          notificationTimeList[x].add(const Duration(hours: 1, minutes: 30));
+      if (sleepTime.compareTo(timeModified) != 1) {
+        break;
+      }
+      notificationTimeList.add(timeModified);
+    }
+    notificationTimeList.add(sleepTime);
+
+    return notificationTimeList;
+  }
+
   void _addDataToUserBox() async {
     final now = DateTime.now();
     var wakeUpTime = context.read<WakeUp>().wakeUpTime;
     var sleepTime = context.read<Sleep>().sleepTime;
 
-    userBox.add(User(
+    userBox.add(
+      User(
         userWeight: context.read<Weight>().weight,
         userWakeUpTime: DateTime(
           now.year,
@@ -67,7 +109,11 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           now.day,
           sleepTime.hour,
           sleepTime.minute,
-        )));
+        ),
+        additionalReminder: false,
+        notificationTimeList: _notificationTimeList(),
+      ),
+    );
 
     waterStatusBox.add(WaterStatus(
       drinkingWaterGoal: howMuchINeedToDrink(),

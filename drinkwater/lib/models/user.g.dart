@@ -20,19 +20,25 @@ class UserAdapter extends TypeAdapter<User> {
       userWeight: fields[0] as int,
       userWakeUpTime: fields[1] as DateTime,
       userSleepTime: fields[2] as DateTime,
+      additionalReminder: fields[3] as bool,
+      notificationTimeList: (fields[4] as List).cast<DateTime>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.userWeight)
       ..writeByte(1)
       ..write(obj.userWakeUpTime)
       ..writeByte(2)
-      ..write(obj.userSleepTime);
+      ..write(obj.userSleepTime)
+      ..writeByte(3)
+      ..write(obj.additionalReminder)
+      ..writeByte(4)
+      ..write(obj.notificationTimeList);
   }
 
   @override
