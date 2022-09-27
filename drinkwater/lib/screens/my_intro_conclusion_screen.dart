@@ -66,8 +66,8 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
       now.year,
       now.month,
       now.day,
-      wakeUpTimeOfDay.hour,
-      wakeUpTimeOfDay.minute,
+      sleepTimeOfDay.hour,
+      sleepTimeOfDay.minute,
     );
 
     List<DateTime> notificationTimeList = [];

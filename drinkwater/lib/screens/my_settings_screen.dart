@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/src/provider.dart';
-
 import '../constant.dart';
 
 class MySettings extends StatefulWidget {
@@ -38,7 +37,6 @@ class _MySettingsState extends State<MySettings> {
     super.dispose();
   }
 
-  bool temp = false;
   @override
   Widget build(BuildContext context) {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
@@ -46,6 +44,28 @@ class _MySettingsState extends State<MySettings> {
 
     final args = ModalRoute.of(context)!.settings.arguments;
     int? _currentIndex = args as int?;
+
+    List<DateTime> _notificationTimeList() {
+      var wakeUpTime = userData!.userWakeUpTime;
+      var sleepTime = userData!.userSleepTime;
+
+      List<DateTime> notificationTimeList = [];
+      notificationTimeList.add(wakeUpTime);
+
+      var awakeTime = -1 * (wakeUpTime.difference(sleepTime).inHours);
+
+      for (int x = 0; x < awakeTime; x++) {
+        var timeModified =
+            notificationTimeList[x].add(const Duration(hours: 1, minutes: 30));
+        if (sleepTime.compareTo(timeModified) != 1) {
+          break;
+        }
+        notificationTimeList.add(timeModified);
+      }
+      notificationTimeList.add(sleepTime);
+
+      return notificationTimeList;
+    }
 
     double auxWaterGoal = waterStatusData!.drinkingWaterGoal.roundToDouble();
     Future openWaterGoalDialog() => showDialog(
@@ -174,20 +194,18 @@ class _MySettingsState extends State<MySettings> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () {
-                      var newUserWakeUpTime = DateTime(
-                        userData!.userWakeUpTime.year,
-                        userData!.userWakeUpTime.month,
-                        userData!.userWakeUpTime.day,
-                        context.read<WakeUp>().wakeUpTime.hour,
-                        context.read<WakeUp>().wakeUpTime.minute,
-                      );
-                      userData!.notificationTimeList.first = newUserWakeUpTime;
                       userData = User(
                         userWeight: userData!.userWeight,
-                        userWakeUpTime: newUserWakeUpTime,
+                        userWakeUpTime: DateTime(
+                          userData!.userWakeUpTime.year,
+                          userData!.userWakeUpTime.month,
+                          userData!.userWakeUpTime.day,
+                          context.read<WakeUp>().wakeUpTime.hour,
+                          context.read<WakeUp>().wakeUpTime.minute,
+                        ),
                         userSleepTime: userData!.userSleepTime,
                         additionalReminder: userData!.additionalReminder,
-                        notificationTimeList: userData!.notificationTimeList,
+                        notificationTimeList: _notificationTimeList(),
                       );
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);
@@ -227,21 +245,18 @@ class _MySettingsState extends State<MySettings> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () {
-                      var newSleepTime = DateTime(
-                        userData!.userSleepTime.year,
-                        userData!.userSleepTime.month,
-                        userData!.userSleepTime.day,
-                        context.read<Sleep>().sleepTime.hour,
-                        context.read<Sleep>().sleepTime.minute,
-                      );
-                      userData!.notificationTimeList.last = newSleepTime;
-
                       userData = User(
                         userWeight: userData!.userWeight,
                         userWakeUpTime: userData!.userWakeUpTime,
-                        userSleepTime: newSleepTime,
+                        userSleepTime: DateTime(
+                          userData!.userSleepTime.year,
+                          userData!.userSleepTime.month,
+                          userData!.userSleepTime.day,
+                          context.read<Sleep>().sleepTime.hour,
+                          context.read<Sleep>().sleepTime.minute,
+                        ),
                         additionalReminder: userData!.additionalReminder,
-                        notificationTimeList: userData!.notificationTimeList,
+                        notificationTimeList: _notificationTimeList(),
                       );
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);
@@ -269,12 +284,17 @@ class _MySettingsState extends State<MySettings> {
               SwitchListTile(
                 title: const Text("Lembrete adicional"),
                 onChanged: (bool newValue) {
-                  setState(() {
-                    temp = newValue;
-                    print(temp);
-                  });
+                  userData = User(
+                    userWeight: userData!.userWeight,
+                    userWakeUpTime: userData!.userWakeUpTime,
+                    userSleepTime: userData!.userSleepTime,
+                    additionalReminder: newValue,
+                    notificationTimeList: userData!.notificationTimeList,
+                  );
+                  userBox.putAt(userBox.length - 1, userData!);
+                  setState(() {});
                 },
-                value: temp,
+                value: userData!.additionalReminder,
               ),
               ListTile(
                 title: const Text("Meta de ingestão"),
