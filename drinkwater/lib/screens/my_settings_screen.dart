@@ -46,8 +46,25 @@ class _MySettingsState extends State<MySettings> {
     int? _currentIndex = args as int?;
 
     List<DateTime> _notificationTimeList() {
-      var wakeUpTime = userData!.userWakeUpTime;
-      var sleepTime = userData!.userSleepTime;
+      final now = DateTime.now();
+      var wakeUpTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        context.read<WakeUp>().wakeUpTime.hour,
+        context.read<WakeUp>().wakeUpTime.minute,
+      );
+
+      var sleepTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        context.read<Sleep>().sleepTime.hour,
+        context.read<Sleep>().sleepTime.minute,
+      );
+
+      print("ACORDANDO AS ${wakeUpTime}");
+      print("DORMINDO AS ${sleepTime}");
 
       List<DateTime> notificationTimeList = [];
       notificationTimeList.add(wakeUpTime);

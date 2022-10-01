@@ -49,7 +49,7 @@ class NotificationApi {
         androidAllowWhileIdle: true);
   }
 
-  tz.TZDateTime _nextInstanceOfXTime(int hour, int seconds) {
+  static tz.TZDateTime _nextInstanceOfXTime(int hour, int seconds) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, seconds);
@@ -59,7 +59,7 @@ class NotificationApi {
     return scheduledDate;
   }
 
-  Future<void> showScheduleNotification(int hour, int seconds) async {
+  static Future<void> showScheduleNotification(int hour, int seconds) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
             'repeating channel id', 'repeating channel name',
