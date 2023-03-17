@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
 
-import '../constant.dart';
 import '../data/remote/api.dart';
-import '../utils/user_token_storage.dart';
 
-class MyLoginScreen extends StatefulWidget {
-  const MyLoginScreen({Key? key}) : super(key: key);
+class MyUserRegistrationScreen extends StatefulWidget {
+  const MyUserRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyLoginScreen> createState() => _MyLoginScreenState();
+  _MyUserRegistrationScreenState createState() =>
+      _MyUserRegistrationScreenState();
 }
 
-class _MyLoginScreenState extends State<MyLoginScreen> {
+class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
   final controllerUsername = TextEditingController();
   final controllerPassword = TextEditingController();
+  final controllerEmail = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Container(
-        color: kLightBlue4,
-        child: Center(
+        appBar: AppBar(
+          title: const Text('Flutter SignUp'),
+        ),
+        body: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  height: 250,
-                  child: Image.asset('assets/images/logo.png'),
+                  height: 200,
+                  child: Image.network(
+                      'http://blog.back4app.com/wp-content/uploads/2017/11/logo-b4a-1-768x175-1.png'),
                 ),
                 Center(
-                  child: const Text('Bem Vindo',
+                  child: const Text('Flutter on Back4App',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
@@ -40,7 +41,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   height: 16,
                 ),
                 Center(
-                  child: const Text('Entre ou Cadastre-se',
+                  child: const Text('User registration',
                       style: TextStyle(fontSize: 16)),
                 ),
                 SizedBox(
@@ -54,7 +55,20 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black)),
-                      labelText: 'Email'),
+                      labelText: 'Username'),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextField(
+                  controller: controllerEmail,
+                  keyboardType: TextInputType.emailAddress,
+                  textCapitalization: TextCapitalization.none,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      labelText: 'E-mail'),
                 ),
                 SizedBox(
                   height: 8,
@@ -68,47 +82,33 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black)),
-                      labelText: 'Senha'),
+                      labelText: 'Password'),
                 ),
                 SizedBox(
-                  height: 16,
+                  height: 8,
                 ),
                 Container(
                   height: 50,
                   child: TextButton(
-                    child: const Text('Entrar'),
-                    onPressed: () => doUserLogin(),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  height: 50,
-                  child: TextButton(
-                    child: const Text('Cadastrar-se'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/myInitialSetupScreen');
-                    },
+                    child: const Text('Sign Up'),
+                    onPressed: () => doUserRegistration(),
                   ),
                 )
               ],
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
-  void showError(String errorMessage) {
+  void showSuccess() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Error!"),
-          content: Text(errorMessage),
+          title: const Text("Success!"),
+          content: const Text("User was successfully created!"),
           actions: <Widget>[
-            new TextButton(
+            TextButton(
               child: const Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -120,28 +120,36 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
     );
   }
 
-  void doUserLogin() async {
-    Api api = Api();
-
-    final email = controllerUsername.text.trim();
-    final password = controllerPassword.text.trim();
-
-    String response = await api.login(email, password);
-
-    await UserTokenSecureStorage.setUserToken(response);
-
-    print("BEM VINDO USUÁRIO ${response}");
-
-    Navigator.pushNamed(context, '/myInitialSetupScreen');
+  void showError(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error!"),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  void doUserLogout() async {
+  void doUserRegistration() async {
     Api api = Api();
 
-    var token = await UserTokenSecureStorage.getUserToken();
+    //Sigup code here
+    final username = controllerUsername.text.trim();
+    final email = controllerEmail.text.trim();
+    final password = controllerPassword.text.trim();
 
-    print("BEM VINDO TOKEN ${token}");
+    String response = await api.signUp(email, password);
 
-    await api.logout(token);
+    print("OLA MEU AMIGO : ${response}");
   }
 }
