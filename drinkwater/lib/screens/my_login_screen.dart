@@ -27,23 +27,23 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
+                SizedBox(
                   height: 250,
                   child: Image.asset('assets/images/logo.png'),
                 ),
-                Center(
-                  child: const Text('Bem Vindo',
+                const Center(
+                  child: Text('Bem Vindo',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
-                Center(
-                  child: const Text('Entre ou Cadastre-se',
+                const Center(
+                  child: Text('Entre ou Cadastre-se',
                       style: TextStyle(fontSize: 16)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 TextField(
@@ -51,12 +51,12 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.none,
                   autocorrect: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black)),
                       labelText: 'Email'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 TextField(
@@ -65,30 +65,30 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.none,
                   autocorrect: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black)),
                       labelText: 'Senha'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
-                Container(
+                SizedBox(
                   height: 50,
                   child: TextButton(
                     child: const Text('Entrar'),
                     onPressed: () => doUserLogin(),
                   ),
                 ),
-                SizedBox(
-                  height: 16,
+                const SizedBox(
+                  height: 3,
                 ),
-                Container(
+                SizedBox(
                   height: 50,
                   child: TextButton(
                     child: const Text('Cadastrar-se'),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/myInitialSetupScreen');
+                      Navigator.pushNamed(context, '/myUserRegistrationScreen');
                     },
                   ),
                 )
@@ -108,7 +108,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
           title: const Text("Error!"),
           content: Text(errorMessage),
           actions: <Widget>[
-            new TextButton(
+            TextButton(
               child: const Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
