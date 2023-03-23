@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WakeUp with ChangeNotifier {
-  late TimeOfDay _wakeUpTime;
+  TimeOfDay _wakeUpTime = const TimeOfDay(hour: 6, minute: 30);
 
   TimeOfDay get wakeUpTime => _wakeUpTime;
 
   void add(TimeOfDay myWakeUpTime) {
     _wakeUpTime = myWakeUpTime;
-    // ignore: avoid_print
     print("EU ACORDO ÀS $_wakeUpTime");
     notifyListeners();
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Sleep with ChangeNotifier {
-  late TimeOfDay _sleepTime;
+  TimeOfDay _sleepTime = const TimeOfDay(hour: 22, minute: 30);
 
   TimeOfDay get sleepTime => _sleepTime;
 
