@@ -7,8 +7,10 @@ import 'package:drinkwater/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import '../constant.dart';
+import '../providers/wake_up_provider.dart';
 
 class MyHomePageScreen extends StatefulWidget {
   const MyHomePageScreen({Key? key}) : super(key: key);
@@ -31,12 +33,26 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     // Iniciando o sistema de notificação do aplicativo
     var wakeUpTime = userBox.getAt(userBox.length - 1)?.userWakeUpTime;
     var sleepTime = userBox.getAt(userBox.length - 1)?.userSleepTime;
+    var notificationTimeList =
+        userBox.getAt(userBox.length - 1)?.notificationTimeList;
 
     // Verificando se é a hora que o usuário acorda para iniciar as notificações
     if (DateTime.now().hour >= wakeUpTime!.hour) {
       NotificationApi.init(initScheduled: true);
       listenNotifications();
-      NotificationApi.repeatNotification();
+      try {
+        notificationTimeList?.forEach((e) {
+          NotificationApi.showScheduleNotification(e.hour, e.second);
+        });
+      } catch (err) {
+        print(err);
+      }
+
+      // NotificationApi.repeatNotification();
+
+      print("================================");
+      print(notificationTimeList);
+      print("================================");
     } else {
       // ignore: avoid_print
       print("O usuário ainda não acordou");
