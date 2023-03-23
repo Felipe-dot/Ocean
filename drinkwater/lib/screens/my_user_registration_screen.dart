@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constant.dart';
 import '../data/remote/api.dart';
 
 class MyUserRegistrationScreen extends StatefulWidget {
@@ -11,93 +12,105 @@ class MyUserRegistrationScreen extends StatefulWidget {
 }
 
 class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
-  final controllerUsername = TextEditingController();
   final controllerPassword = TextEditingController();
+  final controllerPasswordEqual = TextEditingController();
   final controllerEmail = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter SignUp'),
-        ),
-        body: Center(
+        body: SafeArea(
+      child: Container(
+        color: kLightBlue4,
+        child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  height: 200,
-                  child: Image.network(
-                      'http://blog.back4app.com/wp-content/uploads/2017/11/logo-b4a-1-768x175-1.png'),
+                SizedBox(
+                  height: 250,
+                  child: Image.asset('assets/images/logo.png'),
                 ),
-                Center(
-                  child: const Text('Flutter on Back4App',
+                const Center(
+                  child: Text('Cadastre-se',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
-                Center(
-                  child: const Text('User registration',
+                const Center(
+                  child: Text('Crie uma conta, para usufruir do Ocean',
                       style: TextStyle(fontSize: 16)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
-                ),
-                TextField(
-                  controller: controllerUsername,
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.none,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black)),
-                      labelText: 'Username'),
-                ),
-                SizedBox(
-                  height: 8,
                 ),
                 TextField(
                   controller: controllerEmail,
                   keyboardType: TextInputType.emailAddress,
                   textCapitalization: TextCapitalization.none,
                   autocorrect: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black)),
-                      labelText: 'E-mail'),
+                      labelText: 'Email'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 TextField(
                   controller: controllerPassword,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.none,
+                  obscureText: true,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      labelText: 'Senha'),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TextField(
+                  controller: controllerPasswordEqual,
                   obscureText: true,
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.none,
                   autocorrect: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black)),
-                      labelText: 'Password'),
+                      labelText: 'Repita a senha'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
-                Container(
+                SizedBox(
                   height: 50,
                   child: TextButton(
-                    child: const Text('Sign Up'),
+                    child: const Text('Criar conta'),
                     onPressed: () => doUserRegistration(),
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextButton(
+                    child: const Text('Voltar'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   void showSuccess() {
@@ -105,8 +118,8 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Success!"),
-          content: const Text("User was successfully created!"),
+          title: const Text("Sucesso!"),
+          content: const Text("O usuário foi criado!"),
           actions: <Widget>[
             TextButton(
               child: const Text("OK"),
@@ -125,7 +138,7 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Error!"),
+          title: const Text("Erro!"),
           content: Text(errorMessage),
           actions: <Widget>[
             TextButton(
@@ -144,12 +157,21 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
     Api api = Api();
 
     //Sigup code here
-    final username = controllerUsername.text.trim();
     final email = controllerEmail.text.trim();
     final password = controllerPassword.text.trim();
+    final passwordEqual = controllerPasswordEqual.text.trim();
+
+    if (password != passwordEqual) {
+      showError('As senhas não coincidem');
+      return;
+    }
 
     String response = await api.signUp(email, password);
 
+    showSuccess();
+
     print("OLA MEU AMIGO : ${response}");
+
+    Navigator.pop(context);
   }
 }
