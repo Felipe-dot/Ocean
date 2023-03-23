@@ -48,4 +48,35 @@ class NotificationApi {
         platformChannelSpecifics,
         androidAllowWhileIdle: true);
   }
+
+  static tz.TZDateTime _nextInstanceOfXTime(int hour, int seconds) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, seconds);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  static Future<void> showScheduleNotification(int hour, int seconds) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await _notifications.zonedSchedule(
+      1,
+      'Beba água',
+      'Lembre-se de beber água',
+      _nextInstanceOfXTime(hour, seconds),
+      platformChannelSpecifics,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+    );
+  }
 }
