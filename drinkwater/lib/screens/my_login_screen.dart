@@ -134,14 +134,4 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
 
     Navigator.pushNamed(context, '/myInitialSetupScreen');
   }
-
-  void doUserLogout() async {
-    Api api = Api();
-
-    var token = await UserTokenSecureStorage.getUserToken();
-
-    print("BEM VINDO TOKEN ${token}");
-
-    await api.logout(token);
-  }
 }

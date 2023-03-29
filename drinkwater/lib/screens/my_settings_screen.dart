@@ -11,6 +11,8 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/src/provider.dart';
 import '../constant.dart';
+import '../data/remote/api.dart';
+import '../utils/user_token_storage.dart';
 
 class MySettings extends StatefulWidget {
   const MySettings({Key? key}) : super(key: key);
@@ -128,6 +130,14 @@ class _MySettingsState extends State<MySettings> {
             );
           }),
         );
+
+    void doUserLogout() async {
+      Api api = Api();
+
+      var token = await UserTokenSecureStorage.getUserToken();
+
+      await api.logout(token);
+    }
 
     Future openWeightDialog() => showDialog(
           context: context,
@@ -367,7 +377,10 @@ class _MySettingsState extends State<MySettings> {
                     color: kRedAccent,
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  doUserLogout();
+                  Navigator.pushNamed(context, 'MyLoginScreen');
+                },
               )
             ],
           ),
