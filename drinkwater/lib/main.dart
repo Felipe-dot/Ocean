@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
         '/myIntroConclusion': (context) => const MyIntroConclusionScreen(),
         '/myAvailableSoonScreen': (context) => const MyAvailableSoonScreen(),
         '/myStatusScreen': (context) => const MyStatusScreen(),
+        '/myLoginScreen': (context) => const MyLoginScreen(),
         '/mySettingsScreen': (context) => const MySettings(),
         '/myUserRegistrationScreen': (context) =>
             const MyUserRegistrationScreen(),
