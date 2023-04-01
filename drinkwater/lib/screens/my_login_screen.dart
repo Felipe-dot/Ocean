@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../constant.dart';
 import '../data/remote/api.dart';
+import '../models/status.dart';
+import '../models/user.dart';
 import '../utils/user_token_storage.dart';
 
 class MyLoginScreen extends StatefulWidget {
@@ -12,6 +17,23 @@ class MyLoginScreen extends StatefulWidget {
 }
 
 class _MyLoginScreenState extends State<MyLoginScreen> {
+  late Box<User> userBox;
+  late Box<WaterStatus> waterStatusBox;
+  @override
+  void initState() {
+    super.initState();
+    // Get reference to an already opened box
+    userBox = Hive.box('userBox');
+    waterStatusBox = Hive.box('statusBox');
+  }
+
+  @override
+  void dispose() {
+    // Closes all Hive boxes
+    Hive.close();
+    super.dispose();
+  }
+
   final controllerUsername = TextEditingController();
   final controllerPassword = TextEditingController();
 
@@ -120,7 +142,41 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
     );
   }
 
+  void getDataForParseServer() async {
+    Api api = Api();
+
+    var token = await UserTokenSecureStorage.getUserToken();
+
+    List<dynamic> response = await api.getUserData(token);
+
+    // userBox.add(
+    //   User(
+    //     userWeight: userWeight,
+    //     userWakeUpTime: userWakeUpTime,
+    //     userSleepTime: userSleepTime,
+    //     additionalReminder: false,
+    //     notificationTimeList: _notificationTimeList(),
+    //   ),
+    // );
+
+    // waterStatusBox.add(WaterStatus(
+    //   drinkingWaterGoal: howMuchINeedToDrink(),
+    //   amountOfWaterDrank: 0,
+    //   goalOfTheDayWasBeat: false,
+    //   statusDay: DateTime.now(),
+    //   drinkingFrequency: 0,
+    // ));
+  }
+
   void doUserLogin() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
     Api api = Api();
 
     final email = controllerUsername.text.trim();
@@ -132,6 +188,15 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
 
     print("BEM VINDO USUÁRIO ${response}");
 
-    Navigator.pushNamed(context, '/myInitialSetupScreen');
+    Navigator.of(context).pop();
+
+    List<dynamic> userData = await api.getUserData(response);
+
+    if (userData.isEmpty) {
+      Navigator.pushNamed(context, '/myInitialSetupScreen');
+    } else {
+      getDataForParseServer();
+      Navigator.pushNamed(context, '/myHomePage');
+    }
   }
 }
