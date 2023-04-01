@@ -10,7 +10,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../constant.dart';
-import '../providers/wake_up_provider.dart';
 
 class MyHomePageScreen extends StatefulWidget {
   const MyHomePageScreen({Key? key}) : super(key: key);

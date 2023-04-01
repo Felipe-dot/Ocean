@@ -3,6 +3,8 @@ import 'package:drinkwater/screens/my_home_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
+import '../data/remote/api.dart';
+import '../utils/user_token_storage.dart';
 import 'my_login_screen.dart';
 
 class MySplashScreen extends StatefulWidget {
@@ -24,6 +26,14 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
   bool _isBoxEmpty() {
     return box.isEmpty;
+  }
+
+  Future<bool> _validateToken() async {
+    Api api = Api();
+    var token = await UserTokenSecureStorage.getUserToken();
+    var response = await api.validateToken(token);
+
+    return response == "TOKEN_INVÁLIDO" ? false : true;
   }
 
   @override

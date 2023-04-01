@@ -379,7 +379,7 @@ class _MySettingsState extends State<MySettings> {
                 ),
                 onTap: () {
                   doUserLogout();
-                  Navigator.pushNamed(context, 'MyLoginScreen');
+                  Navigator.pushNamed(context, '/MyLoginScreen');
                 },
               )
             ],

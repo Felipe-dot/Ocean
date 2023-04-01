@@ -124,7 +124,7 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
             TextButton(
               child: const Text("OK"),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pushNamed(context, '/myLoginScreen');
               },
             ),
           ],
@@ -164,14 +164,23 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
     if (password != passwordEqual) {
       showError('As senhas não coincidem');
       return;
+    } else if (password.isEmpty || passwordEqual.isEmpty) {
+      showError('As senhas estão vazias');
+      return;
     }
 
-    String response = await api.signUp(email, password);
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
 
-    showSuccess();
-
-    print("OLA MEU AMIGO : ${response}");
+    await api.signUp(email, password);
 
     Navigator.pop(context);
+
+    showSuccess();
   }
 }
