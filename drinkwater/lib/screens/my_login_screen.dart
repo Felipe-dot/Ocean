@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:drinkwater/models/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -142,30 +141,56 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
     );
   }
 
-  void getDataForParseServer() async {
+  Future<int> getDataForParseServer() async {
     Api api = Api();
 
     var token = await UserTokenSecureStorage.getUserToken();
 
     List<dynamic> response = await api.getUserData(token);
 
-    // userBox.add(
-    //   User(
-    //     userWeight: userWeight,
-    //     userWakeUpTime: userWakeUpTime,
-    //     userSleepTime: userSleepTime,
-    //     additionalReminder: false,
-    //     notificationTimeList: _notificationTimeList(),
-    //   ),
-    // );
+    UserData user = createUserData(response[0]);
 
-    // waterStatusBox.add(WaterStatus(
-    //   drinkingWaterGoal: howMuchINeedToDrink(),
-    //   amountOfWaterDrank: 0,
-    //   goalOfTheDayWasBeat: false,
-    //   statusDay: DateTime.now(),
-    //   drinkingFrequency: 0,
-    // ));
+    try {
+      userBox.add(
+        User(
+          userWeight: user.userWeight,
+          userWakeUpTime: user.wakeUpTime,
+          userSleepTime: user.sleepTime,
+          additionalReminder: false,
+          notificationTimeList: user.notificationTimeList,
+        ),
+      );
+
+      waterStatusBox.add(WaterStatus(
+        drinkingWaterGoal: user.waterIntakeGoal,
+        amountOfWaterDrank: 0,
+        goalOfTheDayWasBeat: false,
+        statusDay: DateTime.now(),
+        drinkingFrequency: 0,
+      ));
+
+      return 1;
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
+  UserData createUserData(var user) {
+    var notificationTimeListString = user['notificationTimeList'];
+    List<DateTime> notificationTimeList = [];
+    notificationTimeListString.forEach((e) {
+      notificationTimeList.add(DateTime.parse(e));
+    });
+
+    return UserData(
+      id: user['id'],
+      waterIntakeGoal: user['waterIntakeGoal'],
+      userWeight: user['userWeight'],
+      wakeUpTime: DateTime.parse(user['wakeUpTime']),
+      sleepTime: DateTime.parse(user['sleepTime']),
+      notificationTimeList: notificationTimeList,
+    );
   }
 
   void doUserLogin() async {
@@ -195,7 +220,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
     if (userData.isEmpty) {
       Navigator.pushNamed(context, '/myInitialSetupScreen');
     } else {
-      getDataForParseServer();
+      await getDataForParseServer();
       Navigator.pushNamed(context, '/myHomePage');
     }
   }
