@@ -105,137 +105,158 @@ class Api {
       return response;
     }
   }
-}
 
-Future<dynamic> getUserData(String? userToken) async {
-  Response response;
-  Dio dio = Dio();
+  Future<dynamic> getUserData(String? userToken) async {
+    Response response;
+    Dio dio = Dio();
 
-  dio.options.headers['X-Parse-Application-Id'] =
-      'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
-  dio.options.headers['X-Parse-REST-API-Key'] =
-      'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
-  dio.options.headers['X-Parse-Session-Token'] = userToken;
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
 
-  response = await dio.post(
-    "https://parseapi.back4app.com/parse/functions/get-userData",
-  );
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/get-userData",
+    );
 
-  if (response.statusCode == 200) {
-    return response.data;
-  } else {
-    return response;
+    if (response.statusCode == 200) {
+      return response.data['result'];
+    } else {
+      return response.statusCode;
+    }
   }
-}
 
-Future<dynamic> changeUserWeight(String? userToken, int newWeight) async {
-  Response response;
-  Dio dio = Dio();
+  Future<dynamic> validateToken(String? userToken) async {
+    Response response;
+    Dio dio = Dio();
 
-  dio.options.headers['X-Parse-Application-Id'] =
-      'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
-  dio.options.headers['X-Parse-REST-API-Key'] =
-      'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
-  dio.options.headers['X-Parse-Session-Token'] = userToken;
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
 
-  response = await dio.post(
-    "https://parseapi.back4app.com/parse/functions/change-userWeight",
-    data: {"userWeight": newWeight},
-  );
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/validate-token",
+    );
 
-  if (response.statusCode == 200) {
-    return response.data;
-  } else {
-    return response;
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response.statusCode;
+    }
   }
-}
 
-Future<dynamic> changeWakeUpTime(String? userToken, int newWakeUpTime) async {
-  Response response;
-  Dio dio = Dio();
+  Future<dynamic> changeUserWeight(String? userToken, int newWeight) async {
+    Response response;
+    Dio dio = Dio();
 
-  dio.options.headers['X-Parse-Application-Id'] =
-      'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
-  dio.options.headers['X-Parse-REST-API-Key'] =
-      'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
-  dio.options.headers['X-Parse-Session-Token'] = userToken;
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
 
-  response = await dio.post(
-    "https://parseapi.back4app.com/parse/functions/change-wakeUpTime",
-    data: {"wakeUpTime": newWakeUpTime},
-  );
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-userWeight",
+      data: {"userWeight": newWeight},
+    );
 
-  if (response.statusCode == 200) {
-    return response.data;
-  } else {
-    return response;
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
   }
-}
 
-Future<dynamic> changeSleepTime(String? userToken, int newSleepTime) async {
-  Response response;
-  Dio dio = Dio();
+  Future<dynamic> changeWakeUpTime(String? userToken, int newWakeUpTime) async {
+    Response response;
+    Dio dio = Dio();
 
-  dio.options.headers['X-Parse-Application-Id'] =
-      'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
-  dio.options.headers['X-Parse-REST-API-Key'] =
-      'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
-  dio.options.headers['X-Parse-Session-Token'] = userToken;
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
 
-  response = await dio.post(
-    "https://parseapi.back4app.com/parse/functions/change-sleepTime",
-    data: {"sleepTime": newSleepTime},
-  );
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-wakeUpTime",
+      data: {"wakeUpTime": newWakeUpTime},
+    );
 
-  if (response.statusCode == 200) {
-    return response.data;
-  } else {
-    return response;
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
   }
-}
 
-Future<dynamic> changeWaterIntakeGoal(
-    String? userToken, int newWaterIntakeGoal) async {
-  Response response;
-  Dio dio = Dio();
+  Future<dynamic> changeSleepTime(String? userToken, int newSleepTime) async {
+    Response response;
+    Dio dio = Dio();
 
-  dio.options.headers['X-Parse-Application-Id'] =
-      'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
-  dio.options.headers['X-Parse-REST-API-Key'] =
-      'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
-  dio.options.headers['X-Parse-Session-Token'] = userToken;
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
 
-  response = await dio.post(
-    "https://parseapi.back4app.com/parse/functions/change-waterIntakeGoal",
-    data: {"waterIntakeGoal": newWaterIntakeGoal},
-  );
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-sleepTime",
+      data: {"sleepTime": newSleepTime},
+    );
 
-  if (response.statusCode == 200) {
-    return response.data;
-  } else {
-    return response;
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
   }
-}
 
-Future<dynamic> changeNotificationTimeList(
-    String? userToken, int newNotificationTimeList) async {
-  Response response;
-  Dio dio = Dio();
+  Future<dynamic> changeWaterIntakeGoal(
+      String? userToken, int newWaterIntakeGoal) async {
+    Response response;
+    Dio dio = Dio();
 
-  dio.options.headers['X-Parse-Application-Id'] =
-      'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
-  dio.options.headers['X-Parse-REST-API-Key'] =
-      'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
-  dio.options.headers['X-Parse-Session-Token'] = userToken;
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
 
-  response = await dio.post(
-    "https://parseapi.back4app.com/parse/functions/change-notificationTimeList",
-    data: {"notificationTimeList": newNotificationTimeList},
-  );
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-waterIntakeGoal",
+      data: {"waterIntakeGoal": newWaterIntakeGoal},
+    );
 
-  if (response.statusCode == 200) {
-    return response.data;
-  } else {
-    return response;
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
+  }
+
+  Future<dynamic> changeNotificationTimeList(
+      String? userToken, int newNotificationTimeList) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-notificationTimeList",
+      data: {"notificationTimeList": newNotificationTimeList},
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
   }
 }
