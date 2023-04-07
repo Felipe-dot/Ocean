@@ -33,7 +33,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
     super.dispose();
   }
 
-  final controllerUsername = TextEditingController();
+  final controllerEmail = TextEditingController();
   final controllerPassword = TextEditingController();
 
   @override
@@ -68,7 +68,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   height: 16,
                 ),
                 TextField(
-                  controller: controllerUsername,
+                  controller: controllerEmail,
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.none,
                   autocorrect: false,
@@ -194,6 +194,20 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
   }
 
   void doUserLogin() async {
+    final email = controllerEmail.text.trim();
+    final password = controllerPassword.text.trim();
+
+    if (password.isEmpty && email.isEmpty) {
+      showError('Informe um email e senha');
+      return;
+    } else if (password.isEmpty) {
+      showError('Informe uma senha');
+      return;
+    } else if (email.isEmpty) {
+      showError('Informe um email');
+      return;
+    }
+
     showDialog(
         context: context,
         builder: (context) {
@@ -204,24 +218,26 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
 
     Api api = Api();
 
-    final email = controllerUsername.text.trim();
-    final password = controllerPassword.text.trim();
+    try {
+      String response = await api.login(email, password);
 
-    String response = await api.login(email, password);
+      await UserTokenSecureStorage.setUserToken(response);
 
-    await UserTokenSecureStorage.setUserToken(response);
+      print("BEM VINDO USUÁRIO ${response}");
 
-    print("BEM VINDO USUÁRIO ${response}");
+      Navigator.of(context).pop();
 
-    Navigator.of(context).pop();
+      List<dynamic> userData = await api.getUserData(response);
 
-    List<dynamic> userData = await api.getUserData(response);
-
-    if (userData.isEmpty) {
-      Navigator.pushNamed(context, '/myInitialSetupScreen');
-    } else {
-      await getDataForParseServer();
-      Navigator.pushNamed(context, '/myHomePage');
+      if (userData.isEmpty) {
+        Navigator.pushNamed(context, '/myInitialSetupScreen');
+      } else {
+        await getDataForParseServer();
+        Navigator.pushNamed(context, '/myHomePage');
+      }
+    } catch (e) {
+      showError('Algo deu errado tente novamente');
+      return;
     }
   }
 }
