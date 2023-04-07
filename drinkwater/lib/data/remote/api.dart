@@ -170,7 +170,8 @@ class Api {
     }
   }
 
-  Future<dynamic> changeWakeUpTime(String? userToken, int newWakeUpTime) async {
+  Future<dynamic> changeWakeUpTime(
+      String? userToken, String newWakeUpTime) async {
     Response response;
     Dio dio = Dio();
 
@@ -192,7 +193,8 @@ class Api {
     }
   }
 
-  Future<dynamic> changeSleepTime(String? userToken, int newSleepTime) async {
+  Future<dynamic> changeSleepTime(
+      String? userToken, String newSleepTime) async {
     Response response;
     Dio dio = Dio();
 
@@ -238,7 +240,7 @@ class Api {
   }
 
   Future<dynamic> changeNotificationTimeList(
-      String? userToken, int newNotificationTimeList) async {
+      String? userToken, List<DateTime> newNotificationTimeList) async {
     Response response;
     Dio dio = Dio();
 
@@ -248,9 +250,14 @@ class Api {
         'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
     dio.options.headers['X-Parse-Session-Token'] = userToken;
 
+    List<String> notificationTimeListToString = [];
+
+    newNotificationTimeList
+        .forEach((v) => notificationTimeListToString.add(v.toIso8601String()));
+
     response = await dio.post(
       "https://parseapi.back4app.com/parse/functions/change-notificationTimeList",
-      data: {"notificationTimeList": newNotificationTimeList},
+      data: {"notificationTimeList": notificationTimeListToString},
     );
 
     if (response.statusCode == 200) {
