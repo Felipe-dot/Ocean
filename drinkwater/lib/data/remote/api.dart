@@ -259,4 +259,131 @@ class Api {
       return response;
     }
   }
+
+  Future<dynamic> createWaterHistory(
+    String? userToken,
+    DateTime statusDay,
+    bool goalOfTheDayWasBeat,
+    int amountOfWaterDrank,
+    int drinkingFrequency,
+  ) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    try {
+      response = await dio.post(
+          "https://parseapi.back4app.com/parse/functions/create-waterHistory",
+          data: {
+            "statusDay": statusDay.toIso8601String(),
+            "amountOfWaterDrank": amountOfWaterDrank,
+            "goalOfTheDayWasBeat": goalOfTheDayWasBeat,
+            "drinkingFrequency": drinkingFrequency,
+          });
+    } catch (e) {
+      print("meu erro e $e");
+      return e;
+    }
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
+  }
+
+  Future<dynamic> getWaterHistory(String? userToken) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/get-waterHistory",
+    );
+
+    if (response.statusCode == 200) {
+      return response.data['result'];
+    } else {
+      return response.statusCode;
+    }
+  }
+
+  Future<dynamic> changeGoalOfTheDayWasBeat(
+      String? userToken, bool goalOfTheDayWasBeat) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-goalOfTheDayWasBeat",
+      data: {"goalOfTheDayWasBeat": goalOfTheDayWasBeat},
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
+  }
+
+  Future<dynamic> changeAmountOfWaterDrank(
+      String? userToken, int amountOfWaterDrank) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-amountOfWaterDrank",
+      data: {"amountOfWaterDrank": amountOfWaterDrank},
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
+  }
+
+  Future<dynamic> changeDrinkFrequency(
+      String? userToken, int drinkFrequency) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/change-drinkFrequency",
+      data: {"drinkFrequency": drinkFrequency},
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return response;
+    }
+  }
 }
