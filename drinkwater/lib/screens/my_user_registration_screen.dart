@@ -156,7 +156,6 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
   void doUserRegistration() async {
     Api api = Api();
 
-    //Sigup code here
     final email = controllerEmail.text.trim();
     final password = controllerPassword.text.trim();
     final passwordEqual = controllerPasswordEqual.text.trim();
@@ -166,6 +165,9 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
       return;
     } else if (password.isEmpty || passwordEqual.isEmpty) {
       showError('As senhas estão vazias');
+      return;
+    } else if (email.isEmpty) {
+      showError('Informe um email');
       return;
     }
 
