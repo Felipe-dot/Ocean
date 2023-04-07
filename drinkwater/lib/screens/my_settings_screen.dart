@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/src/provider.dart';
 import '../constant.dart';
 import '../data/remote/api.dart';
+import '../utils/my_utils.dart';
 import '../utils/user_token_storage.dart';
 
 class MySettings extends StatefulWidget {
@@ -37,44 +38,10 @@ class _MySettingsState extends State<MySettings> {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
     var userData = userBox.getAt(userBox.length - 1);
 
+    Api api = Api();
+
     final args = ModalRoute.of(context)!.settings.arguments;
     int? _currentIndex = args as int?;
-
-    List<DateTime> _notificationTimeList() {
-      final now = DateTime.now();
-      var wakeUpTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        context.read<WakeUp>().wakeUpTime.hour,
-        context.read<WakeUp>().wakeUpTime.minute,
-      );
-
-      var sleepTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        context.read<Sleep>().sleepTime.hour,
-        context.read<Sleep>().sleepTime.minute,
-      );
-
-      List<DateTime> notificationTimeList = [];
-      notificationTimeList.add(wakeUpTime);
-
-      var awakeTime = -1 * (wakeUpTime.difference(sleepTime).inHours);
-
-      for (int x = 0; x < awakeTime; x++) {
-        var timeModified =
-            notificationTimeList[x].add(const Duration(hours: 1, minutes: 30));
-        if (sleepTime.compareTo(timeModified) != 1) {
-          break;
-        }
-        notificationTimeList.add(timeModified);
-      }
-      notificationTimeList.add(sleepTime);
-
-      return notificationTimeList;
-    }
 
     double auxWaterGoal = waterStatusData!.drinkingWaterGoal.roundToDouble();
     Future openWaterGoalDialog() => showDialog(
@@ -112,7 +79,7 @@ class _MySettingsState extends State<MySettings> {
                     },
                     child: const Text("CANCELAR")),
                 TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       waterStatusData = WaterStatus(
                         statusDay: waterStatusData!.statusDay,
                         goalOfTheDayWasBeat:
@@ -123,7 +90,12 @@ class _MySettingsState extends State<MySettings> {
                       );
                       waterStatusBox.putAt(
                           waterStatusBox.length - 1, waterStatusData!);
+
                       Navigator.of(context).pop(context);
+
+                      var token = await UserTokenSecureStorage.getUserToken();
+                      await api.changeWaterIntakeGoal(
+                          token, auxWaterGoal.round());
                     },
                     child: const Text("OK")),
               ],
@@ -165,7 +137,7 @@ class _MySettingsState extends State<MySettings> {
                     },
                     child: const Text("CANCELAR")),
                 TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       userData = User(
                         userWeight: context.read<Weight>().weight,
                         userWakeUpTime: userData!.userWakeUpTime,
@@ -174,7 +146,12 @@ class _MySettingsState extends State<MySettings> {
                         notificationTimeList: userData!.notificationTimeList,
                       );
                       userBox.putAt(userBox.length - 1, userData!);
+
                       Navigator.of(context).pop(context);
+
+                      var token = await UserTokenSecureStorage.getUserToken();
+                      await api.changeUserWeight(
+                          token, context.read<Weight>().weight);
                     },
                     child: const Text("OK")),
               ],
@@ -210,22 +187,41 @@ class _MySettingsState extends State<MySettings> {
                     },
                     child: const Text("CANCELAR")),
                 TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
+                      var wakeTimeMinute =
+                          context.read<WakeUp>().wakeUpTime.minute;
+                      var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
+                      var sleepTimeMinute =
+                          context.read<Sleep>().sleepTime.minute;
+
+                      var notificationTimeList = createNotificationTimeList(
+                          wakeTimeHour,
+                          wakeTimeMinute,
+                          sleepTimeHour,
+                          sleepTimeMinute);
+                      DateTime userWakeUpTime = DateTime(
+                        userData!.userWakeUpTime.year,
+                        userData!.userWakeUpTime.month,
+                        userData!.userWakeUpTime.day,
+                        context.read<WakeUp>().wakeUpTime.hour,
+                        context.read<WakeUp>().wakeUpTime.minute,
+                      );
                       userData = User(
                         userWeight: userData!.userWeight,
-                        userWakeUpTime: DateTime(
-                          userData!.userWakeUpTime.year,
-                          userData!.userWakeUpTime.month,
-                          userData!.userWakeUpTime.day,
-                          context.read<WakeUp>().wakeUpTime.hour,
-                          context.read<WakeUp>().wakeUpTime.minute,
-                        ),
+                        userWakeUpTime: userWakeUpTime,
                         userSleepTime: userData!.userSleepTime,
                         additionalReminder: userData!.additionalReminder,
-                        notificationTimeList: _notificationTimeList(),
+                        notificationTimeList: notificationTimeList,
                       );
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);
+
+                      var token = await UserTokenSecureStorage.getUserToken();
+                      await api.changeWakeUpTime(
+                          token, userWakeUpTime.toIso8601String());
+                      await api.changeNotificationTimeList(
+                          token, notificationTimeList);
                     },
                     child: const Text("OK")),
               ],
@@ -261,22 +257,38 @@ class _MySettingsState extends State<MySettings> {
                     },
                     child: const Text("CANCELAR")),
                 TextButton(
-                    onPressed: () {
-                      userData = User(
-                        userWeight: userData!.userWeight,
-                        userWakeUpTime: userData!.userWakeUpTime,
-                        userSleepTime: DateTime(
-                          userData!.userSleepTime.year,
-                          userData!.userSleepTime.month,
-                          userData!.userSleepTime.day,
-                          context.read<Sleep>().sleepTime.hour,
-                          context.read<Sleep>().sleepTime.minute,
-                        ),
-                        additionalReminder: userData!.additionalReminder,
-                        notificationTimeList: _notificationTimeList(),
+                    onPressed: () async {
+                      var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
+                      var wakeTimeMinute =
+                          context.read<WakeUp>().wakeUpTime.minute;
+                      var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
+                      var sleepTimeMinute =
+                          context.read<Sleep>().sleepTime.minute;
+                      var notificationTimeList = createNotificationTimeList(
+                          wakeTimeHour,
+                          wakeTimeMinute,
+                          sleepTimeHour,
+                          sleepTimeMinute);
+                      DateTime userSleepTime = DateTime(
+                        userData!.userSleepTime.year,
+                        userData!.userSleepTime.month,
+                        userData!.userSleepTime.day,
+                        context.read<Sleep>().sleepTime.hour,
+                        context.read<Sleep>().sleepTime.minute,
                       );
+                      userData = User(
+                          userWeight: userData!.userWeight,
+                          userWakeUpTime: userData!.userWakeUpTime,
+                          userSleepTime: userSleepTime,
+                          additionalReminder: userData!.additionalReminder,
+                          notificationTimeList: notificationTimeList);
                       userBox.putAt(userBox.length - 1, userData!);
                       Navigator.of(context).pop(context);
+                      var token = await UserTokenSecureStorage.getUserToken();
+                      await api.changeSleepTime(
+                          token, userSleepTime.toIso8601String());
+                      await api.changeNotificationTimeList(
+                          token, notificationTimeList);
                     },
                     child: const Text("OK")),
               ],
@@ -294,12 +306,6 @@ class _MySettingsState extends State<MySettings> {
           ),
           child: ListView(
             children: [
-              ListTile(
-                title: const Text("Agenda de notificações"),
-                trailing: const Icon(Icons.notifications),
-                onTap: () => Navigator.pushNamed(
-                    context, '/myNotificationSheduleScreen'),
-              ),
               SwitchListTile(
                 title: const Text("Lembrete adicional"),
                 onChanged: (bool newValue) {
