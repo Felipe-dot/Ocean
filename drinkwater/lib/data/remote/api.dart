@@ -272,7 +272,7 @@ class Api {
     DateTime statusDay,
     bool goalOfTheDayWasBeat,
     int amountOfWaterDrank,
-    int drinkingFrequency,
+    int drinkFrequency,
   ) async {
     Response response;
     Dio dio = Dio();
@@ -290,7 +290,7 @@ class Api {
             "statusDay": statusDay.toIso8601String(),
             "amountOfWaterDrank": amountOfWaterDrank,
             "goalOfTheDayWasBeat": goalOfTheDayWasBeat,
-            "drinkingFrequency": drinkingFrequency,
+            "drinkFrequency": drinkFrequency,
           });
     } catch (e) {
       print("meu erro e $e");
