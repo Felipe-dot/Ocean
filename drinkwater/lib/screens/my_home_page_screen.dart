@@ -10,6 +10,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../constant.dart';
+import '../data/remote/api.dart';
+import '../utils/user_token_storage.dart';
 
 class MyHomePageScreen extends StatefulWidget {
   const MyHomePageScreen({Key? key}) : super(key: key);
@@ -82,7 +84,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     super.dispose();
   }
 
-  bool _isDayChanged() {
+  Future<bool> _isDayChanged() async {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
     int lastDay;
     lastDay = waterStatusData!.statusDay.day;
@@ -94,6 +96,18 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
         drinkingFrequency: 0,
       ));
+      try {
+        Api api = Api();
+        final token = await UserTokenSecureStorage.getUserToken();
+        var response = await api.createWaterHistory(
+            token,
+            waterStatusData.statusDay,
+            waterStatusData.goalOfTheDayWasBeat,
+            waterStatusData.amountOfWaterDrank,
+            waterStatusData.drinkingFrequency);
+      } catch (e) {
+        print("MEU QUERIDO ERRO DE INSERCAO $e");
+      }
 
       print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
       return true;
