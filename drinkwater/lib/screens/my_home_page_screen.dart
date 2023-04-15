@@ -48,12 +48,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       } catch (err) {
         print(err);
       }
-
-      // NotificationApi.repeatNotification();
-
-      print("================================");
-      print(notificationTimeList);
-      print("================================");
     } else {
       // ignore: avoid_print
       print("O usuário ainda não acordou");
