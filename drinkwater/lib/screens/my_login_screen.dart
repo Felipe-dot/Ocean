@@ -1,4 +1,5 @@
 import 'package:drinkwater/models/userData.dart';
+import 'package:drinkwater/models/waterHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -6,6 +7,7 @@ import '../constant.dart';
 import '../data/remote/api.dart';
 import '../models/status.dart';
 import '../models/user.dart';
+import '../utils/my_utils.dart';
 import '../utils/user_token_storage.dart';
 
 class MyLoginScreen extends StatefulWidget {
@@ -147,8 +149,11 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
     var token = await UserTokenSecureStorage.getUserToken();
 
     List<dynamic> response = await api.getUserData(token);
+    List<dynamic> waterHistory = await api.getWaterHistory(token);
 
     UserData user = createUserData(response[0]);
+    List<WaterHistory> waterHistoryList =
+        createAListOfWaterHistory(waterHistory);
 
     try {
       userBox.add(
@@ -161,36 +166,21 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
         ),
       );
 
-      waterStatusBox.add(WaterStatus(
-        drinkingWaterGoal: user.waterIntakeGoal,
-        amountOfWaterDrank: 0,
-        goalOfTheDayWasBeat: false,
-        statusDay: DateTime.now(),
-        drinkingFrequency: 0,
-      ));
+      waterHistoryList.forEach((element) {
+        waterStatusBox.add(WaterStatus(
+          drinkingWaterGoal: user.waterIntakeGoal,
+          amountOfWaterDrank: element.amountOfWaterDrank,
+          goalOfTheDayWasBeat: element.goalOfTheDayWasBeat,
+          statusDay: element.statusDay,
+          drinkingFrequency: element.drinkFrequency,
+        ));
+      });
 
       return 1;
     } catch (e) {
       print(e);
       return 0;
     }
-  }
-
-  UserData createUserData(var user) {
-    var notificationTimeListString = user['notificationTimeList'];
-    List<DateTime> notificationTimeList = [];
-    notificationTimeListString.forEach((e) {
-      notificationTimeList.add(DateTime.parse(e));
-    });
-
-    return UserData(
-      id: user['id'],
-      waterIntakeGoal: user['waterIntakeGoal'],
-      userWeight: user['userWeight'],
-      wakeUpTime: DateTime.parse(user['wakeUpTime']),
-      sleepTime: DateTime.parse(user['sleepTime']),
-      notificationTimeList: notificationTimeList,
-    );
   }
 
   void doUserLogin() async {
