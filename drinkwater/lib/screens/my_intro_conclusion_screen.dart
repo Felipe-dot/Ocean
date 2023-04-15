@@ -11,6 +11,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/src/provider.dart';
 
 import '../data/remote/api.dart';
+import '../utils/my_utils.dart';
 import '../utils/user_token_storage.dart';
 
 class MyIntroConclusionScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class MyIntroConclusionScreen extends StatefulWidget {
 class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
   late Box<User> userBox;
   late Box<WaterStatus> waterStatusBox;
+
   @override
   void initState() {
     super.initState();
@@ -39,70 +41,35 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
     super.dispose();
   }
 
-  int howMuchINeedToDrink() {
-    int myWeight = context.read<Weight>().weight;
-    // Calculando quanto o usuário deve beber
-    return myWeight * 35;
-  }
-
   double thisIsEquivalentTo() {
-    int drinkGoal = howMuchINeedToDrink();
+    int drinkGoal = howMuchINeedToDrink(context.read<Weight>().weight);
     return drinkGoal / 200;
-  }
-
-  List<DateTime> _notificationTimeList() {
-    final now = DateTime.now();
-    var wakeUpTimeOfDay = context.read<WakeUp>().wakeUpTime;
-    var sleepTimeOfDay = context.read<Sleep>().sleepTime;
-
-    DateTime wakeUpTime = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      wakeUpTimeOfDay.hour,
-      wakeUpTimeOfDay.minute,
-    );
-
-    DateTime sleepTime = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      sleepTimeOfDay.hour,
-      sleepTimeOfDay.minute,
-    );
-
-    List<DateTime> notificationTimeList = [];
-    notificationTimeList.add(wakeUpTime);
-
-    var awakeTime = -1 * (wakeUpTime.difference(sleepTime).inHours);
-
-    for (int x = 0; x < awakeTime; x++) {
-      var timeModified =
-          notificationTimeList[x].add(const Duration(hours: 1, minutes: 30));
-      if (sleepTime.compareTo(timeModified) != 1) {
-        break;
-      }
-      notificationTimeList.add(timeModified);
-    }
-    notificationTimeList.add(sleepTime);
-
-    return notificationTimeList;
   }
 
   void _addDataToUserBox(
       int userWeight, DateTime userWakeUpTime, DateTime userSleepTime) async {
+    var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
+    var wakeTimeMinute = context.read<WakeUp>().wakeUpTime.minute;
+    var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
+    var sleepTimeMinute = context.read<Sleep>().sleepTime.minute;
+
     userBox.add(
       User(
         userWeight: userWeight,
         userWakeUpTime: userWakeUpTime,
         userSleepTime: userSleepTime,
         additionalReminder: false,
-        notificationTimeList: _notificationTimeList(),
+        notificationTimeList: createNotificationTimeList(
+          wakeTimeHour,
+          wakeTimeMinute,
+          sleepTimeHour,
+          sleepTimeMinute,
+        ),
       ),
     );
 
     waterStatusBox.add(WaterStatus(
-      drinkingWaterGoal: howMuchINeedToDrink(),
+      drinkingWaterGoal: howMuchINeedToDrink(context.read<Weight>().weight),
       amountOfWaterDrank: 0,
       goalOfTheDayWasBeat: false,
       statusDay: DateTime.now(),
@@ -115,13 +82,26 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
 
   void _addDataOnParseServer(
       int userWeight, DateTime userWakeUpTime, DateTime userSleepTime) async {
+    var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
+    var wakeTimeMinute = context.read<WakeUp>().wakeUpTime.minute;
+    var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
+    var sleepTimeMinute = context.read<Sleep>().sleepTime.minute;
+
     Api api = Api();
     var token = await UserTokenSecureStorage.getUserToken();
 
-    var response = await api.createUserData(token, howMuchINeedToDrink(),
-        userWakeUpTime, userSleepTime, userWeight, _notificationTimeList());
-
-    // print("OLA MEUS DADOS $response");
+    var response = await api.createUserData(
+        token,
+        howMuchINeedToDrink(context.read<Weight>().weight),
+        userWakeUpTime,
+        userSleepTime,
+        userWeight,
+        createNotificationTimeList(
+          wakeTimeHour,
+          wakeTimeMinute,
+          sleepTimeHour,
+          sleepTimeMinute,
+        ));
   }
 
   @override
@@ -178,7 +158,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${howMuchINeedToDrink()}',
+                    '${howMuchINeedToDrink(context.read<Weight>().weight)}',
                     style: kHeadline1.copyWith(color: kWhite),
                   ),
                   Text('ml', style: kCaption.copyWith(color: kWhite)),
