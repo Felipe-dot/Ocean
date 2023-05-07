@@ -4,6 +4,7 @@ import 'package:drinkwater/components/my_expandable_fab.dart';
 import 'package:drinkwater/components/my_fab_content.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
+import 'package:drinkwater/utils/water_id_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../constant.dart';
 import '../data/remote/api.dart';
+import '../utils/my_utils.dart';
 import '../utils/user_token_storage.dart';
 
 class MyHomePageScreen extends StatefulWidget {
@@ -39,11 +41,11 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
 
     // Verificando se é a hora que o usuário acorda para iniciar as notificações
     if (DateTime.now().hour >= wakeUpTime!.hour) {
-      NotificationApi.init(initScheduled: true);
-      listenNotifications();
+      // NotificationApi.init(initScheduled: true);
+      // listenNotifications();
       try {
         notificationTimeList?.forEach((e) {
-          NotificationApi.showScheduleNotification(e.hour, e.second);
+          // NotificationApi.showScheduleNotification(e.hour, e.second);
         });
       } catch (err) {
         print(err);
@@ -55,96 +57,27 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
 
     // Cancelando as notificações dado a hora que o usuário dorme
     if (DateTime.now().hour >= sleepTime!.hour) {
-      NotificationApi.cancelAllNotifications();
+      // NotificationApi.cancelAllNotifications();
     }
 
-    _isDayChanged();
+    isDayChanged(waterStatusBox);
   }
 
-  void listenNotifications() =>
-      NotificationApi.onNotifications.stream.listen(onClickedNotification);
+  // void listenNotifications() =>
+  //     NotificationApi.onNotifications.stream.listen(onClickedNotification);
 
-  void onClickedNotification(String payload) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MyHomePageScreen()),
-    );
-  }
+  // void onClickedNotification(String payload) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const MyHomePageScreen()),
+  //   );
+  // }
 
   @override
   void dispose() {
     // Closes all Hive boxes
     Hive.close();
     super.dispose();
-  }
-
-  Future<bool> _isDayChanged() async {
-    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
-    int lastDay;
-    lastDay = waterStatusData!.statusDay.day;
-    if (lastDay != DateTime.now().day) {
-      waterStatusBox.add(WaterStatus(
-        statusDay: DateTime.now(),
-        goalOfTheDayWasBeat: false,
-        amountOfWaterDrank: 0,
-        drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
-        drinkingFrequency: 0,
-      ));
-      try {
-        Api api = Api();
-        final token = await UserTokenSecureStorage.getUserToken();
-        var response = await api.createWaterHistory(
-            token,
-            waterStatusData.statusDay,
-            waterStatusData.goalOfTheDayWasBeat,
-            waterStatusData.amountOfWaterDrank,
-            waterStatusData.drinkingFrequency);
-      } catch (e) {
-        print("MEU QUERIDO ERRO DE INSERCAO $e");
-      }
-
-      print("ONTEM = $lastDay ==== HOJE = ${DateTime.now().day}");
-      return true;
-    } else {
-      print("HOJE = $lastDay ==== HOJE = ${DateTime.now().day}");
-      return false;
-    }
-  }
-
-  bool _getGoalStatus() {
-    return waterStatusBox.getAt(waterStatusBox.length - 1)!.goalOfTheDayWasBeat;
-  }
-
-  double _percentageCalc() {
-    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
-    int amountOfWaterDrank = waterStatusData!.amountOfWaterDrank;
-    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
-
-    double percentage = (amountOfWaterDrank * 100) / drinkWaterGoal;
-
-    // Aplicando regra de três
-    return percentage > 100 ? 100 : percentage;
-  }
-
-  int _howMuchIsMissing() {
-    var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
-    int amountOfWaterDrank = waterStatusData!.amountOfWaterDrank;
-    int drinkWaterGoal = waterStatusData.drinkingWaterGoal;
-
-    // Verificando se a meta já foi batida
-    if ((drinkWaterGoal - amountOfWaterDrank) <= 0) {
-      waterStatusData = WaterStatus(
-        statusDay: waterStatusData.statusDay,
-        goalOfTheDayWasBeat: true,
-        amountOfWaterDrank: waterStatusData.amountOfWaterDrank,
-        drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
-        drinkingFrequency: waterStatusData.drinkingFrequency,
-      );
-      waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
-      return 0;
-    } else {
-      return drinkWaterGoal - amountOfWaterDrank;
-    }
   }
 
   @override
@@ -156,14 +89,14 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: _getGoalStatus() ? kMainColor : kWhite,
+            color: getGoalStatus(waterStatusBox) ? kMainColor : kWhite,
           ),
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _getGoalStatus()
+              getGoalStatus(waterStatusBox)
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -231,9 +164,9 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                         CircularPercentIndicator(
                           radius: 40.0,
                           lineWidth: 5.0,
-                          percent: _percentageCalc() / 100,
+                          percent: percentageCalc(waterStatusBox) / 100,
                           center: Text(
-                            "${_percentageCalc().toStringAsFixed(0)}%",
+                            "${percentageCalc(waterStatusBox).toStringAsFixed(0)}%",
                             style: const TextStyle(
                               color: kMainColor,
                               fontSize: 25,
@@ -266,7 +199,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                               ),
                             ),
                             Text(
-                              "faltando: ${_howMuchIsMissing()}",
+                              "faltando: ${howMuchIsMissing(waterStatusBox)}",
                               style: const TextStyle(
                                 color: kLightBlue2,
                                 fontSize: 15,
@@ -277,7 +210,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                         ),
                       ],
                     ),
-              _getGoalStatus()
+              getGoalStatus(waterStatusBox)
                   ? Container()
                   : Container(
                       height: 200,
@@ -304,48 +237,32 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             myIconImageAsset: 'assets/images/copo.png',
             myFABContentText: '200ml',
             myFunction: () {
-              waterStatusData = WaterStatus(
-                statusDay: waterStatusData!.statusDay,
-                goalOfTheDayWasBeat: waterStatusData!.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData!.amountOfWaterDrank += 200,
-                drinkingWaterGoal: waterStatusData!.drinkingWaterGoal,
-                drinkingFrequency: waterStatusData!.drinkingFrequency + 1,
-              );
-              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
+              updateAmountOfWaterDrank(waterStatusBox, 200, waterStatusData);
               setState(() {});
-              _howMuchIsMissing();
+              updateWaterStatusOnParseServer(waterStatusData);
+              howMuchIsMissing(waterStatusBox);
             },
           ),
           MyFabContent(
             myIconImageAsset: 'assets/images/garrafa.png',
             myFABContentText: '350ml',
             myFunction: () {
-              waterStatusData = WaterStatus(
-                statusDay: waterStatusData!.statusDay,
-                goalOfTheDayWasBeat: waterStatusData!.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData!.amountOfWaterDrank += 350,
-                drinkingWaterGoal: waterStatusData!.drinkingWaterGoal,
-                drinkingFrequency: waterStatusData!.drinkingFrequency + 1,
-              );
-              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
+              updateAmountOfWaterDrank(waterStatusBox, 350, waterStatusData);
+
               setState(() {});
-              _howMuchIsMissing();
+              updateWaterStatusOnParseServer(waterStatusData);
+
+              howMuchIsMissing(waterStatusBox);
             },
           ),
           MyFabContent(
             myIconImageAsset: 'assets/images/jarra.png',
             myFABContentText: '700ml',
             myFunction: () {
-              waterStatusData = WaterStatus(
-                statusDay: waterStatusData!.statusDay,
-                goalOfTheDayWasBeat: waterStatusData!.goalOfTheDayWasBeat,
-                amountOfWaterDrank: waterStatusData!.amountOfWaterDrank += 700,
-                drinkingWaterGoal: waterStatusData!.drinkingWaterGoal,
-                drinkingFrequency: waterStatusData!.drinkingFrequency + 1,
-              );
-              waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
+              updateAmountOfWaterDrank(waterStatusBox, 700, waterStatusData);
               setState(() {});
-              _howMuchIsMissing();
+              updateWaterStatusOnParseServer(waterStatusData);
+              howMuchIsMissing(waterStatusBox);
             },
           ),
         ],
