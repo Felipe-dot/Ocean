@@ -13,6 +13,7 @@ import 'package:provider/src/provider.dart';
 import '../data/remote/api.dart';
 import '../utils/my_utils.dart';
 import '../utils/user_token_storage.dart';
+import '../utils/water_id_storage.dart';
 
 class MyIntroConclusionScreen extends StatefulWidget {
   const MyIntroConclusionScreen({Key? key}) : super(key: key);
@@ -102,6 +103,25 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           sleepTimeHour,
           sleepTimeMinute,
         ));
+  }
+
+  void _addWaterHistoryOnParseServer(
+      DateTime statusDay,
+      bool goalOfTheDayWasBeat,
+      int amountOfWaterDrank,
+      int drinkingFrequency) async {
+    Api api = Api();
+    var token = await UserTokenSecureStorage.getUserToken();
+
+    var response = await api.createWaterHistory(
+      token,
+      statusDay,
+      goalOfTheDayWasBeat,
+      amountOfWaterDrank,
+      drinkingFrequency,
+    );
+
+    await WaterIdSecureStorage.setWaterIdString(response['result']);
   }
 
   @override
@@ -205,6 +225,12 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
                         userWeight, userWakeUpTime, userSleepTime);
                     _addDataOnParseServer(
                         userWeight, userWakeUpTime, userSleepTime);
+                    _addWaterHistoryOnParseServer(
+                      DateTime.now(),
+                      false,
+                      0,
+                      0,
+                    );
                     print("FIM-----------------");
                   },
                   height: 70,

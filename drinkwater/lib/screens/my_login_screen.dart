@@ -1,5 +1,6 @@
 import 'package:drinkwater/models/userData.dart';
 import 'package:drinkwater/models/waterHistory.dart';
+import 'package:drinkwater/utils/water_id_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -8,6 +9,7 @@ import '../data/remote/api.dart';
 import '../models/status.dart';
 import '../models/user.dart';
 import '../utils/my_utils.dart';
+import '../utils/user_id_storage.dart';
 import '../utils/user_token_storage.dart';
 
 class MyLoginScreen extends StatefulWidget {
@@ -134,7 +136,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
             TextButton(
               child: const Text("OK"),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pushNamed(context, '/myLoginScreen');
               },
             ),
           ],
@@ -176,6 +178,8 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
         ));
       });
 
+      await WaterIdSecureStorage.setWaterIdString(waterHistoryList.last.id);
+
       return 1;
     } catch (e) {
       print(e);
@@ -212,6 +216,9 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
       String response = await api.login(email, password);
 
       await UserTokenSecureStorage.setUserToken(response);
+      var userId = await api.getCurrentUser(response);
+
+      await UserIdSecureStorage.setUserIdString(userId['id']);
 
       print("BEM VINDO USUÁRIO ${response}");
 
