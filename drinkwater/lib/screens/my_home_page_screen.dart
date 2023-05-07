@@ -230,43 +230,185 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
           ),
         ),
       ),
-      floatingActionButton: MyExpandableFab(
-        distance: 100.0,
-        children: [
-          MyFabContent(
-            myIconImageAsset: 'assets/images/copo.png',
-            myFABContentText: '200ml',
-            myFunction: () {
-              updateAmountOfWaterDrank(waterStatusBox, 200, waterStatusData);
-              setState(() {});
-              updateWaterStatusOnParseServer(waterStatusData);
-              howMuchIsMissing(waterStatusBox);
-            },
-          ),
-          MyFabContent(
-            myIconImageAsset: 'assets/images/garrafa.png',
-            myFABContentText: '350ml',
-            myFunction: () {
-              updateAmountOfWaterDrank(waterStatusBox, 350, waterStatusData);
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () => {
+                showModalBottomSheet(
+                  backgroundColor: kLightBlue3,
+                  useSafeArea: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  context: context,
+                  builder: (context) {
+                    return SizedBox(
+                      height: 200,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                child: Row(
+                                  children: [
+                                    Tab(
+                                      icon: Image.asset(
+                                        'assets/images/copo.png',
+                                        height: 23,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '200ml',
+                                      style: const TextStyle(
+                                        color: kMainColor,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Marker-Felt',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  updateAmountOfWaterDrank(
+                                      waterStatusBox, 200, waterStatusData);
+                                  setState(() {});
+                                  updateWaterStatusOnParseServer(
+                                      waterStatusData);
+                                  howMuchIsMissing(waterStatusBox);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                child: Row(
+                                  children: [
+                                    Tab(
+                                      icon: Image.asset(
+                                        'assets/images/garrafa.png',
+                                        height: 25,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '350ml',
+                                      style: const TextStyle(
+                                        color: kMainColor,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Marker-Felt',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  updateAmountOfWaterDrank(
+                                      waterStatusBox, 350, waterStatusData);
 
-              setState(() {});
-              updateWaterStatusOnParseServer(waterStatusData);
+                                  setState(() {});
+                                  updateWaterStatusOnParseServer(
+                                      waterStatusData);
 
-              howMuchIsMissing(waterStatusBox);
-            },
-          ),
-          MyFabContent(
-            myIconImageAsset: 'assets/images/jarra.png',
-            myFABContentText: '700ml',
-            myFunction: () {
-              updateAmountOfWaterDrank(waterStatusBox, 700, waterStatusData);
-              setState(() {});
-              updateWaterStatusOnParseServer(waterStatusData);
-              howMuchIsMissing(waterStatusBox);
-            },
-          ),
-        ],
-      ),
+                                  howMuchIsMissing(waterStatusBox);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                child: Row(
+                                  children: [
+                                    Tab(
+                                      icon: Image.asset(
+                                        'assets/images/jarra.png',
+                                        height: 25,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '700ml',
+                                      style: const TextStyle(
+                                        color: kMainColor,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Marker-Felt',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  updateAmountOfWaterDrank(
+                                      waterStatusBox, 700, waterStatusData);
+                                  setState(() {});
+                                  updateWaterStatusOnParseServer(
+                                      waterStatusData);
+                                  howMuchIsMissing(waterStatusBox);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )
+              },
+          child: Icon(
+            Icons.add,
+            color: kMainColor,
+            size: 40,
+          )),
+      // MyExpandableFab(
+      //   distance: 100.0,
+      //   children: [
+      //     MyFabContent(
+      //       myIconImageAsset: 'assets/images/copo.png',
+      //       myFABContentText: '200ml',
+      //       myFunction: () {
+      //         updateAmountOfWaterDrank(waterStatusBox, 200, waterStatusData);
+      //         setState(() {});
+      //         updateWaterStatusOnParseServer(waterStatusData);
+      //         howMuchIsMissing(waterStatusBox);
+      //       },
+      //     ),
+      //     MyFabContent(
+      //       myIconImageAsset: 'assets/images/garrafa.png',
+      //       myFABContentText: '350ml',
+      //       myFunction: () {
+      //         updateAmountOfWaterDrank(waterStatusBox, 350, waterStatusData);
+
+      //         setState(() {});
+      //         updateWaterStatusOnParseServer(waterStatusData);
+
+      //         howMuchIsMissing(waterStatusBox);
+      //       },
+      //     ),
+      //     MyFabContent(
+      //       myIconImageAsset: 'assets/images/jarra.png',
+      //       myFABContentText: '700ml',
+      //       myFunction: () {
+      //         updateAmountOfWaterDrank(waterStatusBox, 700, waterStatusData);
+      //         setState(() {});
+      //         updateWaterStatusOnParseServer(waterStatusData);
+      //         howMuchIsMissing(waterStatusBox);
+      //       },
+      //     ),
+      //   ],
+      // ),
       bottomNavigationBar: MyBottomNavBar(
         iconSize: 30,
         selectedIndex: _currentIndex,
