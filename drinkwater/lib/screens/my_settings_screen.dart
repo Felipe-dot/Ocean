@@ -6,7 +6,9 @@ import 'package:drinkwater/models/user.dart';
 import 'package:drinkwater/providers/sleep_time_provider.dart';
 import 'package:drinkwater/providers/wake_up_provider.dart';
 import 'package:drinkwater/providers/weight_provider.dart';
+import 'package:drinkwater/utils/user_id_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/src/provider.dart';
@@ -32,6 +34,9 @@ class _MySettingsState extends State<MySettings> {
     userBox = Hive.box('userBox');
     waterStatusBox = Hive.box('statusBox');
   }
+
+  bool showUserId = false;
+  String userId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +114,21 @@ class _MySettingsState extends State<MySettings> {
       var token = await UserTokenSecureStorage.getUserToken();
 
       await api.logout(token);
+    }
+
+    void getUserId() async {
+      var response = await UserIdSecureStorage.getUserId();
+      setState(() {
+        showUserId = !showUserId;
+        userId = response as String;
+      });
+    }
+
+    void clearUserData() async {
+      final storage = new FlutterSecureStorage();
+      await storage.deleteAll();
+      userBox.clear();
+      waterStatusBox.clear();
     }
 
     Future openWeightDialog() => showDialog(
@@ -306,20 +326,28 @@ class _MySettingsState extends State<MySettings> {
           ),
           child: ListView(
             children: [
-              SwitchListTile(
-                title: const Text("Lembrete adicional"),
-                onChanged: (bool newValue) {
-                  userData = User(
-                    userWeight: userData!.userWeight,
-                    userWakeUpTime: userData!.userWakeUpTime,
-                    userSleepTime: userData!.userSleepTime,
-                    additionalReminder: newValue,
-                    notificationTimeList: userData!.notificationTimeList,
-                  );
-                  userBox.putAt(userBox.length - 1, userData!);
-                  setState(() {});
-                },
-                value: userData!.additionalReminder,
+              ListTile(
+                title: const Text("Id do usuário"),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      showUserId ? userId : "**********",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: kMainColor,
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          print("OLA MEU AMIGO $showUserId");
+                          getUserId();
+                        },
+                        icon: showUserId
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility))
+                  ],
+                ),
               ),
               ListTile(
                 title: const Text("Meta de ingestão"),
@@ -385,6 +413,7 @@ class _MySettingsState extends State<MySettings> {
                 ),
                 onTap: () {
                   doUserLogout();
+                  clearUserData();
                   Navigator.pushNamed(context, '/myLoginScreen');
                 },
               )
