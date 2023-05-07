@@ -127,6 +127,27 @@ class Api {
     }
   }
 
+  Future<dynamic> getCurrentUser(String? userToken) async {
+    Response response;
+    Dio dio = Dio();
+
+    dio.options.headers['X-Parse-Application-Id'] =
+        'iO2pQe0E4ZPEvmz3KSqWKPApMw7kAm5t1JZdwZGe';
+    dio.options.headers['X-Parse-REST-API-Key'] =
+        'IIJa91tLKGr1tMpbUzJCpoB7Nxtwfoh4SUbDhRGa';
+    dio.options.headers['X-Parse-Session-Token'] = userToken;
+
+    response = await dio.post(
+      "https://parseapi.back4app.com/parse/functions/get-current-user",
+    );
+
+    if (response.statusCode == 200) {
+      return response.data['result'];
+    } else {
+      return response.statusCode;
+    }
+  }
+
   Future<dynamic> validateToken(String? userToken) async {
     Response response;
     Dio dio = Dio();
@@ -326,7 +347,7 @@ class Api {
   }
 
   Future<dynamic> changeGoalOfTheDayWasBeat(
-      String? userToken, bool goalOfTheDayWasBeat) async {
+      String? userToken, String? id, bool goalOfTheDayWasBeat) async {
     Response response;
     Dio dio = Dio();
 
@@ -338,7 +359,7 @@ class Api {
 
     response = await dio.post(
       "https://parseapi.back4app.com/parse/functions/change-goalOfTheDayWasBeat",
-      data: {"goalOfTheDayWasBeat": goalOfTheDayWasBeat},
+      data: {"id": id, "goalOfTheDayWasBeat": goalOfTheDayWasBeat},
     );
 
     if (response.statusCode == 200) {
@@ -349,7 +370,7 @@ class Api {
   }
 
   Future<dynamic> changeAmountOfWaterDrank(
-      String? userToken, int amountOfWaterDrank) async {
+      String? userToken, String? id, int amountOfWaterDrank) async {
     Response response;
     Dio dio = Dio();
 
@@ -361,7 +382,7 @@ class Api {
 
     response = await dio.post(
       "https://parseapi.back4app.com/parse/functions/change-amountOfWaterDrank",
-      data: {"amountOfWaterDrank": amountOfWaterDrank},
+      data: {"id": id, "amountOfWaterDrank": amountOfWaterDrank},
     );
 
     if (response.statusCode == 200) {
@@ -372,7 +393,7 @@ class Api {
   }
 
   Future<dynamic> changeDrinkFrequency(
-      String? userToken, int drinkFrequency) async {
+      String? userToken, String? id, int drinkFrequency) async {
     Response response;
     Dio dio = Dio();
 
@@ -384,7 +405,7 @@ class Api {
 
     response = await dio.post(
       "https://parseapi.back4app.com/parse/functions/change-drinkFrequency",
-      data: {"drinkFrequency": drinkFrequency},
+      data: {"id": id, "drinkFrequency": drinkFrequency},
     );
 
     if (response.statusCode == 200) {
