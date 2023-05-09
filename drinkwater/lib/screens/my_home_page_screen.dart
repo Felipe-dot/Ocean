@@ -1,19 +1,13 @@
-import 'package:drinkwater/api/notification_api.dart';
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
-import 'package:drinkwater/components/my_expandable_fab.dart';
-import 'package:drinkwater/components/my_fab_content.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
-import 'package:drinkwater/utils/water_id_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../constant.dart';
-import '../data/remote/api.dart';
 import '../utils/my_utils.dart';
-import '../utils/user_token_storage.dart';
 
 class MyHomePageScreen extends StatefulWidget {
   const MyHomePageScreen({Key? key}) : super(key: key);
@@ -56,22 +50,10 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     }
 
     // Cancelando as notificações dado a hora que o usuário dorme
-    if (DateTime.now().hour >= sleepTime!.hour) {
-      // NotificationApi.cancelAllNotifications();
-    }
+    if (DateTime.now().hour >= sleepTime!.hour) {}
 
     isDayChanged(waterStatusBox);
   }
-
-  // void listenNotifications() =>
-  //     NotificationApi.onNotifications.stream.listen(onClickedNotification);
-
-  // void onClickedNotification(String payload) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => const MyHomePageScreen()),
-  //   );
-  // }
 
   @override
   void dispose() {
