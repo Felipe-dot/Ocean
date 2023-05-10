@@ -2,8 +2,10 @@
     package="com.example.drinkwater">
    <uses-permission android:name="android.permission.INTERNET"/>
    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+   <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+
    <application
-        android:label="drinkwater"
+        android:label="ocean"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
