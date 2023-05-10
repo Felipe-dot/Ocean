@@ -22,7 +22,7 @@ class MyInfoPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: 150,
+          height: 170,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
