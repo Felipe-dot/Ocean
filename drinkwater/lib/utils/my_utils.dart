@@ -1,11 +1,14 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:drinkwater/models/waterHistory.dart';
 import 'package:drinkwater/utils/user_token_storage.dart';
 import 'package:drinkwater/utils/water_id_storage.dart';
 import 'package:hive/hive.dart';
 
+import '../constant.dart';
 import '../data/remote/api.dart';
 import '../models/status.dart';
 import '../models/userData.dart';
+import '../services/notification_service.dart';
 
 List<DateTime> createNotificationTimeList(
   int wakeTimeHour,
@@ -135,7 +138,7 @@ double percentageCalc(Box<WaterStatus> waterStatusBox) {
 void updateAmountOfWaterDrank(
     Box<WaterStatus> waterStatusBox, int value, WaterStatus waterStatusData) {
   waterStatusData = WaterStatus(
-    statusDay: waterStatusData!.statusDay,
+    statusDay: waterStatusData.statusDay,
     goalOfTheDayWasBeat: waterStatusData.goalOfTheDayWasBeat,
     amountOfWaterDrank: waterStatusData.amountOfWaterDrank += value,
     drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
@@ -191,4 +194,46 @@ int howMuchIsMissing(Box<WaterStatus> waterStatusBox) {
   } else {
     return drinkWaterGoal - amountOfWaterDrank;
   }
+}
+
+Future<bool> isNotificationAlreadyCreate(DateTime time) async {
+  List<NotificationModel> scheduledNotifications =
+      await AwesomeNotifications().listScheduledNotifications();
+
+  print(scheduledNotifications);
+
+  bool isCreated = false;
+
+  for (NotificationModel notification in scheduledNotifications) {
+    if (notification.schedule!.repeats == false &&
+        notification.schedule!.createdDate == time.toIso8601String()) {
+      // A notification is already scheduled for this time, so don't create a new alarm
+      isCreated = true;
+    } else {
+      isCreated = false;
+    }
+  }
+  return isCreated;
+}
+
+void createNotificationWaterAlarms(List<DateTime>? notificationTimeList) async {
+  notificationTimeList!.forEach((e) async {
+    await NotificationService.showNotification(
+        title: "Hidrate-se",
+        body: "Lembre-se de consumir água",
+        payload: {
+          "navigate": "true",
+        },
+        scheduled: true,
+        hour: e.hour,
+        minute: e.minute,
+        actionButtons: [
+          NotificationActionButton(
+            key: 'check',
+            label: 'Registre seu consumo',
+            actionType: ActionType.SilentAction,
+            color: kDark1,
+          )
+        ]);
+  });
 }
