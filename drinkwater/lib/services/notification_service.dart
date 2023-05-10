@@ -95,6 +95,7 @@ class NotificationService {
     final int? interval,
     final int? hour,
     final int? minute,
+    final int? weekday,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -103,8 +104,6 @@ class NotificationService {
         title: title,
         body: body,
         backgroundColor: kMainColor,
-        // customSound: "assets/audio/Bubble.mp3",
-        // icon: "assets/images/logo_wtn.png",
         displayOnBackground: true,
         displayOnForeground: true,
         actionType: actionType,
@@ -116,17 +115,16 @@ class NotificationService {
       ),
       actionButtons: actionButtons,
       schedule: scheduled
-          ? NotificationCalendar(hour: hour, minute: minute, repeats: true)
+          ? NotificationCalendar(
+              weekday: weekday,
+              hour: hour,
+              minute: minute,
+              second: 0,
+              millisecond: 0,
+              repeats: true,
+              allowWhileIdle: true,
+            )
           : null,
     );
   }
 }
-
-
-// 1minuto = 60s 1h = 60min*60 360s
-
-/* 
-Notification Schedule based on calendar components. At least one date parameter is required. [interval] Time interval between each notification (minimum of 60 sec case repeating) [allowWhileIdle] Displays the notification, even when the device is low battery [repeats] Defines if the notification should play only once or keeps repeating [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond. [timeZone] time zone identifier as reference of this schedule date.
-
-
- */

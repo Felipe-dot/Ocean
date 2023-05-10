@@ -196,27 +196,23 @@ int howMuchIsMissing(Box<WaterStatus> waterStatusBox) {
   }
 }
 
-Future<bool> isNotificationAlreadyCreate(DateTime time) async {
+Future<void> isNotificationAlreadyCreate() async {
   List<NotificationModel> scheduledNotifications =
       await AwesomeNotifications().listScheduledNotifications();
 
-  print(scheduledNotifications);
+  scheduledNotifications.forEach((element) {
+    print("MEU ELEMENTO ${element.schedule}");
+  });
+}
 
-  bool isCreated = false;
-
-  for (NotificationModel notification in scheduledNotifications) {
-    if (notification.schedule!.repeats == false &&
-        notification.schedule!.createdDate == time.toIso8601String()) {
-      // A notification is already scheduled for this time, so don't create a new alarm
-      isCreated = true;
-    } else {
-      isCreated = false;
-    }
-  }
-  return isCreated;
+Future<void> cancelAllSchedules() async {
+  await AwesomeNotifications().cancelAllSchedules();
 }
 
 void createNotificationWaterAlarms(List<DateTime>? notificationTimeList) async {
+  print("========================");
+  print(notificationTimeList);
+  print("========================");
   notificationTimeList!.forEach((e) async {
     await NotificationService.showNotification(
         title: "Hidrate-se",
@@ -224,9 +220,11 @@ void createNotificationWaterAlarms(List<DateTime>? notificationTimeList) async {
         payload: {
           "navigate": "true",
         },
+        notificationLayout: NotificationLayout.Default,
         scheduled: true,
         hour: e.hour,
         minute: e.minute,
+        weekday: e.weekday,
         actionButtons: [
           NotificationActionButton(
             key: 'check',

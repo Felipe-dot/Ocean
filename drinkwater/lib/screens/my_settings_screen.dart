@@ -221,6 +221,8 @@ class _MySettingsState extends State<MySettings> {
                           sleepTimeHour,
                           sleepTimeMinute);
 
+                      await cancelAllSchedules();
+
                       createNotificationWaterAlarms(notificationTimeList);
                       DateTime userWakeUpTime = DateTime(
                         userData!.userWakeUpTime.year,
@@ -291,6 +293,8 @@ class _MySettingsState extends State<MySettings> {
                           wakeTimeMinute,
                           sleepTimeHour,
                           sleepTimeMinute);
+
+                      await cancelAllSchedules();
                       createNotificationWaterAlarms(notificationTimeList);
 
                       DateTime userSleepTime = DateTime(
@@ -308,7 +312,6 @@ class _MySettingsState extends State<MySettings> {
                           notificationTimeList: notificationTimeList);
                       userBox.putAt(userBox.length - 1, userData!);
 
-                      createNotificationWaterAlarms(notificationTimeList);
                       Navigator.of(context).pop(context);
                       var token = await UserTokenSecureStorage.getUserToken();
                       await api.changeSleepTime(
@@ -437,9 +440,11 @@ class _MySettingsState extends State<MySettings> {
                     color: kRedAccent,
                   ),
                 ),
-                onTap: () {
+                onTap: () async {
                   doUserLogout();
                   clearUserData();
+                  await cancelAllSchedules();
+
                   Navigator.pushNamed(context, '/myLoginScreen');
                 },
               )
