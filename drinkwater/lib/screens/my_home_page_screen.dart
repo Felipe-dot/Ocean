@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
@@ -7,6 +8,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../constant.dart';
+import '../services/notification_service.dart';
 import '../utils/my_utils.dart';
 
 class MyHomePageScreen extends StatefulWidget {
@@ -28,31 +30,15 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     userBox = Hive.box('userBox');
     waterStatusBox = Hive.box('statusBox');
     // Iniciando o sistema de notificação do aplicativo
-    var wakeUpTime = userBox.getAt(userBox.length - 1)?.userWakeUpTime;
-    var sleepTime = userBox.getAt(userBox.length - 1)?.userSleepTime;
+
     var notificationTimeList =
         userBox.getAt(userBox.length - 1)?.notificationTimeList;
 
-    // Verificando se é a hora que o usuário acorda para iniciar as notificações
-    if (DateTime.now().hour >= wakeUpTime!.hour) {
-      // NotificationApi.init(initScheduled: true);
-      // listenNotifications();
-      try {
-        notificationTimeList?.forEach((e) {
-          // NotificationApi.showScheduleNotification(e.hour, e.second);
-        });
-      } catch (err) {
-        print(err);
-      }
-    } else {
-      // ignore: avoid_print
-      print("O usuário ainda não acordou");
-    }
-
-    // Cancelando as notificações dado a hora que o usuário dorme
-    if (DateTime.now().hour >= sleepTime!.hour) {}
-
     isDayChanged(waterStatusBox);
+  }
+
+  Future<List<dynamic>> listActiveSchedules() async {
+    return await AwesomeNotifications().listScheduledNotifications();
   }
 
   @override
@@ -354,43 +340,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
             color: kMainColor,
             size: 40,
           )),
-      // MyExpandableFab(
-      //   distance: 100.0,
-      //   children: [
-      //     MyFabContent(
-      //       myIconImageAsset: 'assets/images/copo.png',
-      //       myFABContentText: '200ml',
-      //       myFunction: () {
-      //         updateAmountOfWaterDrank(waterStatusBox, 200, waterStatusData);
-      //         setState(() {});
-      //         updateWaterStatusOnParseServer(waterStatusData);
-      //         howMuchIsMissing(waterStatusBox);
-      //       },
-      //     ),
-      //     MyFabContent(
-      //       myIconImageAsset: 'assets/images/garrafa.png',
-      //       myFABContentText: '350ml',
-      //       myFunction: () {
-      //         updateAmountOfWaterDrank(waterStatusBox, 350, waterStatusData);
-
-      //         setState(() {});
-      //         updateWaterStatusOnParseServer(waterStatusData);
-
-      //         howMuchIsMissing(waterStatusBox);
-      //       },
-      //     ),
-      //     MyFabContent(
-      //       myIconImageAsset: 'assets/images/jarra.png',
-      //       myFABContentText: '700ml',
-      //       myFunction: () {
-      //         updateAmountOfWaterDrank(waterStatusBox, 700, waterStatusData);
-      //         setState(() {});
-      //         updateWaterStatusOnParseServer(waterStatusData);
-      //         howMuchIsMissing(waterStatusBox);
-      //       },
-      //     ),
-      //   ],
-      // ),
       bottomNavigationBar: MyBottomNavBar(
         iconSize: 30,
         selectedIndex: _currentIndex,
