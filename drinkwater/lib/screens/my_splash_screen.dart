@@ -32,9 +32,10 @@ class _MySplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
     return EasySplashScreen(
       logoWidth: 50,
-      logo: Image.asset(
-        '/images/logo.png',
-        scale: 1,
+      logo: Image(
+        image: AssetImage("assets/images/logo.png"),
+        width: 150,
+        height: 150,
       ),
       backgroundColor: kLightBlue4,
       showLoader: true,
