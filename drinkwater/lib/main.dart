@@ -1,3 +1,4 @@
+import 'package:drinkwater/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,9 @@ import 'providers/weight_provider.dart';
 import 'screens/screens.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initializeNotification();
+
   // Inicializando o hive
   await Hive.initFlutter();
   // Registrando o adaptador
@@ -29,6 +33,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -39,8 +44,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Drink Water",
+      title: "Ocean",
       debugShowCheckedModeBanner: false,
+      navigatorKey: MyApp.navigatorKey,
       initialRoute: '/',
       routes: {
         '/': (context) => const MySplashScreen(),
