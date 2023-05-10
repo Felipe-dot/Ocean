@@ -1,10 +1,10 @@
+import 'package:drinkwater/constant.dart';
 import 'package:drinkwater/models/user.dart';
 import 'package:drinkwater/screens/my_home_page_screen.dart';
+import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../data/remote/api.dart';
-import '../utils/user_token_storage.dart';
 import 'my_login_screen.dart';
 
 class MySplashScreen extends StatefulWidget {
@@ -28,17 +28,24 @@ class _MySplashScreenState extends State<MySplashScreen> {
     return box.isEmpty;
   }
 
-  Future<bool> _validateToken() async {
-    Api api = Api();
-    var token = await UserTokenSecureStorage.getUserToken();
-    var response = await api.validateToken(token);
-
-    return response == "TOKEN_INVÁLIDO" ? false : true;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _isBoxEmpty() ? const MyLoginScreen() : const MyHomePageScreen();
-    // _isBoxEmpty() ? const MyLoginScreen() : const MyTestScreen(),
+    return EasySplashScreen(
+      logoWidth: 50,
+      logo: Image.asset(
+        '/images/logo.png',
+        scale: 1,
+      ),
+      backgroundColor: kLightBlue4,
+      showLoader: true,
+      loadingText: Text(
+        "Carregando...",
+        style: TextStyle(color: kDark2),
+      ),
+      loaderColor: kDark1,
+      navigator:
+          _isBoxEmpty() ? const MyLoginScreen() : const MyHomePageScreen(),
+      durationInSeconds: 6,
+    );
   }
 }
