@@ -34,15 +34,17 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
                 ),
                 const Center(
                   child: Text('Cadastre-se',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: kMainColor)),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 const Center(
                   child: Text('Crie uma conta, para usufruir do Ocean',
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(fontSize: 16, color: kMainColor)),
                 ),
                 const SizedBox(
                   height: 16,
@@ -54,7 +56,7 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black)),
+                          borderSide: BorderSide(color: kMainColor)),
                       labelText: 'Email'),
                 ),
                 const SizedBox(
@@ -68,7 +70,7 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black)),
+                          borderSide: BorderSide(color: kMainColor)),
                       labelText: 'Senha'),
                 ),
                 const SizedBox(
@@ -82,7 +84,7 @@ class _MyUserRegistrationScreenState extends State<MyUserRegistrationScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black)),
+                          borderSide: BorderSide(color: kMainColor)),
                       labelText: 'Repita a senha'),
                 ),
                 const SizedBox(

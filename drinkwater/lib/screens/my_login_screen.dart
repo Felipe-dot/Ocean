@@ -2,6 +2,7 @@ import 'package:drinkwater/models/userData.dart';
 import 'package:drinkwater/models/waterHistory.dart';
 import 'package:drinkwater/utils/water_id_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 import '../constant.dart';
@@ -58,15 +59,19 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                 ),
                 const Center(
                   child: Text('Bem Vindo',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: kMainColor)),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 const Center(
-                  child: Text('Entre ou Cadastre-se',
-                      style: TextStyle(fontSize: 16)),
+                  child: Text(
+                    'Entre ou Cadastre-se',
+                    style: TextStyle(fontSize: 16, color: kMainColor),
+                  ),
                 ),
                 const SizedBox(
                   height: 16,
@@ -78,7 +83,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black)),
+                          borderSide: BorderSide(color: kMainColor)),
                       labelText: 'Email'),
                 ),
                 const SizedBox(
@@ -92,7 +97,7 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black)),
+                          borderSide: BorderSide(color: kMainColor)),
                       labelText: 'Senha'),
                 ),
                 const SizedBox(
@@ -167,6 +172,11 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
           notificationTimeList: user.notificationTimeList,
         ),
       );
+
+      var notificationTimeList =
+          userBox.getAt(userBox.length - 1)?.notificationTimeList;
+
+      createNotificationWaterAlarms(notificationTimeList);
 
       waterHistoryList.forEach((element) {
         waterStatusBox.add(WaterStatus(

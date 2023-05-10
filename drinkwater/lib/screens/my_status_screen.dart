@@ -190,6 +190,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                     "Semana",
                     style: TextStyle(
                       fontSize: 16,
+                      color: Colors.lightBlue,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -200,7 +201,12 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
             Column(
               children: [
                 ListTile(
-                  title: const Text("Ingestão média"),
+                  title: const Text(
+                    "Ingestão média",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                  ),
                   trailing: Text(
                     "${averageDrank().toStringAsFixed(2)}ml",
                     style: const TextStyle(
@@ -213,7 +219,12 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                   height: 20,
                 ),
                 ListTile(
-                  title: const Text("Frequência de consumo"),
+                  title: const Text(
+                    "Frequência de consumo",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                  ),
                   trailing: Text(
                     "${drinkingFrequency().toStringAsFixed(0)} vezes/dia",
                     style: const TextStyle(
@@ -226,7 +237,12 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
                   height: 20,
                 ),
                 ListTile(
-                  title: const Text("Média de conclusão"),
+                  title: const Text(
+                    "Média de conclusão",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                  ),
                   trailing: Text(
                     "${completionAverage().toStringAsFixed(1)}%",
                     style: const TextStyle(

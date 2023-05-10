@@ -220,6 +220,8 @@ class _MySettingsState extends State<MySettings> {
                           wakeTimeMinute,
                           sleepTimeHour,
                           sleepTimeMinute);
+
+                      createNotificationWaterAlarms(notificationTimeList);
                       DateTime userWakeUpTime = DateTime(
                         userData!.userWakeUpTime.year,
                         userData!.userWakeUpTime.month,
@@ -289,6 +291,8 @@ class _MySettingsState extends State<MySettings> {
                           wakeTimeMinute,
                           sleepTimeHour,
                           sleepTimeMinute);
+                      createNotificationWaterAlarms(notificationTimeList);
+
                       DateTime userSleepTime = DateTime(
                         userData!.userSleepTime.year,
                         userData!.userSleepTime.month,
@@ -303,6 +307,8 @@ class _MySettingsState extends State<MySettings> {
                           additionalReminder: userData!.additionalReminder,
                           notificationTimeList: notificationTimeList);
                       userBox.putAt(userBox.length - 1, userData!);
+
+                      createNotificationWaterAlarms(notificationTimeList);
                       Navigator.of(context).pop(context);
                       var token = await UserTokenSecureStorage.getUserToken();
                       await api.changeSleepTime(
@@ -327,7 +333,10 @@ class _MySettingsState extends State<MySettings> {
           child: ListView(
             children: [
               ListTile(
-                title: const Text("Id do usuário"),
+                title: const Text(
+                  "Id do usuário",
+                  style: TextStyle(color: kMainColor),
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -340,17 +349,25 @@ class _MySettingsState extends State<MySettings> {
                     ),
                     IconButton(
                         onPressed: () {
-                          print("OLA MEU AMIGO $showUserId");
                           getUserId();
                         },
                         icon: showUserId
-                            ? Icon(Icons.visibility_off)
-                            : Icon(Icons.visibility))
+                            ? Icon(
+                                Icons.visibility_off,
+                                color: kMainColor,
+                              )
+                            : Icon(
+                                Icons.visibility,
+                                color: kMainColor,
+                              ))
                   ],
                 ),
               ),
               ListTile(
-                title: const Text("Meta de ingestão"),
+                title: const Text(
+                  "Meta de ingestão",
+                  style: TextStyle(color: kMainColor),
+                ),
                 trailing: Text(
                   "${waterStatusData!.drinkingWaterGoal}ml",
                   style: const TextStyle(
@@ -364,7 +381,10 @@ class _MySettingsState extends State<MySettings> {
                 },
               ),
               ListTile(
-                  title: const Text("Peso"),
+                  title: const Text(
+                    "Peso",
+                    style: TextStyle(color: kMainColor),
+                  ),
                   trailing: Text(
                     "${userData!.userWeight} kg",
                     style: const TextStyle(
@@ -377,7 +397,10 @@ class _MySettingsState extends State<MySettings> {
                     setState(() {});
                   }),
               ListTile(
-                  title: const Text("Hora de acordar"),
+                  title: const Text(
+                    "Hora de acordar",
+                    style: TextStyle(color: kMainColor),
+                  ),
                   trailing: Text(
                     DateFormat.Hm().format(userData!.userWakeUpTime),
                     style: const TextStyle(
@@ -390,7 +413,10 @@ class _MySettingsState extends State<MySettings> {
                     setState(() {});
                   }),
               ListTile(
-                  title: const Text("Hora de dormir"),
+                  title: const Text(
+                    "Hora de dormir",
+                    style: TextStyle(color: kMainColor),
+                  ),
                   trailing: Text(
                     DateFormat.Hm().format(userData!.userSleepTime),
                     style: const TextStyle(

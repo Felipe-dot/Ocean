@@ -1,3 +1,4 @@
+import 'package:drinkwater/constant.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -208,7 +209,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
     List<DateTime> sevenDaysList = lastSevenDays(currentDay);
 
     const style = TextStyle(
-      color: Color(0xff68737d),
+      color: kMainColor,
       fontWeight: FontWeight.bold,
       fontSize: 12,
     );
@@ -249,7 +250,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Color(0xff67727d),
+      color: kMainColor,
       fontWeight: FontWeight.bold,
       fontSize: 13,
     );
@@ -381,7 +382,7 @@ class _MyWaterChartState extends State<MyWaterChart> {
     List<DateTime> sevenMonthsList = lastSevenMonths(currentDay);
 
     const style = TextStyle(
-      color: Color(0xff68737d),
+      color: kMainColor,
       fontWeight: FontWeight.bold,
       fontSize: 12,
     );

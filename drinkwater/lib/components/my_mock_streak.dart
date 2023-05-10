@@ -21,6 +21,7 @@ class MyMockStreak extends StatelessWidget {
           weekday,
           style: const TextStyle(
             fontSize: 13,
+            color: Colors.lightBlue,
             fontWeight: FontWeight.w500,
           ),
         ),

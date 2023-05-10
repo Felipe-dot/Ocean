@@ -18,6 +18,7 @@ class MyDataPointStreak extends StatelessWidget {
         CircleAvatar(
           child: Image.asset(
             "assets/images/gota.png",
+            // color: isTheWeekDayBeat ? kMainColor : kGray,
             color: isTheWeekDayBeat ? kMainColor : kGray,
             height: 15,
           ),
@@ -29,8 +30,9 @@ class MyDataPointStreak extends StatelessWidget {
         ),
         Text(
           weekday,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
+            color: isTheWeekDayBeat ? kLightBlue3 : kGray.withOpacity(0.5),
             fontWeight: FontWeight.w500,
           ),
         ),

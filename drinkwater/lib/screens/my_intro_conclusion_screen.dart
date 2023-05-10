@@ -156,7 +156,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Image(
-                image: AssetImage('assets/images/logoSplashScreen.png'),
+                image: AssetImage('assets/images/logo_wtn.png'),
                 height: 89,
                 width: 145,
               ),
@@ -231,6 +231,9 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
                       0,
                       0,
                     );
+                    var notificationTimeList =
+                        userBox.getAt(userBox.length - 1)?.notificationTimeList;
+                    createNotificationWaterAlarms(notificationTimeList);
                     print("FIM-----------------");
                   },
                   height: 70,
