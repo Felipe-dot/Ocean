@@ -31,9 +31,6 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     waterStatusBox = Hive.box('statusBox');
     // Iniciando o sistema de notificação do aplicativo
 
-    var notificationTimeList =
-        userBox.getAt(userBox.length - 1)?.notificationTimeList;
-
     isDayChanged(waterStatusBox);
   }
 
