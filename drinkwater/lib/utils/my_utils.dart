@@ -103,11 +103,14 @@ Future<bool> isDayChanged(Box<WaterStatus> waterStatusBox) async {
       Api api = Api();
       final token = await UserTokenSecureStorage.getUserToken();
       var response = await api.createWaterHistory(
-          token,
-          waterStatusData.statusDay,
-          waterStatusData.goalOfTheDayWasBeat,
-          waterStatusData.amountOfWaterDrank,
-          waterStatusData.drinkingFrequency);
+        token,
+        DateTime.now(),
+        false,
+        0,
+        0,
+      );
+
+      await WaterIdSecureStorage.setWaterIdString(response['result']);
     } catch (e) {
       print("MEU QUERIDO ERRO DE INSERCAO $e");
     }
@@ -144,7 +147,7 @@ void updateAmountOfWaterDrank(
     drinkingWaterGoal: waterStatusData.drinkingWaterGoal,
     drinkingFrequency: waterStatusData.drinkingFrequency + 1,
   );
-  waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData!);
+  waterStatusBox.putAt(waterStatusBox.length - 1, waterStatusData);
 }
 
 void updateWaterStatusOnParseServer(WaterStatus waterStatusData) async {
@@ -224,7 +227,6 @@ void createNotificationWaterAlarms(List<DateTime>? notificationTimeList) async {
         scheduled: true,
         hour: e.hour,
         minute: e.minute,
-        weekday: e.weekday,
         actionButtons: [
           NotificationActionButton(
             key: 'check',
