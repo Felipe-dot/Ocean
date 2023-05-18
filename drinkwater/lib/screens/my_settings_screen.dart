@@ -8,6 +8,7 @@ import 'package:drinkwater/providers/wake_up_provider.dart';
 import 'package:drinkwater/providers/weight_provider.dart';
 import 'package:drinkwater/utils/user_id_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -353,6 +354,14 @@ class _MySettingsState extends State<MySettings> {
                     IconButton(
                         onPressed: () {
                           getUserId();
+                          if (!showUserId) {
+                            Clipboard.setData(ClipboardData(text: userId))
+                                .then((result) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Copiado para área de transferência !')));
+                            });
+                          }
                         },
                         icon: showUserId
                             ? Icon(
