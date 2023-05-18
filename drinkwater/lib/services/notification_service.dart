@@ -95,7 +95,6 @@ class NotificationService {
     final int? interval,
     final int? hour,
     final int? minute,
-    final int? weekday,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -116,7 +115,6 @@ class NotificationService {
       actionButtons: actionButtons,
       schedule: scheduled
           ? NotificationCalendar(
-              weekday: weekday,
               hour: hour,
               minute: minute,
               second: 0,
