@@ -21,7 +21,7 @@ class _MyNumberPickerState extends State<MyNumberPicker> {
       children: <Widget>[
         NumberPicker(
           value: widget.currentValue,
-          minValue: 0,
+          minValue: 35,
           maxValue: 200,
           textStyle: kHeadline4.copyWith(color: kLightBlue2),
           selectedTextStyle: kHeadline2.copyWith(

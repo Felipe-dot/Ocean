@@ -157,11 +157,11 @@ class _MyWaterChartState extends State<MyWaterChart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 340,
+      width: MediaQuery.of(context).size.width * 0.98,
       child: Stack(
         children: <Widget>[
           AspectRatio(
-            aspectRatio: 1.70,
+            aspectRatio: 1.8,
             child: Container(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(
@@ -169,8 +169,8 @@ class _MyWaterChartState extends State<MyWaterChart> {
                   ),
                   color: Color(0xFFB2C7E6)),
               child: Padding(
-                padding: const EdgeInsets.only(
-                    right: 20.0, left: 25.0, top: 24, bottom: 6),
+                padding:
+                    const EdgeInsets.only(right: 20.0, left: 25.0, top: 24),
                 child: LineChart(
                   showLastSevenMonths ? monthChartData() : sevenDaysChartData(),
                 ),
