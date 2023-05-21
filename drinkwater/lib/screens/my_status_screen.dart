@@ -169,150 +169,165 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
     final args = ModalRoute.of(context)!.settings.arguments;
     int? _currentIndex = args as int?;
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white30,
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white30,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Gráfico Principal
+              Center(
+                child: Container(
+                  // MediaQuery.of(context).size.width >= 645 ? 450 : 310
+                  height: 300,
+                  width: MediaQuery.of(context).size.width >= 645 ? 500 : 400,
+                  child: MyWaterChart(),
+                ),
+              ),
+
+              // Status da semana streak
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding:
+                        EdgeInsets.only(left: 20, right: 8, top: 0, bottom: 10),
+                    child: Text(
+                      "Semana",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.lightBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  buildStreakRow(),
+                ],
+              ),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: const Text(
+                        "Ingestão média",
+                        style: TextStyle(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                      trailing: Text(
+                        "${averageDrank().toStringAsFixed(2)}ml",
+                        style: const TextStyle(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.blueGrey,
+                      height: 20,
+                    ),
+                    ListTile(
+                      title: const Text(
+                        "Frequência de consumo",
+                        style: TextStyle(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                      trailing: Text(
+                        "${drinkingFrequency().toStringAsFixed(0)} vezes/dia",
+                        style: const TextStyle(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.blueGrey,
+                      height: 20,
+                    ),
+                    ListTile(
+                      title: const Text(
+                        "Média de conclusão",
+                        style: TextStyle(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                      trailing: Text(
+                        "${completionAverage().toStringAsFixed(1)}%",
+                        style: const TextStyle(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Gráfico Principal
-            const MyWaterChart(),
-            // Status da semana streak
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding:
-                      EdgeInsets.only(left: 10, right: 8, top: 0, bottom: 10),
-                  child: Text(
-                    "Semana",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.lightBlue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                buildStreakRow(),
-              ],
+        bottomNavigationBar: MyBottomNavBar(
+          iconSize: 30,
+          selectedIndex: _currentIndex!,
+          backgroundColor: kMainColor,
+          showElevation: false,
+          itemCornerRadius: 20,
+          curve: Curves.easeIn,
+          onItemSelected: (index) {
+            setState(() => _currentIndex = index);
+            switch (_currentIndex) {
+              case 0:
+                {
+                  Navigator.pushNamed(context, '/myHomePage');
+                  break;
+                }
+              case 1:
+                {
+                  break;
+                }
+              case 2:
+                {
+                  Navigator.pushNamed(context, '/mySettingsScreen',
+                      arguments: _currentIndex);
+                  break;
+                }
+              default:
+                {
+                  Navigator.pushNamed(context, '/myAvailableSoonScreen',
+                      arguments: _currentIndex);
+                }
+            }
+          },
+          items: <BottomNavyBarItem>[
+            BottomNavyBarItem(
+              icon: const Icon(
+                Icons.home,
+                color: kWhite,
+              ),
+              activeColor: kLightBlue1,
+              inactiveColor: kMainColor,
             ),
-            Column(
-              children: [
-                ListTile(
-                  title: const Text(
-                    "Ingestão média",
-                    style: TextStyle(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                  trailing: Text(
-                    "${averageDrank().toStringAsFixed(2)}ml",
-                    style: const TextStyle(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.blueGrey,
-                  height: 20,
-                ),
-                ListTile(
-                  title: const Text(
-                    "Frequência de consumo",
-                    style: TextStyle(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                  trailing: Text(
-                    "${drinkingFrequency().toStringAsFixed(0)} vezes/dia",
-                    style: const TextStyle(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.blueGrey,
-                  height: 20,
-                ),
-                ListTile(
-                  title: const Text(
-                    "Média de conclusão",
-                    style: TextStyle(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                  trailing: Text(
-                    "${completionAverage().toStringAsFixed(1)}%",
-                    style: const TextStyle(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ),
-              ],
-            )
+            BottomNavyBarItem(
+              icon: const Icon(
+                Icons.event_available,
+                color: kWhite,
+              ),
+              activeColor: kLightBlue1,
+              inactiveColor: kMainColor,
+            ),
+            BottomNavyBarItem(
+              icon: const Icon(
+                Icons.settings,
+                color: kWhite,
+              ),
+              activeColor: kLightBlue1,
+              inactiveColor: kMainColor,
+            ),
           ],
         ),
-      ),
-      bottomNavigationBar: MyBottomNavBar(
-        iconSize: 30,
-        selectedIndex: _currentIndex!,
-        backgroundColor: kMainColor,
-        showElevation: false,
-        itemCornerRadius: 20,
-        curve: Curves.easeIn,
-        onItemSelected: (index) {
-          setState(() => _currentIndex = index);
-          switch (_currentIndex) {
-            case 0:
-              {
-                Navigator.pushNamed(context, '/myHomePage');
-                break;
-              }
-            case 1:
-              {
-                break;
-              }
-            case 2:
-              {
-                Navigator.pushNamed(context, '/mySettingsScreen',
-                    arguments: _currentIndex);
-                break;
-              }
-            default:
-              {
-                Navigator.pushNamed(context, '/myAvailableSoonScreen',
-                    arguments: _currentIndex);
-              }
-          }
-        },
-        items: <BottomNavyBarItem>[
-          BottomNavyBarItem(
-            icon: const Icon(
-              Icons.home,
-              color: kWhite,
-            ),
-            activeColor: kLightBlue1,
-            inactiveColor: kMainColor,
-          ),
-          BottomNavyBarItem(
-            icon: const Icon(
-              Icons.event_available,
-              color: kWhite,
-            ),
-            activeColor: kLightBlue1,
-            inactiveColor: kMainColor,
-          ),
-          BottomNavyBarItem(
-            icon: const Icon(
-              Icons.settings,
-              color: kWhite,
-            ),
-            activeColor: kLightBlue1,
-            inactiveColor: kMainColor,
-          ),
-        ],
       ),
     );
   }

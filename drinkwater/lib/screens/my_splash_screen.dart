@@ -46,7 +46,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       loaderColor: kDark1,
       navigator:
           _isBoxEmpty() ? const MyLoginScreen() : const MyHomePageScreen(),
-      durationInSeconds: 6,
+      durationInSeconds: 5,
     );
   }
 }

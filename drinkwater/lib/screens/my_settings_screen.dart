@@ -145,7 +145,7 @@ class _MySettingsState extends State<MySettings> {
                 width: 100,
                 child: Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.only(left: 35),
+                  // padding: const EdgeInsets.only(left: 35),
                   child: MyNumberPicker(
                     currentValue: userData!.userWeight,
                   ),
