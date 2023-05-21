@@ -2,6 +2,7 @@ import 'package:drinkwater/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'models/status.dart';
 import 'models/user.dart';
@@ -48,6 +49,14 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       navigatorKey: MyApp.navigatorKey,
       initialRoute: '/',
+      builder: (context, widget) => ResponsiveWrapper.builder(
+          ClampingScrollWrapper.builder(context, widget as Widget),
+          defaultScale: true,
+          minWidth: 460,
+          breakpoints: [
+            ResponsiveBreakpoint.resize(645, name: MOBILE),
+            ResponsiveBreakpoint.resize(646, name: DESKTOP),
+          ]),
       routes: {
         '/': (context) => const MySplashScreen(),
         '/myInitialSetupScreen': (context) => const MyInitialSetupScreen(),

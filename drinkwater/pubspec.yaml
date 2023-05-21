@@ -44,6 +44,7 @@ dependencies:
   dio: ^4.0.6
   flutter_secure_storage: ^8.0.0
   easy_splash_screen:
+  responsive_framework: ^0.2.0
 
 dev_dependencies:
   flutter_test:
