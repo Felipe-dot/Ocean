@@ -34,16 +34,14 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
     isDayChanged(waterStatusBox);
   }
 
-  Future<List<dynamic>> listActiveSchedules() async {
-    return await AwesomeNotifications().listScheduledNotifications();
-  }
-
   @override
   void dispose() {
     // Closes all Hive boxes
     Hive.close();
     super.dispose();
   }
+
+  final controllerWaterIntakeCustom = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +194,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
+          backgroundColor: kLightBlue4,
           onPressed: () => {
                 showModalBottomSheet(
                   backgroundColor: kLightBlue3,
@@ -208,7 +206,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                   context: context,
                   builder: (context) {
                     return SizedBox(
-                      height: 200,
+                      height: 250,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -304,7 +302,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                       width: 10,
                                     ),
                                     Text(
-                                      '700ml',
+                                      '400ml',
                                       style: const TextStyle(
                                         color: kMainColor,
                                         fontSize: 12.0,
@@ -316,7 +314,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                 ),
                                 onTap: () {
                                   updateAmountOfWaterDrank(
-                                      waterStatusBox, 700, waterStatusData);
+                                      waterStatusBox, 400, waterStatusData);
                                   setState(() {});
                                   updateWaterStatusOnParseServer(
                                       waterStatusData);
@@ -324,6 +322,96 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                                   Navigator.pop(context);
                                 },
                               ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 40),
+                                    child: Row(
+                                      children: [
+                                        Tab(
+                                          icon: Image.asset(
+                                            'assets/images/gota.png',
+                                            height: 25,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          'Personalizado',
+                                          style: const TextStyle(
+                                            color: kMainColor,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Marker-Felt',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () => showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          title: Text(
+                                              'Digite a quantidade de água consumida'),
+                                          content: SingleChildScrollView(
+                                            child: Container(
+                                              height: 100,
+                                              width: 100,
+                                              child: TextField(
+                                                controller:
+                                                    controllerWaterIntakeCustom,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: kMainColor)),
+                                                  labelText: 'Ml',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: const Text('Voltar'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: const Text('Confirmar'),
+                                              onPressed: () {
+                                                int waterIntake = int.parse(
+                                                    controllerWaterIntakeCustom
+                                                        .value.text);
+
+                                                updateAmountOfWaterDrank(
+                                                    waterStatusBox,
+                                                    waterIntake,
+                                                    waterStatusData);
+
+                                                setState(() {});
+                                                updateWaterStatusOnParseServer(
+                                                    waterStatusData);
+
+                                                howMuchIsMissing(
+                                                    waterStatusBox);
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      })),
                             ],
                           ),
                         ],
