@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/status.dart';
 import 'models/user.dart';
@@ -14,6 +15,7 @@ import 'screens/screens.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.initializeNotification();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Inicializando o hive
   await Hive.initFlutter();
@@ -29,13 +31,14 @@ void main() async {
       ChangeNotifierProvider(create: (_) => WakeUp()),
       ChangeNotifierProvider(create: (_) => Sleep()),
     ],
-    child: const MyApp(),
+    child: MyApp(prefs: prefs),
   ));
 }
 
 class MyApp extends StatefulWidget {
+  final SharedPreferences prefs;
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({required this.prefs, Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -65,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         '/myAvailableSoonScreen': (context) => const MyAvailableSoonScreen(),
         '/myStatusScreen': (context) => const MyStatusScreen(),
         '/myLoginScreen': (context) => const MyLoginScreen(),
-        '/mySettingsScreen': (context) => const MySettings(),
+        '/mySettingsScreen': (context) => MySettings(prefs: widget.prefs),
         '/myUserRegistrationScreen': (context) =>
             const MyUserRegistrationScreen(),
         '/myHomePage': (context) => const MyHomePageScreen(),
