@@ -45,7 +45,8 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   easy_splash_screen:
   responsive_framework: ^0.2.0
-
+  shared_preferences: ^2.0.12
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
