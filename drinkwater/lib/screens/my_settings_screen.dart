@@ -12,14 +12,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constant.dart';
 import '../data/remote/api.dart';
 import '../utils/my_utils.dart';
 import '../utils/user_token_storage.dart';
 
 class MySettings extends StatefulWidget {
-  const MySettings({Key? key}) : super(key: key);
+  final SharedPreferences prefs;
+  const MySettings({required this.prefs, Key? key}) : super(key: key);
 
   @override
   State<MySettings> createState() => _MySettingsState();
@@ -28,12 +30,24 @@ class MySettings extends StatefulWidget {
 class _MySettingsState extends State<MySettings> {
   late Box<User> userBox;
   late Box<WaterStatus> waterStatusBox;
+  late double auxScheduleTime;
+
   @override
   void initState() {
     super.initState();
     // Get reference to an already opened box
     userBox = Hive.box('userBox');
     waterStatusBox = Hive.box('statusBox');
+    var x = widget.prefs.getInt('scheduleTime');
+    if (x == null) {
+      auxScheduleTime = 50;
+    } else {
+      auxScheduleTime = x.toDouble();
+    }
+  }
+
+  _updateScheduleValue(int newValue) async {
+    await widget.prefs.setInt('scheduleTime', newValue);
   }
 
   bool showUserId = false;
@@ -44,12 +58,18 @@ class _MySettingsState extends State<MySettings> {
     var waterStatusData = waterStatusBox.getAt(waterStatusBox.length - 1);
     var userData = userBox.getAt(userBox.length - 1);
 
+    var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
+    var wakeTimeMinute = context.read<WakeUp>().wakeUpTime.minute;
+    var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
+    var sleepTimeMinute = context.read<Sleep>().sleepTime.minute;
+
     Api api = Api();
 
     final args = ModalRoute.of(context)!.settings.arguments;
     int? _currentIndex = args as int?;
 
     double auxWaterGoal = waterStatusData!.drinkingWaterGoal.roundToDouble();
+
     Future openWaterGoalDialog() => showDialog(
           context: context,
           builder: (context) => StatefulBuilder(builder: (context, setState) {
@@ -109,6 +129,76 @@ class _MySettingsState extends State<MySettings> {
           }),
         );
 
+    Future openScheduleTimeDialog() => showDialog(
+          context: context,
+          builder: (context) => StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              title: const Center(
+                  child: Text(
+                "Alterar o intervalo dos lembretes \n de ingestão de água",
+                textAlign: TextAlign.center,
+              )),
+              content: SizedBox(
+                height: 100,
+                width: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("${auxScheduleTime.toStringAsFixed(0)} min"),
+                    Slider(
+                      value: auxScheduleTime,
+                      min: 10,
+                      max: 140,
+                      onChanged: (double newValue) {
+                        setState(() {
+                          auxScheduleTime = newValue.roundToDouble();
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(context);
+                    },
+                    child: const Text("CANCELAR")),
+                TextButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(context);
+                      await _updateScheduleValue(auxScheduleTime.toInt());
+                      await cancelAllSchedules();
+                      userData = User(
+                        userWeight: userData!.userWeight,
+                        userWakeUpTime: userData!.userWakeUpTime,
+                        userSleepTime: userData!.userSleepTime,
+                        additionalReminder: userData!.additionalReminder,
+                        notificationTimeList: createNotificationTimeList(
+                          wakeTimeHour,
+                          wakeTimeMinute,
+                          sleepTimeHour,
+                          sleepTimeMinute,
+                          auxScheduleTime.toInt(),
+                        ),
+                      );
+                      userBox.putAt(userBox.length - 1, userData!);
+
+                      var notificationTimeList = userBox
+                          .getAt(userBox.length - 1)
+                          ?.notificationTimeList;
+
+                      createNotificationWaterAlarms(notificationTimeList);
+                    },
+                    child: const Text("OK")),
+              ],
+            );
+          }),
+        );
+
     void doUserLogout() async {
       Api api = Api();
 
@@ -126,7 +216,7 @@ class _MySettingsState extends State<MySettings> {
     }
 
     void clearUserData() async {
-      final storage = new FlutterSecureStorage();
+      final storage = FlutterSecureStorage();
       await storage.deleteAll();
       userBox.clear();
       waterStatusBox.clear();
@@ -209,18 +299,13 @@ class _MySettingsState extends State<MySettings> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () async {
-                      var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
-                      var wakeTimeMinute =
-                          context.read<WakeUp>().wakeUpTime.minute;
-                      var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
-                      var sleepTimeMinute =
-                          context.read<Sleep>().sleepTime.minute;
-
                       var notificationTimeList = createNotificationTimeList(
-                          wakeTimeHour,
-                          wakeTimeMinute,
-                          sleepTimeHour,
-                          sleepTimeMinute);
+                        wakeTimeHour,
+                        wakeTimeMinute,
+                        sleepTimeHour,
+                        sleepTimeMinute,
+                        auxScheduleTime.toInt(),
+                      );
 
                       await cancelAllSchedules();
 
@@ -283,17 +368,13 @@ class _MySettingsState extends State<MySettings> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () async {
-                      var wakeTimeHour = context.read<WakeUp>().wakeUpTime.hour;
-                      var wakeTimeMinute =
-                          context.read<WakeUp>().wakeUpTime.minute;
-                      var sleepTimeHour = context.read<Sleep>().sleepTime.hour;
-                      var sleepTimeMinute =
-                          context.read<Sleep>().sleepTime.minute;
                       var notificationTimeList = createNotificationTimeList(
-                          wakeTimeHour,
-                          wakeTimeMinute,
-                          sleepTimeHour,
-                          sleepTimeMinute);
+                        wakeTimeHour,
+                        wakeTimeMinute,
+                        sleepTimeHour,
+                        sleepTimeMinute,
+                        auxScheduleTime.toInt(),
+                      );
 
                       await cancelAllSchedules();
                       createNotificationWaterAlarms(notificationTimeList);
@@ -346,7 +427,7 @@ class _MySettingsState extends State<MySettings> {
                   children: [
                     Text(
                       showUserId ? userId : "**********",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         color: kMainColor,
                       ),
@@ -357,18 +438,19 @@ class _MySettingsState extends State<MySettings> {
                           if (!showUserId) {
                             Clipboard.setData(ClipboardData(text: userId))
                                 .then((result) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      'Copiado para área de transferência !')));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Copiado para área de transferência !')));
                             });
                           }
                         },
                         icon: showUserId
-                            ? Icon(
+                            ? const Icon(
                                 Icons.visibility_off,
                                 color: kMainColor,
                               )
-                            : Icon(
+                            : const Icon(
                                 Icons.visibility,
                                 color: kMainColor,
                               ))
@@ -377,11 +459,28 @@ class _MySettingsState extends State<MySettings> {
               ),
               ListTile(
                 title: const Text(
+                  "Intervalo de notificações",
+                  style: TextStyle(color: kMainColor),
+                ),
+                trailing: Text(
+                  "${auxScheduleTime.toInt()} min",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: kMainColor,
+                  ),
+                ),
+                onTap: () async {
+                  await openScheduleTimeDialog();
+                  setState(() {});
+                },
+              ),
+              ListTile(
+                title: const Text(
                   "Meta de ingestão",
                   style: TextStyle(color: kMainColor),
                 ),
                 trailing: Text(
-                  "${waterStatusData!.drinkingWaterGoal}ml",
+                  "${waterStatusData!.drinkingWaterGoal} ml",
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: kMainColor,
