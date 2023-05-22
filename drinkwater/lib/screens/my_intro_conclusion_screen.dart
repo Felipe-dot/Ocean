@@ -65,6 +65,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           wakeTimeMinute,
           sleepTimeHour,
           sleepTimeMinute,
+          50,
         ),
       ),
     );
@@ -102,6 +103,7 @@ class _MyIntroConclusionScreenState extends State<MyIntroConclusionScreen> {
           wakeTimeMinute,
           sleepTimeHour,
           sleepTimeMinute,
+          50,
         ));
   }
 

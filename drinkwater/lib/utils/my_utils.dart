@@ -15,8 +15,10 @@ List<DateTime> createNotificationTimeList(
   int wakeTimeMinute,
   int sleepTimeHour,
   int sleepTimeMinute,
+  int minutes,
 ) {
   final now = DateTime.now();
+
   var wakeUpTime = DateTime(
     now.year,
     now.month,
@@ -39,7 +41,7 @@ List<DateTime> createNotificationTimeList(
   var awakeTime = -1 * (wakeUpTime.difference(sleepTime).inHours);
 
   for (int x = 0; x < awakeTime; x++) {
-    var timeModified = notificationTimeList[x].add(const Duration(minutes: 50));
+    var timeModified = notificationTimeList[x].add(Duration(minutes: minutes));
     if (sleepTime.compareTo(timeModified) != 1) {
       break;
     }

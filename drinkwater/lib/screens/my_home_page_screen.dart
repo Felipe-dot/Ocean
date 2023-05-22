@@ -1,14 +1,11 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:drinkwater/components/my_bottom_nav_bar.dart';
 import 'package:drinkwater/models/status.dart';
 import 'package:drinkwater/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:provider/provider.dart';
 
 import '../constant.dart';
-import '../services/notification_service.dart';
 import '../utils/my_utils.dart';
 
 class MyHomePageScreen extends StatefulWidget {
