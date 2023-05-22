@@ -119,56 +119,59 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
                         ),
                       ],
                     )
-                  : Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 40.0,
-                          lineWidth: 5.0,
-                          percent: percentageCalc(waterStatusBox) / 100,
-                          center: Text(
-                            "${percentageCalc(waterStatusBox).toStringAsFixed(0)}%",
-                            style: const TextStyle(
-                              color: kMainColor,
-                              fontSize: 25,
-                            ),
-                          ),
-                          progressColor: kDark1,
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 140),
-                              child: const Text(
-                                "ml",
-                                style: TextStyle(
-                                  color: kMainColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "${waterStatusData!.amountOfWaterDrank}",
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: [
+                          CircularPercentIndicator(
+                            radius: 40.0,
+                            lineWidth: 5.0,
+                            percent: percentageCalc(waterStatusBox) / 100,
+                            center: Text(
+                              "${percentageCalc(waterStatusBox).toStringAsFixed(0)}%",
                               style: const TextStyle(
                                 color: kMainColor,
-                                fontSize: 60,
-                                fontWeight: FontWeight.w300,
+                                fontSize: 25,
                               ),
                             ),
-                            Text(
-                              "faltando: ${howMuchIsMissing(waterStatusBox)}",
-                              style: const TextStyle(
-                                color: kLightBlue2,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
+                            progressColor: kDark1,
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 140),
+                                child: const Text(
+                                  "ml",
+                                  style: TextStyle(
+                                    color: kMainColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Text(
+                                "${waterStatusData!.amountOfWaterDrank}",
+                                style: const TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              Text(
+                                "faltando: ${howMuchIsMissing(waterStatusBox)}",
+                                style: const TextStyle(
+                                  color: kLightBlue2,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
               getGoalStatus(waterStatusBox)
                   ? Container()
