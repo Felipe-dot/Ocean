@@ -178,7 +178,7 @@ class _MyStatusScreenState extends State<MyStatusScreen> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               // Gráfico Principal
               Center(
