@@ -31,6 +31,13 @@ class _MySettingsState extends State<MySettings> {
   late Box<User> userBox;
   late Box<WaterStatus> waterStatusBox;
   late double auxScheduleTime;
+  late String userId;
+  bool showUserId = false;
+
+  void getUserId() async {
+    var response = await UserIdSecureStorage.getUserId();
+    userId = response as String;
+  }
 
   @override
   void initState() {
@@ -44,14 +51,13 @@ class _MySettingsState extends State<MySettings> {
     } else {
       auxScheduleTime = x.toDouble();
     }
+
+    getUserId();
   }
 
   _updateScheduleValue(int newValue) async {
     await widget.prefs.setInt('scheduleTime', newValue);
   }
-
-  bool showUserId = false;
-  String userId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -205,14 +211,6 @@ class _MySettingsState extends State<MySettings> {
       var token = await UserTokenSecureStorage.getUserToken();
 
       await api.logout(token);
-    }
-
-    void getUserId() async {
-      var response = await UserIdSecureStorage.getUserId();
-      setState(() {
-        showUserId = !showUserId;
-        userId = response as String;
-      });
     }
 
     void clearUserData() async {
@@ -434,8 +432,10 @@ class _MySettingsState extends State<MySettings> {
                     ),
                     IconButton(
                         onPressed: () {
-                          getUserId();
-                          if (!showUserId) {
+                          setState(() {
+                            showUserId = !showUserId;
+                          });
+                          if (showUserId) {
                             Clipboard.setData(ClipboardData(text: userId))
                                 .then((result) {
                               ScaffoldMessenger.of(context).showSnackBar(
